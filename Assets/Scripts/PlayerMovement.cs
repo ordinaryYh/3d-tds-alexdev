@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Player player;
+
     private PlayerControlls controls;
     private CharacterController characterController;
     private Animator anim;
@@ -28,25 +30,17 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 aimInput;
 
-    private void Awake()
-    {
-        AssignInputEvents();
-
-    }
-
 
     private void Start()
     {
+        player = GetComponent<Player>();
+
         characterController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
 
         speed = walkSpeed;
-    }
 
-    private void Shoot()
-    {
-        anim.SetTrigger("Fire");
-        Debug.Log("fire");
+        AssignInputEvents();
     }
 
     private void Update()
@@ -110,15 +104,12 @@ public class PlayerMovement : MonoBehaviour
             verticalVelocity = -0.5f;
     }
 
-    #region  New InputSystem
+
     private void AssignInputEvents()
     {
-        controls = new PlayerControlls();
+        controls = player.controls;
 
         //下面的所有代码都是新的inputSystem的内容
-        //这段代码的作用是，fire事件执行时，给定输入事件的上下文，函数为shoot
-        controls.Character.Fire.performed += context => Shoot();
-
         //下面的代码作用就是movement执行和取消时，对事件的上下文赋值
         //当按下wasd时，给与vector2的值，松开时，就是vector2.zero
         controls.Character.Movement.performed += context => moveInput = context.ReadValue<Vector2>();
@@ -140,15 +131,6 @@ public class PlayerMovement : MonoBehaviour
         };
 
     }
-    private void OnEnable()
-    {
-        controls.Enable();
-    }
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
-    #endregion
 
 
 }
