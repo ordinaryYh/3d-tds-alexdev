@@ -13,8 +13,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Info")]
     [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
+    private float speed;
     private float verticalVelocity;
     private Vector3 movementDirection;
+    private bool isRunning;
 
     [Header("Aim Infor")]
     [SerializeField] private Transform aim;
@@ -27,30 +30,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        controls = new PlayerControlls();
-
-        //这段代码的作用是，fire事件执行时，给定输入事件的上下文，函数为shoot
-        controls.Character.Fire.performed += context => Shoot();
-
-        //下面的代码作用就是movement执行和取消时，对事件的上下文赋值
-        //当按下wasd时，给与vector2的值，松开时，就是vector2.zero
-        controls.Character.Movement.performed += context => moveInput = context.ReadValue<Vector2>();
-        controls.Character.Movement.canceled += context => moveInput = Vector2.zero;
-
-        controls.Character.Aim.performed += context => aimInput = context.ReadValue<Vector2>();
-        controls.Character.Aim.canceled += context => aimInput = Vector2.zero;
+        AssignInputEvents();
 
     }
+
 
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
+
+        speed = walkSpeed;
     }
 
     private void Shoot()
     {
-        Debug.Log("Shoot");
+        anim.SetTrigger("Fire");
+        Debug.Log("fire");
     }
 
     private void Update()
@@ -68,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
 
         anim.SetFloat("xVelocity", xVelocity, 0.05f, Time.deltaTime);
         anim.SetFloat("zVelocity", zVelocity, 0.05f, Time.deltaTime);
+        anim.SetBool("isRunning", isRunning && movementDirection.magnitude > 0);
     }
 
     private void AimTowardsMouse()
@@ -98,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         //如果存在输入
         if (movementDirection.magnitude > 0)
         {
-            characterController.Move(movementDirection * Time.deltaTime * walkSpeed);
+            characterController.Move(movementDirection * Time.deltaTime * speed);
         }
     }
 
@@ -113,13 +110,45 @@ public class PlayerMovement : MonoBehaviour
             verticalVelocity = -0.5f;
     }
 
+    #region  New InputSystem
+    private void AssignInputEvents()
+    {
+        controls = new PlayerControlls();
+
+        //下面的所有代码都是新的inputSystem的内容
+        //这段代码的作用是，fire事件执行时，给定输入事件的上下文，函数为shoot
+        controls.Character.Fire.performed += context => Shoot();
+
+        //下面的代码作用就是movement执行和取消时，对事件的上下文赋值
+        //当按下wasd时，给与vector2的值，松开时，就是vector2.zero
+        controls.Character.Movement.performed += context => moveInput = context.ReadValue<Vector2>();
+        controls.Character.Movement.canceled += context => moveInput = Vector2.zero;
+
+        controls.Character.Aim.performed += context => aimInput = context.ReadValue<Vector2>();
+        controls.Character.Aim.canceled += context => aimInput = Vector2.zero;
+
+
+        controls.Character.Run.performed += context =>
+        {
+            speed = runSpeed;
+            isRunning = true;
+        };
+        controls.Character.Run.canceled += context =>
+        {
+            speed = walkSpeed;
+            isRunning = false;
+        };
+
+    }
     private void OnEnable()
     {
         controls.Enable();
     }
-
     private void OnDisable()
     {
         controls.Disable();
     }
+    #endregion
+
+
 }
