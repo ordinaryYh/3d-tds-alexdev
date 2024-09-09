@@ -935,7 +935,7 @@ Transform:
   m_GameObject: {fileID: 597406705}
   serializedVersion: 2
   m_LocalRotation: {x: -0.47372434, y: -0.4383953, z: 0.55382013, w: 0.526002}
-  m_LocalPosition: {x: 0.274, y: 0.066, z: 0.03}
+  m_LocalPosition: {x: 0.454, y: 0.064, z: -0.001}
   m_LocalScale: {x: 0.09999999, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1733,7 +1733,9 @@ MonoBehaviour:
   autoRifle: {fileID: 1917435756}
   shotgun: {fileID: 433331260}
   rifle: {fileID: 71710234}
-  leftHand: {fileID: 386587378}
+  rigIncreaseSetp: 2.5
+  leftHandIK: {fileID: 1137919130}
+  leftHandIK_Traget: {fileID: 386587378}
 --- !u!1 &1695297363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2408,6 +2410,7 @@ GameObject:
   - component: {fileID: 5896891610865550939}
   - component: {fileID: 5896891610865550941}
   - component: {fileID: 5896891610865550940}
+  - component: {fileID: 5896891610865550942}
   m_Layer: 0
   m_Name: character_main
   m_TagString: Untagged
@@ -3745,6 +3748,18 @@ MonoBehaviour:
   - m_Rig: {fileID: 1300001549}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &5896891610865550942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900169986307442331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e0315eeece534c7990f976d811b0b3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &5898382812425322194
 MeshFilter:
   m_ObjectHideFlags: 0
