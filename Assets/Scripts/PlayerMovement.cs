@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,17 +19,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runSpeed;
     private float speed;
     private float verticalVelocity;
+
+    public Vector2 moveInput { get; private set; }
     private Vector3 movementDirection;
     private bool isRunning;
 
-    [Header("Aim Infor")]
-    [SerializeField] private Transform aim;
-    [SerializeField] private LayerMask aimLayerMask;
-    private Vector3 lookingDirection;
-
-
-    private Vector2 moveInput;
-    private Vector2 aimInput;
 
 
     private void Start()
@@ -46,39 +41,19 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ApplyMovement();
-        AimTowardsMouse();
         AnimatorControllers();
     }
 
     private void AnimatorControllers()
     {
-        //这里要使用向量的点积
+        //这里要使用向量的点积,以此来获取在自身x和z轴上的分量，判断是往左走还是右走
+        //然后给动画赋值，就可以正常实现了
         float xVelocity = Vector3.Dot(movementDirection.normalized, transform.right);
         float zVelocity = Vector3.Dot(movementDirection.normalized, transform.forward);
 
         anim.SetFloat("xVelocity", xVelocity, 0.05f, Time.deltaTime);
         anim.SetFloat("zVelocity", zVelocity, 0.05f, Time.deltaTime);
         anim.SetBool("isRunning", isRunning && movementDirection.magnitude > 0);
-    }
-
-    private void AimTowardsMouse()
-    {
-        //这个函数的作用，就是让玩家移至朝向鼠标的位置
-        //camera实际上有一个视野是一个四棱锥，称为视锥体
-        //在屏幕上点击的位置虽然是个二维坐标，实际上就是这个视椎体的底部上面的区域
-        Ray ray = Camera.main.ScreenPointToRay(aimInput);
-
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
-        {
-            lookingDirection = hitInfo.point - transform.position;
-            lookingDirection.y = 0;
-            lookingDirection.Normalize();
-
-            transform.forward = lookingDirection;
-
-            aim.position = new Vector3(hitInfo.point.x, transform.position.y+1, hitInfo.point.z);
-        }
-
     }
 
     private void ApplyMovement()
@@ -115,10 +90,6 @@ public class PlayerMovement : MonoBehaviour
         controls.Character.Movement.performed += context => moveInput = context.ReadValue<Vector2>();
         controls.Character.Movement.canceled += context => moveInput = Vector2.zero;
 
-        controls.Character.Aim.performed += context => aimInput = context.ReadValue<Vector2>();
-        controls.Character.Aim.canceled += context => aimInput = Vector2.zero;
-
-
         controls.Character.Run.performed += context =>
         {
             speed = runSpeed;
@@ -129,8 +100,6 @@ public class PlayerMovement : MonoBehaviour
             speed = walkSpeed;
             isRunning = false;
         };
-
-
     }
 
 
