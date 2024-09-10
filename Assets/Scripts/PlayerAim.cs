@@ -7,18 +7,25 @@ public class PlayerAim : MonoBehaviour
     private Player player;
     private PlayerControlls controls;
 
-    [Header("Aim Info")]
+    [Header("Aim control")]
+    [SerializeField] private Transform aim;
+
+    [SerializeField] private bool isAimingPrecisly;
+
+    [Header("Camera control")]
+    [SerializeField] private Transform cameraTarget;
     [Range(0.5f, 1)]
     [SerializeField] private float minCameraDistance = 1.5f;
     [Range(1, 3f)]
     [SerializeField] private float maxCameraDistance = 4;
     [Range(3f, 5f)]
-    [SerializeField] private float aimSensetivity = 5f;
+    [SerializeField] private float cameraSensetivity = 5f;
     [Space]
-    [SerializeField] private Transform aim;
     [SerializeField] private LayerMask aimLayerMask;
     [SerializeField] private float turnSpeed;
+
     private Vector2 aimInput;
+    private RaycastHit lastKnowMouseHit;
 
     private void Start()
     {
@@ -28,8 +35,33 @@ public class PlayerAim : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            isAimingPrecisly = !isAimingPrecisly;
+
         ApplyRotation();
-        aim.position = Vector3.Lerp(aim.position, TargetAimPosition(), aimSensetivity * Time.deltaTime);
+        UpdateAimPosition();
+        UpdateCameraPosition();
+    }
+
+    private void UpdateCameraPosition()
+    {
+        cameraTarget.position = Vector3.Lerp(cameraTarget.position, DesieredCameraPosition(), cameraSensetivity * Time.deltaTime);
+    }
+
+    private void UpdateAimPosition()
+    {
+        aim.position = GetMouseHitInfo().point;
+
+        if (isAimingPrecisly == false)
+            aim.position = new Vector3(aim.position.x, transform.position.y + 1, aim.position.z);
+    }
+
+    public bool CanAimPrecisly()
+    {
+        if (isAimingPrecisly == true)
+            return true;
+
+        return false;
     }
 
     private void AssignInputEvents()
@@ -42,7 +74,7 @@ public class PlayerAim : MonoBehaviour
 
     private void ApplyRotation()
     {
-        Vector3 lookingDirection = this.GetMousePosition() - transform.position;
+        Vector3 lookingDirection = this.GetMouseHitInfo().point - transform.position;
         lookingDirection.y = 0;
         lookingDirection.Normalize();
 
@@ -53,23 +85,24 @@ public class PlayerAim : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
     }
 
-    private Vector3 TargetAimPosition()
+    private Vector3 DesieredCameraPosition()
     {
+        //这个函数用来限制aim的位置
         float actualMaxCameraDistance = player.movement.moveInput.y < -0.5f ? minCameraDistance : maxCameraDistance;
 
-        Vector3 targetAimPosition = GetMousePosition();
-        Vector3 aimDirection = (targetAimPosition - transform.position).normalized;
+        Vector3 desiredCameraPosition = GetMouseHitInfo().point;
+        Vector3 aimDirection = (desiredCameraPosition - transform.position).normalized;
 
-        float distanceToTargetPosition = Vector3.Distance(transform.position, targetAimPosition);
+        float distanceToTargetPosition = Vector3.Distance(transform.position, desiredCameraPosition);
         float clampedDistance = Mathf.Clamp(distanceToTargetPosition, minCameraDistance, actualMaxCameraDistance);
 
-        targetAimPosition = transform.position + aimDirection * clampedDistance;
-        targetAimPosition.y = transform.position.y + 1;
+        desiredCameraPosition = transform.position + aimDirection * clampedDistance;
+        desiredCameraPosition.y = transform.position.y + 1;
 
-        return targetAimPosition;
+        return desiredCameraPosition;
     }
 
-    public Vector3 GetMousePosition()
+    public RaycastHit GetMouseHitInfo()
     {
         //这个函数的作用，就是返回一个坐标
         //要想实现玩家朝向物体，就要用这种方式，从camera发出射线，然后射中物体，返回物体坐标
@@ -79,9 +112,10 @@ public class PlayerAim : MonoBehaviour
 
         if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
         {
-            return hitInfo.point;
+            lastKnowMouseHit = hitInfo;
+            return hitInfo;
         }
 
-        return Vector3.zero;
+        return lastKnowMouseHit;
     }
 }
