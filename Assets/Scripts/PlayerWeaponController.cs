@@ -33,11 +33,11 @@ public class PlayerWeaponController : MonoBehaviour
         GetComponentInChildren<Animator>().SetTrigger("Fire");
     }
 
-    private Vector3 BulletDirection()
+    public Vector3 BulletDirection()
     {
         Vector3 direction = (aim.position - gunPoint.position).normalized;
 
-        if (player.aim.CanAimPrecisly() == false)
+        if (player.aim.CanAimPrecisly() == false && player.aim.Target() == null)
             direction.y = 0;
 
         //下面两句代码是为了保证弹道准确，不会因为角色的旋转而发生偏差
@@ -47,11 +47,5 @@ public class PlayerWeaponController : MonoBehaviour
         return direction;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(weaponHolder.position, weaponHolder.position + weaponHolder.forward * 25);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(gunPoint.position, gunPoint.position + BulletDirection() * 25);
-    }
+    public Transform GunPoint() => gunPoint;
 }

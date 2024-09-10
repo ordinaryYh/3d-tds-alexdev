@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,14 @@ public class PlayerAim : MonoBehaviour
     private Player player;
     private PlayerControlls controls;
 
+    [Header("Aim Visual - Laser")]
+    [SerializeField] private LineRenderer aimLaser;
+
     [Header("Aim control")]
     [SerializeField] private Transform aim;
 
     [SerializeField] private bool isAimingPrecisly;
+    [SerializeField] private bool isLockingToTarget;
 
     [Header("Camera control")]
     [SerializeField] private Transform cameraTarget;
@@ -38,9 +43,34 @@ public class PlayerAim : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
             isAimingPrecisly = !isAimingPrecisly;
 
+        if (Input.GetKeyDown(KeyCode.L))
+            isLockingToTarget = !isLockingToTarget;
+
+        UpdateAimLaser();
         ApplyRotation();
         UpdateAimPosition();
         UpdateCameraPosition();
+    }
+
+    private void UpdateAimLaser()
+    {
+        Transform gunPoint = player.weapon.GunPoint();
+        Vector3 laserDirection = player.weapon.BulletDirection();
+
+        float laserTipLength = 0.5f;
+        float gunDistance = 4;
+
+        Vector3 endPoint = gunPoint.position + laserDirection * gunDistance;
+
+        if (Physics.Raycast(gunPoint.position, laserDirection, out RaycastHit hit, gunDistance))
+        {
+            endPoint = hit.point;
+            laserTipLength = 0;
+        }
+
+        aimLaser.SetPosition(0, gunPoint.position);
+        aimLaser.SetPosition(1, endPoint);
+        aimLaser.SetPosition(2, endPoint + laserDirection * laserTipLength);
     }
 
     private void UpdateCameraPosition()
@@ -50,6 +80,15 @@ public class PlayerAim : MonoBehaviour
 
     private void UpdateAimPosition()
     {
+
+        Transform target = this.Target();
+
+        if (target != null && isLockingToTarget)
+        {
+            aim.position = target.position;
+            return;
+        }
+
         aim.position = GetMouseHitInfo().point;
 
         if (isAimingPrecisly == false)
@@ -62,6 +101,18 @@ public class PlayerAim : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    public Transform Target()
+    {
+        Transform target = null;
+
+        if (GetMouseHitInfo().transform.GetComponent<Target>() != null)
+        {
+            target = GetMouseHitInfo().transform;
+        }
+
+        return target;
     }
 
     private void AssignInputEvents()
