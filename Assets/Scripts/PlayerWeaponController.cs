@@ -10,6 +10,10 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] private float bulletSpeed;
     [SerializeField] private Transform gunPoint;
 
+    //这个是子弹默认击中后的效果，之后如果速度增加，质量就会减少
+    //子弹击中的效果永远不会变
+    private const float REFERENCE_BULLET_SPEED = 20;
+
     [SerializeField] private Transform weaponHolder;
 
     private void Start()
@@ -25,7 +29,10 @@ public class PlayerWeaponController : MonoBehaviour
         GameObject newBullet =
             Instantiate(bulletPrefab, gunPoint.position, Quaternion.LookRotation(gunPoint.forward));
 
-        newBullet.GetComponent<Rigidbody>().velocity = BulletDirection() * bulletSpeed;
+        Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+        //这段代码的作用是控制子弹的击中效果，速度增加，那么质量就会减少
+        rb.mass = REFERENCE_BULLET_SPEED / bulletSpeed;
+        rb.velocity = BulletDirection() * bulletSpeed;
 
         Destroy(newBullet, 10);
 
