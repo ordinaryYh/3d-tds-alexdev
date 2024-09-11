@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9b07fee789c424b09b41ce0653ddb9be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,8 +106,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 0.89966995, z: 1}
+  m_Center: {x: 0, y: -0.050165944, z: 0}
 --- !u!54 &1181202040319636182
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c852af001dae0064e9acaa832f1dadb7, type: 2}
+  - {fileID: 2100000, guid: 9b07fee789c424b09b41ce0653ddb9be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -186,16 +186,16 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.001785569
-        value: 0.013842985
+        time: 0
+        value: 0.14614868
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
+        inWeight: 0
+        outWeight: 0
       - serializedVersion: 3
-        time: 0.052678578
+        time: 0.95334226
         value: 0
         inSlope: 0
         outSlope: 0
@@ -260,3 +260,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c02d95db1fa64d03be72d58f3b82a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletImpactFX: {fileID: 1235062067201549174, guid: ce8597e445a844dffb06679579a8f17e, type: 3}
