@@ -29,7 +29,7 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] private LayerMask aimLayerMask;
     [SerializeField] private float turnSpeed;
 
-    private Vector2 aimInput;
+    private Vector2 mouseInput;
     private RaycastHit lastKnowMouseHit;
 
     private void Start()
@@ -46,13 +46,13 @@ public class PlayerAim : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
             isLockingToTarget = !isLockingToTarget;
 
-        UpdateAimLaser();
+        UpdateAimVisuals();
         ApplyRotation();
         UpdateAimPosition();
         UpdateCameraPosition();
     }
 
-    private void UpdateAimLaser()
+    private void UpdateAimVisuals()
     {
         Transform gunPoint = player.weapon.GunPoint();
         Vector3 laserDirection = player.weapon.BulletDirection();
@@ -73,10 +73,6 @@ public class PlayerAim : MonoBehaviour
         aimLaser.SetPosition(2, endPoint + laserDirection * laserTipLength);
     }
 
-    private void UpdateCameraPosition()
-    {
-        cameraTarget.position = Vector3.Lerp(cameraTarget.position, DesieredCameraPosition(), cameraSensetivity * Time.deltaTime);
-    }
 
     private void UpdateAimPosition()
     {
@@ -95,13 +91,9 @@ public class PlayerAim : MonoBehaviour
             aim.position = new Vector3(aim.position.x, transform.position.y + 1, aim.position.z);
     }
 
-    public bool CanAimPrecisly()
-    {
-        if (isAimingPrecisly == true)
-            return true;
+    public Transform Aim() => aim;
+    public bool CanAimPrecisly() => isAimingPrecisly;
 
-        return false;
-    }
 
     public Transform Target()
     {
@@ -119,8 +111,8 @@ public class PlayerAim : MonoBehaviour
     {
         controls = player.controls;
 
-        controls.Character.Aim.performed += context => aimInput = context.ReadValue<Vector2>();
-        controls.Character.Aim.canceled += context => aimInput = Vector2.zero;
+        controls.Character.Aim.performed += context => mouseInput = context.ReadValue<Vector2>();
+        controls.Character.Aim.canceled += context => mouseInput = Vector2.zero;
     }
 
     private void ApplyRotation()
@@ -136,6 +128,24 @@ public class PlayerAim : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
     }
 
+    public RaycastHit GetMouseHitInfo()
+    {
+        //这个函数的作用，就是返回一个坐标
+        //要想实现玩家朝向物体，就要用这种方式，从camera发出射线，然后射中物体，返回物体坐标
+        //camera实际上有一个视野是一个四棱锥，称为视锥体
+        //在屏幕上点击的位置虽然是个二维坐标，实际上就是这个视椎体的底部上面的区域
+        Ray ray = Camera.main.ScreenPointToRay(mouseInput);
+
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
+        {
+            lastKnowMouseHit = hitInfo;
+            return hitInfo;
+        }
+
+        return lastKnowMouseHit;
+    }
+
+    #region Camera Region
     private Vector3 DesieredCameraPosition()
     {
         //这个函数用来限制aim的位置
@@ -153,20 +163,10 @@ public class PlayerAim : MonoBehaviour
         return desiredCameraPosition;
     }
 
-    public RaycastHit GetMouseHitInfo()
+    private void UpdateCameraPosition()
     {
-        //这个函数的作用，就是返回一个坐标
-        //要想实现玩家朝向物体，就要用这种方式，从camera发出射线，然后射中物体，返回物体坐标
-        //camera实际上有一个视野是一个四棱锥，称为视锥体
-        //在屏幕上点击的位置虽然是个二维坐标，实际上就是这个视椎体的底部上面的区域
-        Ray ray = Camera.main.ScreenPointToRay(aimInput);
-
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
-        {
-            lastKnowMouseHit = hitInfo;
-            return hitInfo;
-        }
-
-        return lastKnowMouseHit;
+        cameraTarget.position = Vector3.Lerp(cameraTarget.position, DesieredCameraPosition(), cameraSensetivity * Time.deltaTime);
     }
+
+    #endregion
 }
