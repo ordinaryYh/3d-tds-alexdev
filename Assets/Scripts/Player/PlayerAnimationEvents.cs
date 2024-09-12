@@ -29,4 +29,6 @@ public class PlayerAnimationEvents : MonoBehaviour
     {
         visualController.SetBusyGrabbingWeaponTo(false);
     }
+
+    public void SwitchOnWeaponModel() => visualController.SwithcOnCurrentWeaponModel();
 }

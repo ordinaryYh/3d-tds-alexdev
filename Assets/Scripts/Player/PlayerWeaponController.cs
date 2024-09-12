@@ -23,7 +23,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     [Header("Inventory")]
     [SerializeField] private int maxSlots = 2;
-    [SerializeField] private List<Weapon> weaponSlots;
+    [SerializeField] private List<Weapon> weaponSlots; //一共只有两把武器
 
     private void Start()
     {
@@ -38,6 +38,7 @@ public class PlayerWeaponController : MonoBehaviour
     private void EquipWeapon(int i)
     {
         currentWeapon = weaponSlots[i];
+        player.weaponVisuals.PlayWeaponEquiAnimation();
     }
 
     public void PickupWeapon(Weapon _newWeapon)
@@ -49,16 +50,16 @@ public class PlayerWeaponController : MonoBehaviour
         }
 
         weaponSlots.Add(_newWeapon);
+        player.weaponVisuals.SwitchOnBackupWeaponModel();
     }
 
     private void DropWeapon()
     {
-        if (weaponSlots.Count <= 1)
+        if (HasOnlyOneWeapon())
             return;
 
         weaponSlots.Remove(currentWeapon);
-
-        currentWeapon = weaponSlots[0];
+        EquipWeapon(0);
     }
 
     #endregion
@@ -96,7 +97,20 @@ public class PlayerWeaponController : MonoBehaviour
         return direction;
     }
 
+    public bool HasOnlyOneWeapon() => weaponSlots.Count <= 1;
+
     public Weapon CurrentWeapon() => currentWeapon;
+
+    public Weapon BackupWeapon()
+    {
+        foreach (Weapon weapon in weaponSlots)
+        {
+            if (weapon != currentWeapon)
+                return weapon;
+        }
+
+        return null;
+    }
 
     public Transform GunPoint() => gunPoint;
 
@@ -122,5 +136,6 @@ public class PlayerWeaponController : MonoBehaviour
         };
     }
     #endregion
+
 
 }
