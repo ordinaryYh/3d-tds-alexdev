@@ -5,17 +5,18 @@ using UnityEngine;
 public class PlayerAnimationEvents : MonoBehaviour
 {
     private PlayerWeaponVisuals visualController;
+    private PlayerWeaponController weaponController;
 
     private void Start()
     {
         visualController = GetComponentInParent<PlayerWeaponVisuals>();
+        weaponController = GetComponentInParent<PlayerWeaponController>();
     }
 
     public void ReloadIsOver()
     {
         visualController.Maxmize_RigWeight();
-
-        //之后要添加补充子弹的功能
+        weaponController.CurrentWeapon().ReloadBullets();
     }
 
     public void ReturnRig()

@@ -3,21 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public enum GrabType { SideGrab, BackGrab };
+
 
 public class PlayerWeaponVisuals : MonoBehaviour
 {
+    private Player player;
     private Animator anim;
+    private bool isGrabbingWeapon;
 
-    [SerializeField] private Transform[] gunTransforms;
+    [SerializeField] private WeaponModel[] weaponModels;
 
-    [SerializeField] private Transform pistol;
-    [SerializeField] private Transform revolver;
-    [SerializeField] private Transform autoRifle;
-    [SerializeField] private Transform shotgun;
-    [SerializeField] private Transform rifle;
-
-    private Transform currentGun;
 
     [Header("Rig")]
     [SerializeField] private float rigWeightIncreaseRate;
@@ -30,31 +25,48 @@ public class PlayerWeaponVisuals : MonoBehaviour
     private bool shouldIncrease_LeftHandIKWeight;
     private Rig rig;
 
-    private bool isGrabbingWeapon;
 
 
     private void Start()
     {
         anim = GetComponentInChildren<Animator>();
         rig = GetComponentInChildren<Rig>();
-
-        SwitchOn(pistol);
+        //输入true，代表即使被关闭也能获取到，否则获取不到
+        weaponModels = GetComponentsInChildren<WeaponModel>(true);
+        player = GetComponent<Player>();
     }
 
     private void Update()
     {
         CheckWeaponSwitch();
-
-        if (Input.GetKeyDown(KeyCode.R) && isGrabbingWeapon == false)
-        {
-            //这里要停止rig，不然的话装弹的时候，手部、枪、头部都不会有动作
-            //因为rig上设置了这些部位的动作
-            ReduceRigWeight();
-            anim.SetTrigger("Reload");
-        }
-
         UpdateRigWeight();
         UpdateLeftHandIKWeight();
+    }
+
+    public WeaponModel CurrentWeaponModel()
+    {
+        WeaponModel weaponModel = null;
+
+        WeaponType weaponType = player.weapon.CurrentWeapon().weaponType;
+
+        for (int i = 0; i < weaponModels.Length; i++)
+        {
+            if (weaponModels[i].weaponType == weaponType)
+                weaponModel = weaponModels[i];
+        }
+
+        return weaponModel;
+    }
+
+    public void PlayReloadAnimation()
+    {
+        if (isGrabbingWeapon)
+            return;
+
+        //这里要停止rig，不然的话装弹的时候，手部、枪、头部都不会有动作
+        //因为rig上设置了这些部位的动作
+        ReduceRigWeight();
+        anim.SetTrigger("Reload");
     }
 
     private void UpdateLeftHandIKWeight()
@@ -108,56 +120,56 @@ public class PlayerWeaponVisuals : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            SwitchOn(pistol);
+            SwitchOn();
             SwitchAnimationLayer(1);
             PlayWeaponGrabAnimation(GrabType.SideGrab);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SwitchOn(revolver);
+            SwitchOn();
             SwitchAnimationLayer(1);
             PlayWeaponGrabAnimation(GrabType.SideGrab);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SwitchOn(autoRifle);
+            SwitchOn();
             SwitchAnimationLayer(1);
             PlayWeaponGrabAnimation(GrabType.BackGrab);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            SwitchOn(shotgun);
+            SwitchOn();
             SwitchAnimationLayer(2);
             PlayWeaponGrabAnimation(GrabType.BackGrab);
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            SwitchOn(rifle);
+            SwitchOn();
             SwitchAnimationLayer(3);
             PlayWeaponGrabAnimation(GrabType.BackGrab);
         }
     }
 
-    private void SwitchOn(Transform gunTransform)
+    private void SwitchOn()
     {
-        SwitchOffGuns();
-        gunTransform.gameObject.SetActive(true);
-        currentGun = gunTransform;
+        SwitchOffWeaponModels();
+
+        CurrentWeaponModel().gameObject.SetActive(true);
 
         AttachLeftHand();
     }
 
-    private void SwitchOffGuns()
+    private void SwitchOffWeaponModels()
     {
-        for (int i = 0; i < gunTransforms.Length; i++)
+        for (int i = 0; i < weaponModels.Length; i++)
         {
-            gunTransforms[i].gameObject.SetActive(false);
+            weaponModels[i].gameObject.SetActive(false);
         }
     }
 
     private void AttachLeftHand()
     {
-        Transform targetTransform = currentGun.GetComponentInChildren<LeftHand_TragetTransform>().transform;
+        Transform targetTransform = CurrentWeaponModel().holdPoint;
 
         leftHandIK_Traget.localPosition = targetTransform.localPosition;
         leftHandIK_Traget.localRotation = targetTransform.localRotation;
