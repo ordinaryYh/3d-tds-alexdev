@@ -3522,7 +3522,7 @@ MonoBehaviour:
     baseSpread: 0
     maximumSpread: 3
     spreadIncreaseRate: 0.15
-  - weaponType: 1
+  - weaponType: 3
     bulletsInMagazine: 6
     magazineCapacity: 6
     totleReserveAmmo: 12
@@ -3534,11 +3534,11 @@ MonoBehaviour:
     burstBulletPerShot: 0
     burstFireRate: 0
     burstFireDelay: 0.1
-    bulletPerShot: 0
-    defaultFireRate: 0
+    bulletPerShot: 5
+    defaultFireRate: 1
     fireRate: 1
-    baseSpread: 0
-    maximumSpread: 3
+    baseSpread: 20
+    maximumSpread: 20
     spreadIncreaseRate: 0.15
 --- !u!114 &1651834851
 MonoBehaviour:

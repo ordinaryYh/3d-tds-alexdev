@@ -93,7 +93,16 @@ public class Weapon
 
     #region  Burst Methods
 
-    public bool BurstActivated() => burstActive;
+    public bool BurstActivated()
+    {
+        if (weaponType == WeaponType.Shotgun)
+        {
+            burstFireDelay = 0;
+            return true;
+        }
+
+        return burstActive;
+    }
 
     public void ToggleBurst()
     {
