@@ -11,7 +11,8 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         CreateImpactFX(collision);
-        Destroy(gameObject);
+        //使用对象池进行管理
+        ObjectPool.instance.ReturnBullet(gameObject);
     }
 
     private void CreateImpactFX(Collision collision)

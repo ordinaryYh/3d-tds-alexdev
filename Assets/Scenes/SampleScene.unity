@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 4
-  grabType: 1
+  equipAnimationType: 0
   holdType: 3
   gunPoint: {fileID: 537326400}
   holdPoint: {fileID: 203260744}
@@ -912,7 +912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 3
-  grabType: 1
+  equipAnimationType: 0
   holdType: 2
   gunPoint: {fileID: 255691030}
   holdPoint: {fileID: 1085495373}
@@ -2150,6 +2150,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 4
+--- !u!1 &1034725309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1034725311}
+  - component: {fileID: 1034725310}
+  m_Layer: 0
+  m_Name: ObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1034725310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034725309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20b74bfd25be5424c8876bd7ffb7817e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 6365928861200159972, guid: e10d47f3f80f14077a44e0ae739639c9, type: 3}
+  poolSize: 10
+--- !u!4 &1034725311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034725309}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.4827206, y: 1.2274508, z: -2.431224}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1085495372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2285,6 +2331,20 @@ MonoBehaviour:
     bulletsInMagazine: 0
     magazineCapacity: 0
     totleReserveAmmo: 0
+    shootType: 0
+    reloadSpeed: 1
+    equipmentSpeed: 1
+    burstAvalible: 0
+    burstActive: 0
+    burstBulletPerShot: 0
+    burstFireRate: 0
+    burstFireDelay: 0.1
+    bulletPerShot: 0
+    defaultFireRate: 0
+    fireRate: 1
+    baseSpread: 0
+    maximumSpread: 3
+    spreadIncreaseRate: 0.15
 --- !u!4 &1214912422
 Transform:
   m_ObjectHideFlags: 0
@@ -2862,7 +2922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 0
-  grabType: 0
+  equipAnimationType: 0
   holdType: 1
   gunPoint: {fileID: 35662332}
   holdPoint: {fileID: 1456846465}
@@ -3425,20 +3485,61 @@ MonoBehaviour:
     bulletsInMagazine: 0
     magazineCapacity: 0
     totleReserveAmmo: 0
+    shootType: 0
+    reloadSpeed: 1
+    equipmentSpeed: 1
+    burstAvalible: 0
+    burstActive: 0
+    burstBulletPerShot: 0
+    burstFireRate: 0
+    burstFireDelay: 0.1
+    bulletPerShot: 0
+    defaultFireRate: 0
+    fireRate: 1
+    baseSpread: 0
+    maximumSpread: 3
+    spreadIncreaseRate: 0.15
   bulletPrefab: {fileID: 6365928861200159972, guid: e10d47f3f80f14077a44e0ae739639c9, type: 3}
   bulletSpeed: 20
-  gunPoint: {fileID: 35662332}
   weaponHolder: {fileID: 438115223}
   maxSlots: 2
   weaponSlots:
-  - weaponType: 0
+  - weaponType: 2
     bulletsInMagazine: 30
     magazineCapacity: 30
     totleReserveAmmo: 60
-  - weaponType: 2
-    bulletsInMagazine: 11
-    magazineCapacity: 5
-    totleReserveAmmo: 11
+    shootType: 1
+    reloadSpeed: 2
+    equipmentSpeed: 2
+    burstAvalible: 1
+    burstActive: 0
+    burstBulletPerShot: 3
+    burstFireRate: 1.5
+    burstFireDelay: 0.1
+    bulletPerShot: 1
+    defaultFireRate: 10
+    fireRate: 10
+    baseSpread: 0
+    maximumSpread: 3
+    spreadIncreaseRate: 0.15
+  - weaponType: 1
+    bulletsInMagazine: 6
+    magazineCapacity: 6
+    totleReserveAmmo: 12
+    shootType: 0
+    reloadSpeed: 1
+    equipmentSpeed: 1
+    burstAvalible: 0
+    burstActive: 0
+    burstBulletPerShot: 0
+    burstFireRate: 0
+    burstFireDelay: 0.1
+    bulletPerShot: 0
+    defaultFireRate: 0
+    fireRate: 1
+    baseSpread: 0
+    maximumSpread: 3
+    spreadIncreaseRate: 0.15
 --- !u!114 &1651834851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3688,7 +3789,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 1
-  grabType: 0
+  equipAnimationType: 0
   holdType: 1
   gunPoint: {fileID: 1841866751}
   holdPoint: {fileID: 909253819}
@@ -4101,7 +4202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 2
-  grabType: 1
+  equipAnimationType: 0
   holdType: 1
   gunPoint: {fileID: 2094320916}
   holdPoint: {fileID: 503251962}
@@ -8000,3 +8101,4 @@ SceneRoots:
   - {fileID: 1651834848}
   - {fileID: 1214912422}
   - {fileID: 3883249348816210876}
+  - {fileID: 1034725311}

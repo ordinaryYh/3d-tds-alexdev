@@ -11,12 +11,12 @@ public class PlayerWeaponController : MonoBehaviour
 
 
     [SerializeField] private Weapon currentWeapon;
-
+    private bool weaponReady;
+    private bool isShooting;
 
     [Header("Bullet details")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float bulletSpeed;
-    [SerializeField] private Transform gunPoint;
 
 
     [SerializeField] private Transform weaponHolder;
@@ -30,13 +30,41 @@ public class PlayerWeaponController : MonoBehaviour
         player = GetComponent<Player>();
         AssignInputEvents();
 
-        currentWeapon.bulletsInMagazine = currentWeapon.totleReserveAmmo;
+        Invoke("EquipStartingWeapon", 0.1f); //在开局的时候装备武器1
     }
 
-    #region  Slots managment - Pick\Equip\Drop
+    private void Update()
+    {
+        if (isShooting)
+            Shoot();
+
+        if (Input.GetKeyDown(KeyCode.B))
+            currentWeapon.ToggleBurst();
+    }
+
+    //下面是三连发模式
+    private IEnumerator BurstFire()
+    {
+        SetWeaponReady(false);
+
+        for (int i = 1; i <= currentWeapon.bulletPerShot; i++)
+        {
+            FireSingleBullet();
+
+            yield return new WaitForSeconds(currentWeapon.burstFireDelay);
+
+            if (i >= currentWeapon.bulletPerShot)
+                SetWeaponReady(true);
+        }
+    }
+
+    #region  Slots managment - Pick\Equip\Drop\Ready
+
+    private void EquipStartingWeapon() => EquipWeapon(0);
 
     private void EquipWeapon(int i)
     {
+        SetWeaponReady(false);
         currentWeapon = weaponSlots[i];
         player.weaponVisuals.PlayWeaponEquiAnimation();
     }
@@ -62,37 +90,68 @@ public class PlayerWeaponController : MonoBehaviour
         EquipWeapon(0);
     }
 
+    public void SetWeaponReady(bool ready) => weaponReady = ready;
+    public bool WeaponReady() => weaponReady;
+
     #endregion
 
     private void Shoot()
     {
+        if (WeaponReady() == false)
+            return;
+
         if (currentWeapon.CanShoot() == false)
             return;
 
-        GameObject newBullet =
-            Instantiate(bulletPrefab, gunPoint.position, Quaternion.LookRotation(gunPoint.forward));
+        player.weaponVisuals.PlayerFireAnimation();
+
+        //每次按下左键才会设置为true，如果是单发模式，那么每次射击后都变为false即可
+        //这样需要按一次才会射击一次
+        if (currentWeapon.shootType == ShootType.Single)
+            isShooting = false;
+
+        if (currentWeapon.BurstActivated() == true)
+        {
+            StartCoroutine(BurstFire());
+            return;
+        }
+
+        FireSingleBullet();
+
+    }
+
+    private void FireSingleBullet()
+    {
+        currentWeapon.bulletsInMagazine--;
+
+        //使用对象池来创建子弹
+        GameObject newBullet = ObjectPool.instance.GetBullet();
+
+        newBullet.transform.position = GunPoint().position;
+        newBullet.transform.rotation = Quaternion.LookRotation(GunPoint().forward);
 
         Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+
+        Vector3 bulletDirection = currentWeapon.ApplySpread(BulletDirection());
+
         //这段代码的作用是控制子弹的击中效果，速度增加，那么质量就会减少
         rb.mass = REFERENCE_BULLET_SPEED / bulletSpeed;
-        rb.velocity = BulletDirection() * bulletSpeed;
+        rb.velocity = bulletDirection * bulletSpeed;
+    }
 
-        Destroy(newBullet, 10);
-
-        GetComponentInChildren<Animator>().SetTrigger("Fire");
+    private void Reload()
+    {
+        SetWeaponReady(false);
+        player.weaponVisuals.PlayReloadAnimation();
     }
 
     public Vector3 BulletDirection()
     {
         Transform aim = player.aim.Aim();
-        Vector3 direction = (aim.position - gunPoint.position).normalized;
+        Vector3 direction = (aim.position - GunPoint().position).normalized;
 
         if (player.aim.CanAimPrecisly() == false && player.aim.Target() == null)
             direction.y = 0;
-
-        //下面两句代码是为了保证弹道准确，不会因为角色的旋转而发生偏差
-        // weaponHolder.LookAt(aim);
-        // gunPoint.LookAt(aim);
 
         return direction;
     }
@@ -112,7 +171,7 @@ public class PlayerWeaponController : MonoBehaviour
         return null;
     }
 
-    public Transform GunPoint() => gunPoint;
+    public Transform GunPoint() => player.weaponVisuals.CurrentWeaponModel().gunPoint;
 
     #region  Input Event
     private void AssignInputEvents()
@@ -120,7 +179,8 @@ public class PlayerWeaponController : MonoBehaviour
         PlayerControlls controls = player.controls;
 
         //这段代码的作用是，fire事件执行时，给定输入事件的上下文，函数为shoot
-        controls.Character.Fire.performed += context => Shoot();
+        controls.Character.Fire.performed += context => isShooting = true;
+        controls.Character.Fire.canceled += context => isShooting = false;
 
         //下面是装备武器的事件
         controls.Character.EquipSlot1.performed += context => EquipWeapon(0);
@@ -129,12 +189,15 @@ public class PlayerWeaponController : MonoBehaviour
 
         controls.Character.Reload.performed += context =>
         {
-            if (currentWeapon.CanReload())
+            if (currentWeapon.CanReload() && WeaponReady() == true)
             {
-                player.weaponVisuals.PlayReloadAnimation();
+                Reload();
             }
         };
     }
+
+
+
     #endregion
 
 

@@ -9,7 +9,6 @@ public class PlayerWeaponVisuals : MonoBehaviour
 {
     private Player player;
     private Animator anim;
-    private bool isGrabbingWeapon;
 
     [SerializeField] private WeaponModel[] weaponModels;
     [SerializeField] private BackupWeaponModel[] backupWeaponModels;
@@ -45,6 +44,8 @@ public class PlayerWeaponVisuals : MonoBehaviour
         UpdateLeftHandIKWeight();
     }
 
+
+
     public WeaponModel CurrentWeaponModel()
     {
         WeaponModel weaponModel = null;
@@ -60,15 +61,6 @@ public class PlayerWeaponVisuals : MonoBehaviour
         return weaponModel;
     }
 
-
-
-
-
-    public void SetBusyGrabbingWeaponTo(bool _busy)
-    {
-        isGrabbingWeapon = _busy;
-        anim.SetBool("BusyGrabbingWeapon", isGrabbingWeapon);
-    }
 
 
     public void SwithcOnCurrentWeaponModel()
@@ -113,27 +105,29 @@ public class PlayerWeaponVisuals : MonoBehaviour
         }
     }
 
+    public void PlayerFireAnimation() => anim.SetTrigger("Fire");
+
     public void PlayReloadAnimation()
     {
-        if (isGrabbingWeapon)
-            return;
-
+        float reloadSpeed = player.weapon.CurrentWeapon().reloadSpeed;
         //这里要停止rig，不然的话装弹的时候，手部、枪、头部都不会有动作
         //因为rig上设置了这些部位的动作
         ReduceRigWeight();
+        anim.SetFloat("ReloadSpeed", reloadSpeed);
         anim.SetTrigger("Reload");
     }
 
     public void PlayWeaponEquiAnimation()
     {
-        GrabType grabType = CurrentWeaponModel().grabType;
+        EquipType equipType = CurrentWeaponModel().equipAnimationType;
+
+        float equipmentSpeed = player.weapon.CurrentWeapon().equipmentSpeed;
 
         leftHandIK.weight = 0;
         ReduceRigWeight();
-        anim.SetFloat("WeaponGrabType", (float)grabType);
-        anim.SetTrigger("WeaponGrab");
-
-        SetBusyGrabbingWeaponTo(true);
+        anim.SetTrigger("EquipWeapon");
+        anim.SetFloat("EquipType", (float)equipType);
+        anim.SetFloat("EquipSpeed", equipmentSpeed);
     }
 
 
