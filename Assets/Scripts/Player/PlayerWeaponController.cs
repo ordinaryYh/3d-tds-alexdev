@@ -132,6 +132,10 @@ public class PlayerWeaponController : MonoBehaviour
 
         Rigidbody rb = newBullet.GetComponent<Rigidbody>();
 
+        Bullet bulletScript = newBullet.GetComponent<Bullet>();
+        bulletScript.BulletSetup(currentWeapon.gunDistance);
+
+
         Vector3 bulletDirection = currentWeapon.ApplySpread(BulletDirection());
 
         //这段代码的作用是控制子弹的击中效果，速度增加，那么质量就会减少

@@ -32,6 +32,8 @@ public class Weapon
     public float reloadSpeed = 1;  //装弹动画的速度
     [Range(1, 3)]
     public float equipmentSpeed = 1;  //装备武器的动画速度
+    [Range(2, 12)]
+    public float gunDistance = 4;
 
     [Header("Burst fire")]
     public bool burstAvalible;

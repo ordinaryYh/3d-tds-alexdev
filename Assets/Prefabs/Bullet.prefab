@@ -260,4 +260,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c02d95db1fa64d03be72d58f3b82a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 1181202040319636182}
+  trailRenderer: {fileID: 6048401699483018906}
+  meshRenderer: {fileID: 2650774943907923643}
+  cd: {fileID: 1054052437625430403}
   bulletImpactFX: {fileID: 1235062067201549174, guid: ce8597e445a844dffb06679579a8f17e, type: 3}
