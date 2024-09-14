@@ -131,8 +131,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1955031}
+  - component: {fileID: 1955032}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: CameraManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,6 +156,20 @@ Transform:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1955032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01d3737717f94949923d9752b803c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canChangeCameraDistance: 0
+  distanceChangeRate: 2
 --- !u!1 &14282209
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,13 +392,47 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 96943240}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 2.892733, y: -0.803639, z: 1.51}
   m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 200663101}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &200663100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 200663101}
+  m_Layer: 0
+  m_Name: Level
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &200663101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200663100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.892733, y: 0.803639, z: -1.51}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 263670626}
+  - {fileID: 446999513}
+  - {fileID: 96943244}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &203260743
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,8 +628,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263670625}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.892733, y: 0.803639, z: -1.51}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -593,7 +642,7 @@ Transform:
   - {fileID: 612023698}
   - {fileID: 412142406}
   - {fileID: 1586511926}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 200663101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &328932160
 PrefabInstance:
@@ -999,6 +1048,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 0
+  hangType: 2
 --- !u!1 &446999512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,14 +1073,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446999512}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.98, y: -0.26, z: -3.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.872733, y: -1.0636389, z: -1.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 14282210}
   - {fileID: 1737655625}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 200663101}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &463371241
 GameObject:
@@ -1227,7 +1277,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 503251962}
-  - component: {fileID: 503251963}
   m_Layer: 8
   m_Name: LeftHand_TragetTransform
   m_TagString: Untagged
@@ -1250,18 +1299,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1917435756}
   m_LocalEulerAnglesHint: {x: -1.243, y: -79.646, z: 43.612}
---- !u!114 &503251963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 503251961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce957b67ac6a4299a6b840df9714573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &504588974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1815,15 +1852,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 752713323}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5642653, y: -0.000000022555465, z: -0.000000037543938, w: 0.8255936}
-  m_LocalPosition: {x: 0.136, y: -0.03, z: -0.078}
+  m_LocalRotation: {x: 0.3886054, y: -0.59859914, z: -0.4091229, w: 0.56858015}
+  m_LocalPosition: {x: -0.044, y: -0.216, z: -0.005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3641959084135881530}
   - {fileID: 8188088110045264745}
   m_Father: {fileID: 408570157082061733}
-  m_LocalEulerAnglesHint: {x: 68.703, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -2.745, y: -91.071, z: -68.677}
 --- !u!114 &752713325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1837,6 +1874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 3
+  hangType: 0
 --- !u!1 &909253818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1846,7 +1884,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 909253819}
-  - component: {fileID: 909253820}
   m_Layer: 8
   m_Name: LeftHand_TragetTransform
   m_TagString: Untagged
@@ -1869,18 +1906,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1695297364}
   m_LocalEulerAnglesHint: {x: -1.243, y: -79.646, z: 43.612}
---- !u!114 &909253820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909253818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce957b67ac6a4299a6b840df9714573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &959561322
 GameObject:
   m_ObjectHideFlags: 0
@@ -2127,8 +2152,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1003458598}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5642653, y: -0.000000022555465, z: -0.000000037543938, w: 0.8255936}
-  m_LocalPosition: {x: 0.136, y: -0.03, z: -0.078}
+  m_LocalRotation: {x: 0.56426424, y: -0.001606201, z: -0.0010978973, w: 0.825592}
+  m_LocalPosition: {x: 0.035788972, y: 0.017222757, z: -0.096408956}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2136,7 +2161,7 @@ Transform:
   - {fileID: 5395284278621835079}
   - {fileID: 7701400725647001501}
   m_Father: {fileID: 408570157082061733}
-  m_LocalEulerAnglesHint: {x: 68.703, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 68.701, y: -0.614, z: -0.572}
 --- !u!114 &1003458600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2150,6 +2175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 4
+  hangType: 1
 --- !u!1 &1034725309
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,7 +2187,7 @@ GameObject:
   - component: {fileID: 1034725311}
   - component: {fileID: 1034725310}
   m_Layer: 0
-  m_Name: ObjectPool
+  m_Name: '***ObjectPool***'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2205,7 +2231,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1085495373}
-  - component: {fileID: 1085495374}
   m_Layer: 8
   m_Name: LeftHand_TragetTransform
   m_TagString: Untagged
@@ -2228,18 +2253,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 433331260}
   m_LocalEulerAnglesHint: {x: -1.243, y: -79.646, z: 43.612}
---- !u!114 &1085495374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1085495372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce957b67ac6a4299a6b840df9714573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1137919128
 GameObject:
   m_ObjectHideFlags: 0
@@ -2335,6 +2348,7 @@ MonoBehaviour:
     reloadSpeed: 1
     equipmentSpeed: 1
     gunDistance: 4
+    cameraDistance: 6
     burstAvalible: 0
     burstActive: 0
     burstBulletPerShot: 0
@@ -3049,7 +3063,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1456846465}
-  - component: {fileID: 1456846466}
   m_Layer: 8
   m_Name: LeftHand_TragetTransform
   m_TagString: Untagged
@@ -3072,18 +3085,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1347365654}
   m_LocalEulerAnglesHint: {x: -1.243, y: -79.646, z: 43.612}
---- !u!114 &1456846466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1456846464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce957b67ac6a4299a6b840df9714573, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1561148839
 GameObject:
   m_ObjectHideFlags: 0
@@ -3131,6 +3132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 1
+  hangType: 2
 --- !u!1 &1575218899
 GameObject:
   m_ObjectHideFlags: 0
@@ -3178,6 +3180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 2
+  hangType: 1
 --- !u!1 &1585508905
 GameObject:
   m_ObjectHideFlags: 0
@@ -3490,6 +3493,7 @@ MonoBehaviour:
     reloadSpeed: 1
     equipmentSpeed: 1
     gunDistance: 4
+    cameraDistance: 6
     burstAvalible: 0
     burstActive: 0
     burstBulletPerShot: 0
@@ -3514,6 +3518,7 @@ MonoBehaviour:
     reloadSpeed: 2
     equipmentSpeed: 2
     gunDistance: 12
+    cameraDistance: 7
     burstAvalible: 1
     burstActive: 0
     burstBulletPerShot: 3
@@ -3533,6 +3538,7 @@ MonoBehaviour:
     reloadSpeed: 1
     equipmentSpeed: 1
     gunDistance: 6
+    cameraDistance: 4
     burstAvalible: 0
     burstActive: 0
     burstBulletPerShot: 0
@@ -3543,6 +3549,66 @@ MonoBehaviour:
     fireRate: 1
     baseSpread: 20
     maximumSpread: 20
+    spreadIncreaseRate: 0.15
+  - weaponType: 4
+    bulletsInMagazine: 6
+    magazineCapacity: 6
+    totleReserveAmmo: 12
+    shootType: 0
+    reloadSpeed: 1
+    equipmentSpeed: 1
+    gunDistance: 6
+    cameraDistance: 6
+    burstAvalible: 0
+    burstActive: 0
+    burstBulletPerShot: 0
+    burstFireRate: 0
+    burstFireDelay: 0.1
+    bulletPerShot: 5
+    defaultFireRate: 1
+    fireRate: 1
+    baseSpread: 20
+    maximumSpread: 20
+    spreadIncreaseRate: 0.15
+  - weaponType: 0
+    bulletsInMagazine: 15
+    magazineCapacity: 15
+    totleReserveAmmo: 45
+    shootType: 0
+    reloadSpeed: 1
+    equipmentSpeed: 1
+    gunDistance: 6
+    cameraDistance: 6
+    burstAvalible: 0
+    burstActive: 0
+    burstBulletPerShot: 0
+    burstFireRate: 0
+    burstFireDelay: 0.1
+    bulletPerShot: 5
+    defaultFireRate: 1
+    fireRate: 1
+    baseSpread: 3
+    maximumSpread: 5
+    spreadIncreaseRate: 0.15
+  - weaponType: 1
+    bulletsInMagazine: 6
+    magazineCapacity: 6
+    totleReserveAmmo: 12
+    shootType: 0
+    reloadSpeed: 1
+    equipmentSpeed: 1
+    gunDistance: 6
+    cameraDistance: 6
+    burstAvalible: 0
+    burstActive: 0
+    burstBulletPerShot: 0
+    burstFireRate: 0
+    burstFireDelay: 0.1
+    bulletPerShot: 5
+    defaultFireRate: 1
+    fireRate: 1
+    baseSpread: 3
+    maximumSpread: 5
     spreadIncreaseRate: 0.15
 --- !u!114 &1651834851
 MonoBehaviour:
@@ -8096,10 +8162,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 959561324}
   - {fileID: 1955031}
-  - {fileID: 263670626}
-  - {fileID: 446999513}
+  - {fileID: 200663101}
   - {fileID: 705507995}
-  - {fileID: 96943244}
   - {fileID: 2094248063}
   - {fileID: 1725567807}
   - {fileID: 1651834848}

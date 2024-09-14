@@ -34,6 +34,8 @@ public class Weapon
     public float equipmentSpeed = 1;  //装备武器的动画速度
     [Range(2, 12)]
     public float gunDistance = 4;
+    [Range(3, 8)]
+    public float cameraDistance = 6;
 
     [Header("Burst fire")]
     public bool burstAvalible;
