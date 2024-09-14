@@ -60,6 +60,13 @@ public class Weapon
     private float lastSpreadUpdateTime;
     private float spreadCooldown = 1;
 
+
+    public Weapon(WeaponType _weaponType)
+    {
+        defaultFireRate = fireRate;
+        this.weaponType = _weaponType;
+    }
+
     private void Awake()
     {
         currentSpred = baseSpread;

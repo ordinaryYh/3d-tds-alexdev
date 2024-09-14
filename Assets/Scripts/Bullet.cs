@@ -53,7 +53,7 @@ public class Bullet : MonoBehaviour
         }
 
         if (trailRenderer.time < 0)
-            ObjectPool.instance.ReturnBullet(gameObject);
+            ObjectPool.instance.ReturnToPool(gameObject);
 
     }
 
@@ -61,7 +61,7 @@ public class Bullet : MonoBehaviour
     {
         CreateImpactFX(collision);
         //使用对象池进行管理
-        ObjectPool.instance.ReturnBullet(gameObject);
+        ObjectPool.instance.ReturnToPool(gameObject);
     }
 
     private void CreateImpactFX(Collision collision)
@@ -70,9 +70,11 @@ public class Bullet : MonoBehaviour
         {
             //下面的代码是只在第一次接触的点，触发fx特效
             ContactPoint contact = collision.contacts[0];
-            GameObject newImpactFX = Instantiate(bulletImpactFX, contact.point, Quaternion.LookRotation(contact.normal));
 
-            Destroy(newImpactFX, 1);
+            GameObject newImpactFX = ObjectPool.instance.GetObject(bulletImpactFX);
+            newImpactFX.transform.position = contact.point;
+
+            ObjectPool.instance.ReturnToPoolDelay(5, newImpactFX);
         }
     }
 }

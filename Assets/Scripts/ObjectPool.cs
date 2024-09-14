@@ -6,10 +6,11 @@ public class ObjectPool : MonoBehaviour
 {
     public static ObjectPool instance;
 
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private int poolSize = 10;
+    [SerializeField] private int poolSize = 5;
 
-    private Queue<GameObject> bulletPool;
+    private Dictionary<GameObject, Queue<GameObject>> poolDictionary =
+        new Dictionary<GameObject, Queue<GameObject>>();
+
 
     private void Awake()
     {
@@ -19,44 +20,67 @@ public class ObjectPool : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void Start()
+
+    public GameObject GetObject(GameObject _prefab)
     {
-        bulletPool = new Queue<GameObject>();
-        CreateInitialPool();
+        if (poolDictionary.ContainsKey(_prefab) == false)
+        {
+            InitializeNewPool(_prefab);
+        }
+
+        if (poolDictionary[_prefab].Count == 0)
+        {
+            CreateNewObject(_prefab);
+        }
+
+        GameObject objectToGet = poolDictionary[_prefab].Dequeue();
+        objectToGet.SetActive(true);
+        objectToGet.transform.parent = null;
+
+        return objectToGet;
     }
 
-    public GameObject GetBullet()
+    //之所以要创建那个PooledObject就是因为这个函数
+    //因为当调用return函数时，传入的并不是prefab，而是生成的GameObjet，而这些GameObject都不相同
+    //所以字典就会检索不到，字典的key都是相应的prefab，所以需要用PooledObject这个类来存储prefab，这样可以方便获取
+    public void ReturnToPool(GameObject _object)
     {
-        if (bulletPool.Count == 0)
-            CreateNewBullet();
+        GameObject originalPrefab = _object.GetComponent<PooledObject>().originalPrefab;
 
-        GameObject bulletToGet = bulletPool.Dequeue();
-        bulletToGet.SetActive(true);
-        bulletToGet.transform.parent = null;
+        _object.SetActive(false);
+        _object.transform.parent = transform;
 
-        return bulletToGet;
+        poolDictionary[originalPrefab].Enqueue(_object);
     }
 
-    public void ReturnBullet(GameObject _bullet)
+    //返回到对象池的协程函数
+    public void ReturnToPoolDelay(float _delay, GameObject objectToReturn)
+        => StartCoroutine(DelayReturn(_delay, objectToReturn));
+
+    private IEnumerator DelayReturn(float delay, GameObject objectToRrturn)
     {
-        _bullet.SetActive(false);
-        bulletPool.Enqueue(_bullet);
-        _bullet.transform.parent = this.transform;
+        yield return new WaitForSeconds(delay);
+
+        ReturnToPool(objectToRrturn);
     }
 
-    private void CreateInitialPool()
+    private void InitializeNewPool(GameObject _prefab)
     {
+        poolDictionary[_prefab] = new Queue<GameObject>();
+
         for (int i = 0; i < poolSize; i++)
         {
-            CreateNewBullet();
+            CreateNewObject(_prefab);
         }
     }
 
-    private void CreateNewBullet()
+    private void CreateNewObject(GameObject _prefab)
     {
         //创建的时候，设置当前类为父节点
-        GameObject newBullet = Instantiate(bulletPrefab, transform);
-        bulletPool.Enqueue(newBullet);
-        newBullet.SetActive(false);
+        GameObject newObject = Instantiate(_prefab, transform);
+        newObject.AddComponent<PooledObject>().originalPrefab = _prefab;
+        newObject.SetActive(false);
+
+        poolDictionary[_prefab].Enqueue(newObject);
     }
 }
