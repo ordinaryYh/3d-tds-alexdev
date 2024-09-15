@@ -9,7 +9,7 @@ public class PlayerWeaponController : MonoBehaviour
     //子弹击中的效果永远不会变
     private const float REFERENCE_BULLET_SPEED = 20;
 
-
+    [SerializeField] private Weapon_Data defaultWeaponData;
     [SerializeField] private Weapon currentWeapon;
     private bool weaponReady;
     private bool isShooting;
@@ -59,7 +59,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void EquipStartingWeapon()
     {
-        weaponSlots[0] = new Weapon(WeaponType.Pistol);
+        weaponSlots[0] = new Weapon(defaultWeaponData);
 
         EquipWeapon(0);
     }
@@ -76,7 +76,7 @@ public class PlayerWeaponController : MonoBehaviour
         CameraManager.instance.ChangeCameraDistance(currentWeapon.cameraDistance);
     }
 
-    public void PickupWeapon(Weapon _newWeapon)
+    public void PickupWeapon(Weapon_Data _weapon_Data)
     {
         if (weaponSlots.Count >= maxSlots)
         {
@@ -84,7 +84,7 @@ public class PlayerWeaponController : MonoBehaviour
             return;
         }
 
-        weaponSlots.Add(_newWeapon);
+        weaponSlots.Add(new Weapon(_weapon_Data));
         player.weaponVisuals.SwitchOnBackupWeaponModel();
     }
 

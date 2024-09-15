@@ -2325,27 +2325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68599a7c2677437b996e83e54fdd5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon:
-    weaponType: 2
-    bulletsInMagazine: 0
-    magazineCapacity: 0
-    totleReserveAmmo: 0
-    shootType: 0
-    reloadSpeed: 1
-    equipmentSpeed: 1
-    gunDistance: 4
-    cameraDistance: 6
-    burstAvalible: 0
-    burstActive: 0
-    burstBulletPerShot: 0
-    burstFireRate: 0
-    burstFireDelay: 0.1
-    bulletPerShot: 0
-    defaultFireRate: 0
-    fireRate: 1
-    baseSpread: 0
-    maximumSpread: 3
-    spreadIncreaseRate: 0.15
+  weaponData: {fileID: 11400000, guid: 64d0061dc3f9f1e4f809ac9a0154c728, type: 2}
 --- !u!4 &1214912422
 Transform:
   m_ObjectHideFlags: 0
@@ -3470,132 +3450,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650c0d3d8370a4b84b9aab016863b9fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultWeaponData: {fileID: 11400000, guid: e9453ffb1942ed141bfad6f138380ab6, type: 2}
   currentWeapon:
     weaponType: 0
+    shootType: 0
+    fireRate: 0
+    burstActive: 0
     bulletsInMagazine: 0
     magazineCapacity: 0
     totleReserveAmmo: 0
-    shootType: 0
-    reloadSpeed: 1
-    equipmentSpeed: 1
-    gunDistance: 4
-    cameraDistance: 6
-    burstAvalible: 0
-    burstActive: 0
-    burstBulletPerShot: 0
-    burstFireRate: 0
-    burstFireDelay: 0.1
-    bulletPerShot: 0
-    defaultFireRate: 0
-    fireRate: 1
-    baseSpread: 0
-    maximumSpread: 3
-    spreadIncreaseRate: 0.15
   bulletPrefab: {fileID: 6365928861200159972, guid: e10d47f3f80f14077a44e0ae739639c9, type: 3}
   bulletSpeed: 20
   weaponHolder: {fileID: 438115223}
   maxSlots: 2
   weaponSlots:
   - weaponType: 2
+    shootType: 1
+    fireRate: 0
+    burstActive: 0
     bulletsInMagazine: 30
     magazineCapacity: 30
     totleReserveAmmo: 60
-    shootType: 1
-    reloadSpeed: 2
-    equipmentSpeed: 2
-    gunDistance: 12
-    cameraDistance: 7
-    burstAvalible: 1
-    burstActive: 0
-    burstBulletPerShot: 3
-    burstFireRate: 1.5
-    burstFireDelay: 0.1
-    bulletPerShot: 1
-    defaultFireRate: 10
-    fireRate: 10
-    baseSpread: 0
-    maximumSpread: 3
-    spreadIncreaseRate: 0.15
   - weaponType: 3
+    shootType: 0
+    fireRate: 0
+    burstActive: 0
     bulletsInMagazine: 6
     magazineCapacity: 6
     totleReserveAmmo: 12
-    shootType: 0
-    reloadSpeed: 1
-    equipmentSpeed: 1
-    gunDistance: 6
-    cameraDistance: 4
-    burstAvalible: 0
-    burstActive: 0
-    burstBulletPerShot: 0
-    burstFireRate: 0
-    burstFireDelay: 0.1
-    bulletPerShot: 5
-    defaultFireRate: 1
-    fireRate: 1
-    baseSpread: 20
-    maximumSpread: 20
-    spreadIncreaseRate: 0.15
   - weaponType: 4
+    shootType: 0
+    fireRate: 0
+    burstActive: 0
     bulletsInMagazine: 6
     magazineCapacity: 6
     totleReserveAmmo: 12
-    shootType: 0
-    reloadSpeed: 1
-    equipmentSpeed: 1
-    gunDistance: 6
-    cameraDistance: 6
-    burstAvalible: 0
-    burstActive: 0
-    burstBulletPerShot: 0
-    burstFireRate: 0
-    burstFireDelay: 0.1
-    bulletPerShot: 5
-    defaultFireRate: 1
-    fireRate: 1
-    baseSpread: 20
-    maximumSpread: 20
-    spreadIncreaseRate: 0.15
   - weaponType: 0
+    shootType: 0
+    fireRate: 0
+    burstActive: 0
     bulletsInMagazine: 15
     magazineCapacity: 15
     totleReserveAmmo: 45
-    shootType: 0
-    reloadSpeed: 1
-    equipmentSpeed: 1
-    gunDistance: 6
-    cameraDistance: 6
-    burstAvalible: 0
-    burstActive: 0
-    burstBulletPerShot: 0
-    burstFireRate: 0
-    burstFireDelay: 0.1
-    bulletPerShot: 5
-    defaultFireRate: 1
-    fireRate: 1
-    baseSpread: 3
-    maximumSpread: 5
-    spreadIncreaseRate: 0.15
   - weaponType: 1
+    shootType: 0
+    fireRate: 0
+    burstActive: 0
     bulletsInMagazine: 6
     magazineCapacity: 6
     totleReserveAmmo: 12
-    shootType: 0
-    reloadSpeed: 1
-    equipmentSpeed: 1
-    gunDistance: 6
-    cameraDistance: 6
-    burstAvalible: 0
-    burstActive: 0
-    burstBulletPerShot: 0
-    burstFireRate: 0
-    burstFireDelay: 0.1
-    bulletPerShot: 5
-    defaultFireRate: 1
-    fireRate: 1
-    baseSpread: 3
-    maximumSpread: 5
-    spreadIncreaseRate: 0.15
 --- !u!114 &1651834851
 MonoBehaviour:
   m_ObjectHideFlags: 0
