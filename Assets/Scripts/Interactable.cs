@@ -1,25 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public class Interactable : MonoBehaviour
 {
-    private MeshRenderer mesh;
+    protected MeshRenderer mesh;
     [SerializeField] private Material highlightMaterial;
-    private Material defaultMaterial;
+    protected Material defaultMaterial;
 
     private void Start()
     {
         if (mesh == null)
             mesh = GetComponentInChildren<MeshRenderer>();
 
-        defaultMaterial = mesh.material;
+        defaultMaterial = mesh.sharedMaterial;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
             HighlightActive(true);
+    }
+
+    protected void UpdateMeshAndMaterial(MeshRenderer newMesh)
+    {
+        mesh = newMesh;
+        defaultMaterial = newMesh.sharedMaterial;
     }
 
     public virtual void Interaction()
@@ -43,7 +50,7 @@ public class Interactable : MonoBehaviour
             return;
 
 
-        playerInteraction.interactables.Add(this);
+        playerInteraction.GetInteracbles().Add(this);
         playerInteraction.UpdateClosestInteractble();
     }
 
@@ -55,7 +62,7 @@ public class Interactable : MonoBehaviour
             return;
 
 
-        playerInteraction.interactables.Remove(this);
+        playerInteraction.GetInteracbles().Remove(this);
         playerInteraction.UpdateClosestInteractble();
     }
 }

@@ -11,6 +11,8 @@ public class ObjectPool : MonoBehaviour
     private Dictionary<GameObject, Queue<GameObject>> poolDictionary =
         new Dictionary<GameObject, Queue<GameObject>>();
 
+    [Header("To Initialize")]
+    [SerializeField] private GameObject weaponPickup;
 
     private void Awake()
     {
@@ -18,6 +20,11 @@ public class ObjectPool : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        InitializeNewPool(weaponPickup);
     }
 
 

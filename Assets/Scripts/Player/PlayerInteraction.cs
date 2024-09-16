@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public List<Interactable> interactables;
-
+    private List<Interactable> interactables = new List<Interactable>();
     private Interactable closestInteractable;
 
     private void Start()
     {
         Player player = GetComponent<Player>();
-
         player.controls.Character.Interaction.performed += context => InteractWithClosest();
     }
 
     private void InteractWithClosest()
     {
         closestInteractable?.Interaction();
+        interactables.Remove(closestInteractable);
+
+        UpdateClosestInteractble();
     }
 
     public void UpdateClosestInteractble()
@@ -41,4 +42,6 @@ public class PlayerInteraction : MonoBehaviour
 
         closestInteractable?.HighlightActive(true);
     }
+
+    public List<Interactable> GetInteracbles() => interactables;
 }

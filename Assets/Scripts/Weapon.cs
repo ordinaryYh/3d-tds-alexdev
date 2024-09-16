@@ -44,7 +44,7 @@ public class Weapon
 
     #region  Weapon generic info variables
     public float reloadSpeed { get; private set; }  //装弹动画的速度
-    public float equipmentSpeed { get; private set; }  //装备武器的动画速度
+    public float equipmentSpeed = 1;  //装备武器的动画速度
     public float gunDistance { get; private set; }
     public float cameraDistance { get; private set; }
     #endregion
@@ -59,6 +59,8 @@ public class Weapon
     private float lastSpreadUpdateTime;
     private float spreadCooldown = 1;
     #endregion
+
+    public Weapon_Data weaponData { get; private set; }
 
     public Weapon(Weapon_Data weapon_Data)
     {
@@ -88,6 +90,8 @@ public class Weapon
         cameraDistance = weapon_Data.cameraDistance;
 
         defaultFireRate = fireRate;
+
+        this.weaponData = weapon_Data;
     }
 
     private void Awake()

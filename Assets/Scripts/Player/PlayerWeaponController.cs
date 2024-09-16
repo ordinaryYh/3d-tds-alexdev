@@ -25,6 +25,8 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] private int maxSlots = 2;
     [SerializeField] private List<Weapon> weaponSlots; //一共只有两把武器
 
+    [SerializeField] private GameObject weaponPickupPrefab;
+
     private void Start()
     {
         player = GetComponent<Player>();
@@ -74,17 +76,36 @@ public class PlayerWeaponController : MonoBehaviour
         player.weaponVisuals.PlayWeaponEquiAnimation();
 
         CameraManager.instance.ChangeCameraDistance(currentWeapon.cameraDistance);
+
+        Debug.Log(CurrentWeapon().weaponType);
     }
 
-    public void PickupWeapon(Weapon_Data _weapon_Data)
+    //捡起武器总共有三种情况
+    public void PickupWeapon(Weapon newWeapon)
     {
-        if (weaponSlots.Count >= maxSlots)
+
+        //如果当前有这把武器，那么就加子弹
+        if (WeaponInSlots(newWeapon.weaponType) != null)
         {
-            Debug.Log("No slots avaliable");
+            WeaponInSlots(newWeapon.weaponType).totleReserveAmmo += newWeapon.totleReserveAmmo;
             return;
         }
 
-        weaponSlots.Add(new Weapon(_weapon_Data));
+        //如果没有这把武器，并且武器槽数量过多，那么就会替换当前武器
+        if (weaponSlots.Count >= maxSlots && newWeapon.weaponType != currentWeapon.weaponType)
+        {
+            int weaponIndex = weaponSlots.IndexOf(currentWeapon);
+
+            player.weaponVisuals.SwitchOffWeaponModels();
+            weaponSlots[weaponIndex] = newWeapon;
+
+            CreateWeaponOnTheGround();
+            EquipWeapon(weaponIndex);
+            return;
+        }
+
+        //如果没有这把武器，并且武器槽有空，那么就添加这把武器
+        weaponSlots.Add(newWeapon);
         player.weaponVisuals.SwitchOnBackupWeaponModel();
     }
 
@@ -93,8 +114,16 @@ public class PlayerWeaponController : MonoBehaviour
         if (HasOnlyOneWeapon())
             return;
 
+        CreateWeaponOnTheGround();
+
         weaponSlots.Remove(currentWeapon);
         EquipWeapon(0);
+    }
+
+    private void CreateWeaponOnTheGround()
+    {
+        GameObject droppedWeapon = ObjectPool.instance.GetObject(weaponPickupPrefab);
+        droppedWeapon.GetComponent<Pickup_Weapon>()?.SetupPickupWeapon(currentWeapon, transform);
     }
 
     public void SetWeaponReady(bool ready) => weaponReady = ready;
