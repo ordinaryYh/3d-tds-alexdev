@@ -22,7 +22,7 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] private Transform weaponHolder;
 
     [Header("Inventory")]
-    [SerializeField] private int maxSlots = 2;
+    [SerializeField] private int maxSlots = 5;
     [SerializeField] private List<Weapon> weaponSlots; //一共只有两把武器
 
     [SerializeField] private GameObject weaponPickupPrefab;
