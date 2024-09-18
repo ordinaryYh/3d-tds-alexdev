@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyState
 {
@@ -8,6 +9,9 @@ public class EnemyState
     protected EnemyStateMachine stateMachine;
 
     protected string animBoolName;
+    protected float stateTimer; //每个state都可能拥有自己的state
+
+    protected bool triggerCalled;
 
     public EnemyState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName)
     {
@@ -18,18 +22,40 @@ public class EnemyState
 
     public virtual void Enter()
     {
-        //anim.setBool(animBoolName, true);
-        Debug.Log(animBoolName);
+        enemyBase.anim.SetBool(animBoolName, true);
+
+        triggerCalled = false;
     }
 
     public virtual void Exit()
     {
-        //anim.setBool(animBoolName, false);
+        enemyBase.anim.SetBool(animBoolName, false);
     }
 
     public virtual void Update()
     {
-
+        stateTimer -= Time.deltaTime;
     }
 
+    public void AnimationTrigger() => triggerCalled = true;
+
+
+    //这个函数是如果存在最近的角落，那么就返回
+    //如果没有，就返回目的地位置
+    protected Vector3 GetNextPathPoint()
+    {
+        NavMeshAgent agent = enemyBase.agent;
+        NavMeshPath path = agent.path;
+
+        if (path.corners.Length < 2)
+            return agent.destination;
+
+        for (int i = 0; i < path.corners.Length; i++)
+        {
+            if (Vector3.Distance(agent.transform.position, path.corners[i]) < 1)
+                return path.corners[i + 1];
+        }
+
+        return agent.destination;
+    }
 }
