@@ -65,7 +65,18 @@ public class Bullet : MonoBehaviour
     //和OnTriggerEnter是冲突的，要求两个物体都不能勾选is Trigger，否则不会触发
     private void OnCollisionEnter(Collision collision)
     {
+        CreateImpactFX(collision);
+        //使用对象池进行管理
+        ObjectPool.instance.ReturnToPool(gameObject);
+
         Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
+        EnemyShield shield = collision.gameObject.GetComponent<EnemyShield>();
+
+        if (shield != null)
+        {
+            shield.ReduceDurability();
+            return;
+        }
 
         if (enemy != null)
         {
@@ -76,9 +87,6 @@ public class Bullet : MonoBehaviour
             enemy.HitImapct(force, collision.contacts[0].point, hitRigidbody);
         }
 
-        CreateImpactFX(collision);
-        //使用对象池进行管理
-        ObjectPool.instance.ReturnToPool(gameObject);
     }
 
     private void CreateImpactFX(Collision collision)

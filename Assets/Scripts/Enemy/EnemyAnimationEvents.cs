@@ -18,4 +18,6 @@ public class EnemyAnimationEvents : MonoBehaviour
 
     public void StartManualRotation() =>enemy.ActivateMnaualRotation(true);
     public void StopManualRotation() =>enemy.ActivateMnaualRotation(false);
+
+    public void AbilityEvent()=> enemy.GetComponent<Enemy_Melee>().TriggerAbility();
 }

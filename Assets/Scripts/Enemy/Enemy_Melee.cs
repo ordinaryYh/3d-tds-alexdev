@@ -15,6 +15,7 @@ public struct AttackData
 }
 
 public enum AttackType_Melee { Close, Charge }
+public enum EnemyMelee_Type { Regular, Shield, Dodge }
 
 public class Enemy_Melee : Enemy
 {
@@ -24,7 +25,13 @@ public class Enemy_Melee : Enemy
     public ChaseState_Melee chaseState { get; private set; }
     public AttackState_Melee attackState { get; private set; }
     public DeadState_Melee deadState { get; private set; }
+    public AbilityState_Melee abilityState { get; private set; }
 
+    [Header("Enemy Settings")]
+    public EnemyMelee_Type meleeType;
+    public Transform shieldTransform;
+    public float dodgeCooldown;
+    private float lastTimeDodge;
 
     [Header("Attack data")]
     public AttackData attackData;
@@ -43,6 +50,7 @@ public class Enemy_Melee : Enemy
         chaseState = new ChaseState_Melee(this, stateMachine, "Chase");
         attackState = new AttackState_Melee(this, stateMachine, "Attack");
         deadState = new DeadState_Melee(this, stateMachine, "Idle"); //idle并不重要，最终都要使用ragdoll
+        abilityState = new AbilityState_Melee(this, stateMachine, "Axe Throw");
     }
 
     protected override void Start()
@@ -50,12 +58,30 @@ public class Enemy_Melee : Enemy
         base.Start();
 
         stateMachine.Initialize(idleState);
+
+        InitializeSpeciality();
     }
 
 
     protected override void Update()
     {
         stateMachine.currentState.Update();
+    }
+
+    public void TriggerAbility()
+    {
+        moveSpeed = moveSpeed * 0.6f;
+        Debug.Log("axe throw");
+        pulledWeapon.gameObject.SetActive(false);
+    }
+
+    private void InitializeSpeciality()
+    {
+        if (meleeType == EnemyMelee_Type.Shield)
+        {
+            anim.SetFloat("ChaseIndex", 1);
+            shieldTransform.gameObject.SetActive(true);
+        }
     }
 
     public override void GetHit()
@@ -80,4 +106,21 @@ public class Enemy_Melee : Enemy
     }
 
     public bool PlayerInAttackRnage() => Vector3.Distance(transform.position, player.position) < attackData.attackRange;
+
+    public void ActivateDodgeRoll()
+    {
+        if (meleeType != EnemyMelee_Type.Dodge)
+            return;
+        if (stateMachine.currentState != chaseState)
+            return;
+        if (Vector3.Distance(transform.position, player.position) < 2f)
+            return;
+
+        if (Time.time > dodgeCooldown + lastTimeDodge)
+        {
+            anim.SetTrigger("Dodge");
+            lastTimeDodge = Time.time;
+        }
+
+    }
 }
