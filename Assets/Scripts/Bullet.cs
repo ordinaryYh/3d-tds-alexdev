@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public float impactForce;
+
     private Rigidbody rb;
     private TrailRenderer trailRenderer;
     private MeshRenderer meshRenderer;
@@ -27,7 +29,7 @@ public class Bullet : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
-    public void BulletSetup(float _flyDistance)
+    public void BulletSetup(float _flyDistance, float _impactForce)
     {
         bulletDisable = false;
         cd.enabled = true;
@@ -35,6 +37,7 @@ public class Bullet : MonoBehaviour
         trailRenderer.time = 0.25f;
         startPosition = transform.position;
         this.flyDistance = _flyDistance + 0.5f;
+        this.impactForce = _impactForce;
     }
 
     private void Update()
@@ -57,8 +60,22 @@ public class Bullet : MonoBehaviour
 
     }
 
+
+    //这个和OnTriggerEnter的区别是
+    //和OnTriggerEnter是冲突的，要求两个物体都不能勾选is Trigger，否则不会触发
     private void OnCollisionEnter(Collision collision)
     {
+        Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
+
+        if (enemy != null)
+        {
+            Vector3 force = rb.velocity.normalized * impactForce;
+            Rigidbody hitRigidbody = collision.collider.attachedRigidbody;
+
+            enemy.GetHit();
+            enemy.HitImapct(force, collision.contacts[0].point, hitRigidbody);
+        }
+
         CreateImpactFX(collision);
         //使用对象池进行管理
         ObjectPool.instance.ReturnToPool(gameObject);

@@ -5,20 +5,18 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public float turnSpeed;
-    public float aggresionRange;
-
-    [Header("Attack data")]
-    public float attackRange;
-    public float attackMoveSpeed;
+    protected int healthPoints = 20;
 
     [Header("Idle data")]
     public float idleTime;
+    public float aggresionRange;
 
     [Header("Move data")]
     public float moveSpeed;
     public float chaseSpeed;
     private bool manualMovement;
+    private bool manualRotation;
+    public float turnSpeed;
 
     [SerializeField] private Transform[] patrolPoints;
     private int currentPatrolIndex;
@@ -44,6 +42,23 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
 
+    }
+
+    public virtual void GetHit()
+    {
+        healthPoints--;
+    }
+
+    public virtual void HitImapct(Vector3 force, Vector3 hitPoint, Rigidbody rb)
+    {
+        StartCoroutine(HitImpactCourutine(force, hitPoint, rb));
+    }
+
+    private IEnumerator HitImpactCourutine(Vector3 force, Vector3 hitPoint, Rigidbody rb)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        rb.AddForceAtPosition(force, hitPoint, ForceMode.Impulse);
     }
 
     private void InitializePatrolPoints()
@@ -77,17 +92,17 @@ public class Enemy : MonoBehaviour
         return Quaternion.Euler(currentEulerAngels.x, yRotation, currentEulerAngels.z);
     }
 
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, aggresionRange);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
     public bool PlayerInAggresionRange() => Vector3.Distance(transform.position, player.position) < aggresionRange;
-    public bool PlayerInAttackRnage() => Vector3.Distance(transform.position, player.position) < attackRange;
+
 
     public void ActivateMnaualMovement(bool _manualMovement) => this.manualMovement = _manualMovement;
+    public void ActivateMnaualRotation(bool _manualRotation) => this.manualRotation = _manualRotation;
     public bool ManualMovementActive() => this.manualMovement;
+    public bool ManualRotationActive() => this.manualRotation;
     public void AnimationTrigger() => stateMachine.currentState.AnimationTrigger();
 }

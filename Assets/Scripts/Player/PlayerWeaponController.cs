@@ -15,6 +15,7 @@ public class PlayerWeaponController : MonoBehaviour
     private bool isShooting;
 
     [Header("Bullet details")]
+    [SerializeField] private float bulletImpacForce = 100;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float bulletSpeed;
 
@@ -77,7 +78,7 @@ public class PlayerWeaponController : MonoBehaviour
 
         CameraManager.instance.ChangeCameraDistance(currentWeapon.cameraDistance);
 
-        Debug.Log(CurrentWeapon().weaponType);
+        Debug.Log("当前武器为: " + CurrentWeapon().weaponType.ToString());
     }
 
     //捡起武器总共有三种情况
@@ -169,7 +170,7 @@ public class PlayerWeaponController : MonoBehaviour
         Rigidbody rb = newBullet.GetComponent<Rigidbody>();
 
         Bullet bulletScript = newBullet.GetComponent<Bullet>();
-        bulletScript.BulletSetup(currentWeapon.gunDistance);
+        bulletScript.BulletSetup(currentWeapon.gunDistance, bulletImpacForce);
 
 
         Vector3 bulletDirection = currentWeapon.ApplySpread(BulletDirection());
@@ -240,8 +241,6 @@ public class PlayerWeaponController : MonoBehaviour
             }
         };
     }
-
-
 
     #endregion
 
