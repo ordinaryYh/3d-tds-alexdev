@@ -8,20 +8,31 @@ public enum Enemy_MeleeWeaponType { OneHand, Throw }
 
 public class Enemy_Visuals : MonoBehaviour
 {
-    [Header("Weapon model")]
+
+    [Header("Weapon visuals")]
     [SerializeField] private Enemy_WeaponModel[] weaponModels;
     [SerializeField] private Enemy_MeleeWeaponType weaponType;
     public GameObject currentWeaponModel { get; private set; }
+
+    [Header("Corruption visuals")]
+    [SerializeField] private GameObject[] corruptionCrystals;
+    [SerializeField] private int corruptionAmount;
 
     [Header("Color")]
     [SerializeField] private Texture[] colorTextures;
     [SerializeField] private SkinnedMeshRenderer skinnedMeshRenderer;
 
-    private void Start()
+    private void Awake()
     {
         weaponModels = GetComponentsInChildren<Enemy_WeaponModel>(true);
-        InvokeRepeating(nameof(SetupLook), 0, 0.5f);
+        CollectCorruptionCrystals();
     }
+
+    private void Start()
+    {
+        
+    }
+
 
     public void SetupWeaponType(Enemy_MeleeWeaponType type)
         => weaponType = type;
@@ -30,6 +41,34 @@ public class Enemy_Visuals : MonoBehaviour
     {
         SetupRandomColor();
         SetupRandomWeapon();
+        SetupRandomCorruption();
+    }
+
+    //这段代码的作用是让enemy身上的水晶随机显示部分
+    private void SetupRandomCorruption()
+    {
+        List<int> avaliableIndexs = new List<int>();
+
+        for (int i = 0; i < corruptionCrystals.Length; i++)
+        {
+            avaliableIndexs.Add(i);
+            corruptionCrystals[i].SetActive(false);
+            
+        }
+
+        for (int i = 0; i < corruptionAmount; i++)
+        {
+            if (avaliableIndexs.Count == 0)    
+                break;
+
+
+            int randomIndex = Random.Range(0, avaliableIndexs.Count);
+            int objectIndex = avaliableIndexs[randomIndex];
+
+            corruptionCrystals[objectIndex].SetActive(true);
+            Debug.Log("open crystal");
+            avaliableIndexs.RemoveAt(randomIndex);
+        }
     }
 
     private void SetupRandomWeapon()
@@ -63,4 +102,16 @@ public class Enemy_Visuals : MonoBehaviour
 
         skinnedMeshRenderer.material = newMat;
     }
+
+    private void CollectCorruptionCrystals()
+    {
+        Enemy_CoruptionCrystal[] crystalComponents = GetComponentsInChildren<Enemy_CoruptionCrystal>(true);
+        corruptionCrystals = new GameObject[crystalComponents.Length];
+
+        for (int i = 0; i < corruptionCrystals.Length; i++)
+        {
+            corruptionCrystals[i] = crystalComponents[i].gameObject;
+        }
+    }
+
 }
