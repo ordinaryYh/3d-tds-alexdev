@@ -22,7 +22,7 @@ public class AbilityState_Melee : EnemyState
     {
         base.Enter();
 
-        enemy.PullWeapon();
+        enemy.EnableWeaponModel(true);
 
         moveSpeed = enemy.moveSpeed;
         movementDirection = enemy.transform.position + enemy.transform.forward * MAX_MOVEMENT_DISTANCE;
@@ -42,7 +42,7 @@ public class AbilityState_Melee : EnemyState
 
         if (enemy.ManualRotationActive())
         {
-             enemy.FaceTarget(enemy.player.position);
+            enemy.FaceTarget(enemy.player.position);
             movementDirection = enemy.transform.position + enemy.transform.forward * MAX_MOVEMENT_DISTANCE;
         }
 

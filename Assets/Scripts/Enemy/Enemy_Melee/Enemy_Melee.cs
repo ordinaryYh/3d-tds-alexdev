@@ -19,6 +19,8 @@ public enum EnemyMelee_Type { Regular, Shield, Dodge, AxeThrow }
 
 public class Enemy_Melee : Enemy
 {
+    private Enemy_Visuals visuals;
+
     #region  states
     public IdleState_Melee idleState { get; private set; }
     public MoveState_Melee moveState { get; private set; }
@@ -50,9 +52,6 @@ public class Enemy_Melee : Enemy
     public AttackData attackData;
     public List<AttackData> attackList;
 
-    [SerializeField] private Transform hiddenWeapon;
-    [SerializeField] private Transform pulledWeapon;
-
     protected override void Awake()
     {
         base.Awake();
@@ -64,6 +63,8 @@ public class Enemy_Melee : Enemy
         attackState = new AttackState_Melee(this, stateMachine, "Attack");
         deadState = new DeadState_Melee(this, stateMachine, "Idle"); //idle并不重要，最终都要使用ragdoll
         abilityState = new AbilityState_Melee(this, stateMachine, "Axe Throw");
+
+        visuals = GetComponent<Enemy_Visuals>();
     }
 
     protected override void Start()
@@ -73,6 +74,7 @@ public class Enemy_Melee : Enemy
         stateMachine.Initialize(idleState);
 
         InitializeSpeciality();
+        visuals.SetupLook();
     }
 
 
@@ -102,15 +104,21 @@ public class Enemy_Melee : Enemy
         base.AbilityTrigger();
 
         moveSpeed = moveSpeed * 0.6f;
-        pulledWeapon.gameObject.SetActive(false);
+        EnableWeaponModel(false);
     }
 
     private void InitializeSpeciality()
     {
+        if (meleeType == EnemyMelee_Type.AxeThrow)
+        {
+            visuals.SetupWeaponType(Enemy_MeleeWeaponType.Throw);
+        }
+
         if (meleeType == EnemyMelee_Type.Shield)
         {
             anim.SetFloat("ChaseIndex", 1);
             shieldTransform.gameObject.SetActive(true);
+            visuals.SetupWeaponType(Enemy_MeleeWeaponType.OneHand);
         }
     }
 
@@ -121,10 +129,9 @@ public class Enemy_Melee : Enemy
             stateMachine.ChangeState(deadState);
     }
 
-    public void PullWeapon()
+    public void EnableWeaponModel(bool _active)
     {
-        hiddenWeapon.gameObject.SetActive(false);
-        pulledWeapon.gameObject.SetActive(true);
+        visuals.currentWeaponModel.gameObject.SetActive(_active);
     }
 
     protected override void OnDrawGizmos()
