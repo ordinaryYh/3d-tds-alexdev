@@ -15,10 +15,11 @@ public struct AttackData
 }
 
 public enum AttackType_Melee { Close, Charge }
-public enum EnemyMelee_Type { Regular, Shield, Dodge }
+public enum EnemyMelee_Type { Regular, Shield, Dodge, AxeThrow }
 
 public class Enemy_Melee : Enemy
 {
+    #region  states
     public IdleState_Melee idleState { get; private set; }
     public MoveState_Melee moveState { get; private set; }
     public RecoveryState_Melee recoveryState { get; private set; }
@@ -26,12 +27,24 @@ public class Enemy_Melee : Enemy
     public AttackState_Melee attackState { get; private set; }
     public DeadState_Melee deadState { get; private set; }
     public AbilityState_Melee abilityState { get; private set; }
+    #endregion
+
 
     [Header("Enemy Settings")]
     public EnemyMelee_Type meleeType;
     public Transform shieldTransform;
     public float dodgeCooldown;
-    private float lastTimeDodge;
+    private float lastTimeDodge = -10;
+
+
+    [Header("Axe Throw ability")]
+    public GameObject axePrefab;
+    public float axeFlySpeed;
+    public float aimTimer;
+    public float axeThrowCooldown;
+    public Transform axeStartPoint;
+    private float lastTimeAxeThrown;
+
 
     [Header("Attack data")]
     public AttackData attackData;
@@ -65,13 +78,30 @@ public class Enemy_Melee : Enemy
 
     protected override void Update()
     {
+        base.Update();
         stateMachine.currentState.Update();
+
+        if (ShouldEnterBattleMode())
+        {
+            EnterBattleMode();
+        }
     }
 
-    public void TriggerAbility()
+    public override void EnterBattleMode()
     {
+        if (inBattleMode)
+            return;
+
+        base.EnterBattleMode();
+
+        stateMachine.ChangeState(recoveryState);
+    }
+
+    public override void AbilityTrigger()
+    {
+        base.AbilityTrigger();
+
         moveSpeed = moveSpeed * 0.6f;
-        Debug.Log("axe throw");
         pulledWeapon.gameObject.SetActive(false);
     }
 
@@ -110,17 +140,53 @@ public class Enemy_Melee : Enemy
     public void ActivateDodgeRoll()
     {
         if (meleeType != EnemyMelee_Type.Dodge)
+        {
             return;
-        if (stateMachine.currentState != chaseState)
-            return;
-        if (Vector3.Distance(transform.position, player.position) < 2f)
-            return;
+        }
 
-        if (Time.time > dodgeCooldown + lastTimeDodge)
+        if (stateMachine.currentState != chaseState)
+        {
+            return;
+        }
+
+        if (Vector3.Distance(transform.position, player.position) < 2f)
+        {
+            return;
+        }
+
+        float dodgeAnimationDuration = GetAnimationClipDuration("Dodge roll");
+
+        if (Time.time > dodgeCooldown + dodgeAnimationDuration + lastTimeDodge)
         {
             anim.SetTrigger("Dodge");
             lastTimeDodge = Time.time;
         }
 
+    }
+
+    public bool CanThrowAxe()
+    {
+        if (meleeType != EnemyMelee_Type.AxeThrow)
+            return false;
+
+        if (Time.time > lastTimeAxeThrown + axeThrowCooldown)
+        {
+            lastTimeAxeThrown = Time.time;
+            return true;
+        }
+
+        return false;
+    }
+
+    private float GetAnimationClipDuration(string clipName)
+    {
+        AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
+
+        foreach (AnimationClip clip in clips)
+        {
+            if (clip.name == clipName)
+                return clip.length;
+        }
+        return 0;
     }
 }

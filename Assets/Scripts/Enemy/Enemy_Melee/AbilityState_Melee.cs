@@ -12,6 +12,7 @@ public class AbilityState_Melee : EnemyState
 
     private float moveSpeed;
 
+
     public AbilityState_Melee(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName) : base(_enemyBase, _stateMachine, _animBoolName)
     {
         this.enemy = enemyBase as Enemy_Melee;
@@ -20,6 +21,8 @@ public class AbilityState_Melee : EnemyState
     public override void Enter()
     {
         base.Enter();
+
+        enemy.PullWeapon();
 
         moveSpeed = enemy.moveSpeed;
         movementDirection = enemy.transform.position + enemy.transform.forward * MAX_MOVEMENT_DISTANCE;
@@ -30,7 +33,7 @@ public class AbilityState_Melee : EnemyState
         base.Exit();
 
         enemy.moveSpeed = moveSpeed;
-        enemy.anim.SetFloat("Recovery Index",0);
+        enemy.anim.SetFloat("Recovery Index", 0);
     }
 
     public override void Update()
@@ -39,7 +42,7 @@ public class AbilityState_Melee : EnemyState
 
         if (enemy.ManualRotationActive())
         {
-            enemy.transform.rotation = enemy.FaceTarget(enemy.player.position);
+             enemy.FaceTarget(enemy.player.position);
             movementDirection = enemy.transform.position + enemy.transform.forward * MAX_MOVEMENT_DISTANCE;
         }
 
@@ -53,4 +56,14 @@ public class AbilityState_Melee : EnemyState
             stateMachine.ChangeState(enemy.recoveryState);
     }
 
+    public override void AbilityTrigger()
+    {
+        base.AbilityTrigger();
+
+
+        GameObject newAxe = ObjectPool.instance.GetObject(enemy.axePrefab);
+
+        newAxe.transform.position = enemy.axeStartPoint.position;
+        newAxe.GetComponent<EnemyAxe>().AxeSetup(enemy.axeFlySpeed, enemy.player, enemy.aimTimer);
+    }
 }

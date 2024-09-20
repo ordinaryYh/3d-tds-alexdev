@@ -19,7 +19,7 @@ public class MoveState_Melee : EnemyState
         base.Enter();
 
         enemy.agent.speed = enemy.moveSpeed;
-        
+
         this.destination = enemyBase.GetPatrolDestination();
         enemyBase.agent.SetDestination(this.destination);
     }
@@ -35,13 +35,7 @@ public class MoveState_Melee : EnemyState
     {
         base.Update();
 
-        if (enemy.PlayerInAggresionRange())
-        {
-            stateMachine.ChangeState(enemy.recoveryState);
-            return;
-        }
-
-        enemy.transform.rotation = enemy.FaceTarget(GetNextPathPoint());
+        enemy.FaceTarget(GetNextPathPoint());
 
         if (enemy.agent.remainingDistance <= enemy.agent.stoppingDistance + 0.05f)
             stateMachine.ChangeState(enemy.idleState);

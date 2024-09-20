@@ -39,6 +39,11 @@ public class EnemyState
 
     public void AnimationTrigger() => triggerCalled = true;
 
+    public virtual void AbilityTrigger()
+    {
+        
+    }
+
 
     //这个函数是如果存在最近的角落，那么就返回
     //如果没有，就返回目的地位置
