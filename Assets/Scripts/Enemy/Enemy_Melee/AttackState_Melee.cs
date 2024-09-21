@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class AttackState_Melee : EnemyState
@@ -20,7 +19,9 @@ public class AttackState_Melee : EnemyState
     public override void Enter()
     {
         base.Enter();
+        enemy.UpdateAttackData();
         enemy.EnableWeaponModel(true);
+        enemy.visuals.EnableWeaponTrail(true);
 
 
         attackMoveSpeed = enemy.attackData.moveSpeed;
@@ -40,6 +41,8 @@ public class AttackState_Melee : EnemyState
     {
         base.Exit();
         SetupNextAttack();
+
+        enemy.visuals.EnableWeaponTrail(false);
     }
 
     private void SetupNextAttack()
@@ -77,9 +80,9 @@ public class AttackState_Melee : EnemyState
 
     private bool PlayerClose() => Vector3.Distance(enemy.transform.position, enemy.player.position) <= 1;
 
-    private AttackData UpdateAttackData()
+    private MeleeAttackData UpdateAttackData()
     {
-        List<AttackData> validAttacks = new List<AttackData>(enemy.attackList);
+        List<MeleeAttackData> validAttacks = new List<MeleeAttackData>(enemy.attackList);
 
         //下面这段代码的意思是如果玩家过近
         //那么就移除掉和Charge同样类型的所有attackData

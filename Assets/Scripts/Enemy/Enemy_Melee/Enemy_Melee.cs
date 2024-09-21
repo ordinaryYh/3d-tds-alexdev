@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct AttackData
+public struct MeleeAttackData
 {
     public string attackName;
     public float attackRange;
@@ -19,7 +19,7 @@ public enum EnemyMelee_Type { Regular, Shield, Dodge, AxeThrow }
 
 public class Enemy_Melee : Enemy
 {
-    private Enemy_Visuals visuals;
+    public Enemy_Visuals visuals { get; private set; }
 
     #region  states
     public IdleState_Melee idleState { get; private set; }
@@ -49,8 +49,8 @@ public class Enemy_Melee : Enemy
 
 
     [Header("Attack data")]
-    public AttackData attackData;
-    public List<AttackData> attackList;
+    public MeleeAttackData attackData;
+    public List<MeleeAttackData> attackList;
 
     protected override void Awake()
     {
@@ -75,6 +75,7 @@ public class Enemy_Melee : Enemy
 
         InitializeSpeciality();
         visuals.SetupLook();
+        UpdateAttackData();
     }
 
 
@@ -107,6 +108,17 @@ public class Enemy_Melee : Enemy
         EnableWeaponModel(false);
     }
 
+    public void UpdateAttackData()
+    {
+        Enemy_WeaponModel currentWeapon = visuals.currentWeaponModel.GetComponent<Enemy_WeaponModel>();
+
+        if (currentWeapon.weaponData != null)
+        {
+            attackList = new List<MeleeAttackData>(currentWeapon.weaponData.attackDatas);
+            this.turnSpeed = currentWeapon.weaponData.turnspeed;
+        }
+    }
+
     private void InitializeSpeciality()
     {
         if (meleeType == EnemyMelee_Type.AxeThrow)
@@ -119,6 +131,11 @@ public class Enemy_Melee : Enemy
             anim.SetFloat("ChaseIndex", 1);
             shieldTransform.gameObject.SetActive(true);
             visuals.SetupWeaponType(Enemy_MeleeWeaponType.OneHand);
+        }
+
+        if (meleeType == EnemyMelee_Type.Dodge)
+        {
+            visuals.SetupWeaponType(Enemy_MeleeWeaponType.Unarmed);
         }
     }
 
@@ -142,7 +159,7 @@ public class Enemy_Melee : Enemy
         Gizmos.DrawWireSphere(transform.position, attackData.attackRange);
     }
 
-    public bool PlayerInAttackRnage() => Vector3.Distance(transform.position, player.position) < attackData.attackRange;
+
 
     public void ActivateDodgeRoll()
     {
@@ -196,4 +213,6 @@ public class Enemy_Melee : Enemy
         }
         return 0;
     }
+
+    public bool PlayerInAttackRnage() => Vector3.Distance(transform.position, player.position) < attackData.attackRange;
 }

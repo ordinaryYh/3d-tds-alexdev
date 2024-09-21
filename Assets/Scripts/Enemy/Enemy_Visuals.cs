@@ -4,7 +4,7 @@ using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 
 
-public enum Enemy_MeleeWeaponType { OneHand, Throw }
+public enum Enemy_MeleeWeaponType { OneHand, Throw, Unarmed }
 
 public class Enemy_Visuals : MonoBehaviour
 {
@@ -30,12 +30,18 @@ public class Enemy_Visuals : MonoBehaviour
 
     private void Start()
     {
-        
+
+    }
+
+    public void EnableWeaponTrail(bool enable)
+    {
+        Enemy_WeaponModel currentWeapon = currentWeaponModel.GetComponent<Enemy_WeaponModel>();
+        currentWeapon.EneableTrailEffect(enable);
     }
 
 
     public void SetupWeaponType(Enemy_MeleeWeaponType type)
-        => weaponType = type;
+        => this.weaponType = type;
 
     public void SetupLook()
     {
@@ -53,12 +59,12 @@ public class Enemy_Visuals : MonoBehaviour
         {
             avaliableIndexs.Add(i);
             corruptionCrystals[i].SetActive(false);
-            
+
         }
 
         for (int i = 0; i < corruptionAmount; i++)
         {
-            if (avaliableIndexs.Count == 0)    
+            if (avaliableIndexs.Count == 0)
                 break;
 
 
@@ -82,7 +88,7 @@ public class Enemy_Visuals : MonoBehaviour
 
         foreach (var weaponModel in weaponModels)
         {
-            if (weaponModel.weaponType == weaponType)
+            if (weaponModel.weaponType == this.weaponType)
                 filteredWeaponModels.Add(weaponModel);
         }
 
@@ -90,6 +96,19 @@ public class Enemy_Visuals : MonoBehaviour
 
         currentWeaponModel = filteredWeaponModels[randomIndex].gameObject;
         currentWeaponModel.SetActive(true);
+
+        OverrideAnimatorController();
+    }
+
+    private void OverrideAnimatorController()
+    {
+        AnimatorOverrideController overrideController =
+                    currentWeaponModel.GetComponent<Enemy_WeaponModel>().overrideController;
+
+        if (overrideController != null)
+        {
+            GetComponentInChildren<Animator>().runtimeAnimatorController = overrideController;
+        }
     }
 
     private void SetupRandomColor()
