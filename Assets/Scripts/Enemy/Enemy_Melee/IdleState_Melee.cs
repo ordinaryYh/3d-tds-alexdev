@@ -6,16 +6,21 @@ public class IdleState_Melee : EnemyState
 {
     private Enemy_Melee enemy;
 
-    public IdleState_Melee(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName) : base(_enemyBase, _stateMachine, _animBoolName)
+    public IdleState_Melee(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName) : base(enemyBase, stateMachine, animBoolName)
     {
-        this.enemy = enemyBase as Enemy_Melee;
+        enemy = enemyBase as Enemy_Melee;
     }
 
     public override void Enter()
     {
         base.Enter();
 
-        stateTimer = enemyBase.idleTime;
+        stateTimer = enemy.idleTime;
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
 
     }
 
@@ -23,14 +28,8 @@ public class IdleState_Melee : EnemyState
     {
         base.Update();
 
-        if (stateTimer < 0)
-        {
-            stateMachine.ChangeState(enemy.moveState);
-        }
-    }
 
-    public override void Exit()
-    {
-        base.Exit();
+        if (stateTimer < 0)
+            stateMachine.ChangeState(enemy.moveState);
     }
 }

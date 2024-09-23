@@ -5,10 +5,9 @@ using UnityEngine;
 public class RecoveryState_Melee : EnemyState
 {
     private Enemy_Melee enemy;
-
-    public RecoveryState_Melee(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName) : base(_enemyBase, _stateMachine, _animBoolName)
+    public RecoveryState_Melee(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName) : base(enemyBase, stateMachine, animBoolName)
     {
-        this.enemy = enemyBase as Enemy_Melee;
+        enemy = enemyBase as Enemy_Melee;
     }
 
     public override void Enter()
@@ -31,23 +30,17 @@ public class RecoveryState_Melee : EnemyState
 
         if (triggerCalled)
         {
-
             if (enemy.CanThrowAxe())
             {
                 stateMachine.ChangeState(enemy.abilityState);
-                return;
             }
-            else if (enemy.PlayerInAttackRnage())
+            else if (enemy.PlayerInAttackRange())
             {
                 stateMachine.ChangeState(enemy.attackState);
-                return;
             }
             else
-            {
                 stateMachine.ChangeState(enemy.chaseState);
-                return;
-            }
+
         }
     }
-
 }

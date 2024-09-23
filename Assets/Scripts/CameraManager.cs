@@ -1,17 +1,18 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
     public static CameraManager instance;
 
+
     private CinemachineVirtualCamera virtualCamera;
     private CinemachineFramingTransposer transposer;
 
-    [Header("Cmaera Distance")]
+
+    [Header("Camera distance")]
     [SerializeField] private bool canChangeCameraDistance;
     [SerializeField] private float distanceChangeRate;
     private float targetCameraDistance;
@@ -22,12 +23,14 @@ public class CameraManager : MonoBehaviour
             instance = this;
         else
         {
-            Debug.Log("you have more than one manager");
+            Debug.LogWarning("You had more than one Camera Manager");
             Destroy(gameObject);
         }
 
+
         virtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
         transposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+
     }
 
     private void Update()
@@ -40,12 +43,13 @@ public class CameraManager : MonoBehaviour
         if (canChangeCameraDistance == false)
             return;
 
-        float currentDistance = transposer.m_CameraDistance;
+        float currentDistnace = transposer.m_CameraDistance;
 
-        if (Mathf.Abs(targetCameraDistance - currentDistance) > 0.01f)
-        {
-            transposer.m_CameraDistance = Mathf.Lerp(currentDistance, targetCameraDistance, distanceChangeRate * Time.deltaTime);
-        }
+        if (Mathf.Abs(targetCameraDistance - currentDistnace) < .01f)
+            return;
+        
+        transposer.m_CameraDistance =
+            Mathf.Lerp(currentDistnace, targetCameraDistance, distanceChangeRate * Time.deltaTime);
     }
 
     public void ChangeCameraDistance(float distance) => targetCameraDistance = distance;

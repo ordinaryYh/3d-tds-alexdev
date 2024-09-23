@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -11,24 +9,26 @@ public class Weapon_Data : ScriptableObject
     [Header("Magazine details")]
     public int bulletsInMagazine;
     public int magazineCapacity;
-    public int totleReserveAmmo;
+    public int totalReserveAmmo;
+
 
     [Header("Regular shot")]
     public ShootType shootType;
-    public int bulletPerShot = 1;
+    public int bulletsPerShot = 1;
     public float fireRate;
+
 
     [Header("Burst shot")]
     public bool burstAvalible;
     public bool burstActive;
-    public int burstBulletPerShot;
+    public int burstBulletsPerShot;
     public float burstFireRate;
-    public float burstFireDelay = 0.15f;
+    public float burstFireDelay = .1f;
 
     [Header("Weapon spread")]
     public float baseSpread;
     public float maxSpread;
-    public float spreadIncreaseRate = 0.15f;
+    public float spreadIncreaseRate = .15f;
 
     [Header("Weapon generics")]
     public WeaponType weaponType;
@@ -40,5 +40,4 @@ public class Weapon_Data : ScriptableObject
     public float gunDistance = 4;
     [Range(4, 8)]
     public float cameraDistance = 6;
-
 }

@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 public class Interactable : MonoBehaviour
 {
     protected PlayerWeaponController weaponController;
     protected MeshRenderer mesh;
+
+
     [SerializeField] private Material highlightMaterial;
     protected Material defaultMaterial;
 
@@ -18,12 +17,6 @@ public class Interactable : MonoBehaviour
         defaultMaterial = mesh.sharedMaterial;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-            HighlightActive(true);
-    }
-
     protected void UpdateMeshAndMaterial(MeshRenderer newMesh)
     {
         mesh = newMesh;
@@ -32,16 +25,17 @@ public class Interactable : MonoBehaviour
 
     public virtual void Interaction()
     {
-        Debug.Log("Interacted with+ " + gameObject.name);
+        Debug.Log("Interacted with " + gameObject.name);
     }
 
-    public void HighlightActive(bool _active)
+    public void HighlightActive(bool active)
     {
-        if (_active)
+        if (active)
             mesh.material = highlightMaterial;
         else
             mesh.material = defaultMaterial;
     }
+
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -53,7 +47,6 @@ public class Interactable : MonoBehaviour
         if (playerInteraction == null)
             return;
 
-
         playerInteraction.GetInteracbles().Add(this);
         playerInteraction.UpdateClosestInteractble();
     }
@@ -64,7 +57,6 @@ public class Interactable : MonoBehaviour
 
         if (playerInteraction == null)
             return;
-
 
         playerInteraction.GetInteracbles().Remove(this);
         playerInteraction.UpdateClosestInteractble();

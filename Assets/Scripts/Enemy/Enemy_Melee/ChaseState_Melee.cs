@@ -5,35 +5,35 @@ using UnityEngine;
 public class ChaseState_Melee : EnemyState
 {
     private Enemy_Melee enemy;
-    private float lastTimeUpdateDestination;
+    private float lastTimeUpdatedDistanation;
 
-    public ChaseState_Melee(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName) : base(_enemyBase, _stateMachine, _animBoolName)
+    public ChaseState_Melee(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName) : base(enemyBase, stateMachine, animBoolName)
     {
-        this.enemy = _enemyBase as Enemy_Melee;
+        enemy = enemyBase as Enemy_Melee;
     }
 
     public override void Enter()
     {
         base.Enter();
 
-        enemy.agent.speed = enemy.chaseSpeed;
-        enemy.agent.isStopped = false;
-    }
 
+        enemy.agent.speed = enemy.runSpeed;
+        enemy.agent.isStopped = false;
+
+    }
     public override void Exit()
     {
         base.Exit();
-
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (enemy.PlayerInAttackRnage())
+        if (enemy.PlayerInAttackRange())
             stateMachine.ChangeState(enemy.attackState);
 
-         enemy.FaceTarget(GetNextPathPoint());
+        enemy.FaceTarget(GetNextPathPoint());
 
         if (CanUpdateDestination())
         {
@@ -41,17 +41,15 @@ public class ChaseState_Melee : EnemyState
         }
     }
 
+
     private bool CanUpdateDestination()
     {
-        if (Time.time > lastTimeUpdateDestination + 0.25f)
+        if (Time.time > lastTimeUpdatedDistanation + .25f)
         {
-            lastTimeUpdateDestination = Time.time;
+            lastTimeUpdatedDistanation = Time.time;
             return true;
         }
 
         return false;
     }
-
 }
-
-

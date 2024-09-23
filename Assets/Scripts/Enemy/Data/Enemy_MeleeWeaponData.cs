@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New Weapon Data", menuName = "Enemy data/Melee weapon Data")]
 
-[CreateAssetMenu(fileName = "New Weapon Data", menuName = "Enemy data/Melee Weapon Data")]
 public class Enemy_MeleeWeaponData : ScriptableObject
 {
-    public List<MeleeAttackData> attackDatas;
-    public float turnspeed = 10;
+    public List<AttackData_EnemyMelee> attackData;
+    public float turnSpeed = 10;
 }

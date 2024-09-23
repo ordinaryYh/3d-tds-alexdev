@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,24 +23,26 @@ public class PlayerInteraction : MonoBehaviour
     public void UpdateClosestInteractble()
     {
         closestInteractable?.HighlightActive(false);
-
         closestInteractable = null;
 
         float closestDistance = float.MaxValue;
 
-        foreach (var item in interactables)
+
+
+        foreach (Interactable interactable in interactables)
         {
-            float distance = Vector3.Distance(transform.position, item.transform.position);
+            float distance = Vector3.Distance(transform.position, interactable.transform.position);
 
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestInteractable = item;
+                closestInteractable = interactable;
             }
         }
 
         closestInteractable?.HighlightActive(true);
     }
+
 
     public List<Interactable> GetInteracbles() => interactables;
 }

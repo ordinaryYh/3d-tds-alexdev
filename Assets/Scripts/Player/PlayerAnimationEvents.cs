@@ -15,22 +15,23 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void ReloadIsOver()
     {
-        visualController.Maxmize_RigWeight();
-        weaponController.CurrentWeapon().ReloadBullets();
+        visualController.MaximizeRigWeight();
+        weaponController.CurrentWeapon().RefillBullets();
 
         weaponController.SetWeaponReady(true);
     }
+
 
     public void ReturnRig()
     {
-        visualController.Maxmize_RigWeight();
-        visualController.Maxmize_LeftHandWeight();
+        visualController.MaximizeRigWeight();
+        visualController.MaximizeLeftHandWeight();
     }
 
-    public void WeaponEquipmingIsOver()
+    public void WeaponEquipingIsOver()
     {
         weaponController.SetWeaponReady(true);
     }
 
-    public void SwitchOnWeaponModel() => visualController.SwithcOnCurrentWeaponModel();
+    public void SwitchOnWeaponModel() => visualController.SwitchOnCurrentWeaponModel();
 }

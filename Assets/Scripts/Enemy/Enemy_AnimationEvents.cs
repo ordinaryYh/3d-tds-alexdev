@@ -13,11 +13,18 @@ public class Enemy_AnimationEvents : MonoBehaviour
 
     public void AnimationTrigger() => enemy.AnimationTrigger();
 
-    public void StartManualMovement() => enemy.ActivateMnaualMovement(true);
-    public void StopManulMovement() => enemy.ActivateMnaualMovement(false);
+    public void StartManualMovement() => enemy.ActivateManualMovement(true);
+    public void StopManualMovement() => enemy.ActivateManualMovement(false);
 
-    public void StartManualRotation() => enemy.ActivateMnaualRotation(true);
-    public void StopManualRotation() => enemy.ActivateMnaualRotation(false);
+    public void StartManualRotation() => enemy.ActivateManualRotation(true);
+    public void StopManualRotation() => enemy.ActivateManualRotation(false);
 
     public void AbilityEvent() => enemy.AbilityTrigger();
+    public void EnableIK() => enemy.visuals.EnableIK(true, true, 1f);
+
+    public void EnableWeaponModel()
+    {
+        enemy.visuals.EnableWeaponModel(true);
+        enemy.visuals.EnableSeconoderyWeaponModel(false);
+    }
 }

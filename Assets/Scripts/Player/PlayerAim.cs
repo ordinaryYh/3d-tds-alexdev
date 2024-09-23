@@ -1,15 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAim : MonoBehaviour
 {
     private Player player;
-    private PlayerControlls controls;
+    private PlayerControls controls;
 
-    [Header("Aim Visual - Laser")]
-    [SerializeField] private LineRenderer aimLaser;
+    [Header("Aim Viusal - Laser")]
+    [SerializeField] private LineRenderer aimLaser; // this component is on the waepon holder(child of a player)
 
     [Header("Aim control")]
     [SerializeField] private Transform aim;
@@ -19,35 +17,34 @@ public class PlayerAim : MonoBehaviour
 
     [Header("Camera control")]
     [SerializeField] private Transform cameraTarget;
-    [Range(0.5f, 1)]
+    [Range(.5f, 1)]
     [SerializeField] private float minCameraDistance = 1.5f;
     [Range(1, 3f)]
     [SerializeField] private float maxCameraDistance = 4;
     [Range(3f, 5f)]
     [SerializeField] private float cameraSensetivity = 5f;
+
     [Space]
+
     [SerializeField] private LayerMask aimLayerMask;
-    [SerializeField] private float turnSpeed;
 
     private Vector2 mouseInput;
-    private RaycastHit lastKnowMouseHit;
+    private RaycastHit lastKnownMouseHit;
 
     private void Start()
     {
         player = GetComponent<Player>();
         AssignInputEvents();
     }
-
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.P))
             isAimingPrecisly = !isAimingPrecisly;
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if(Input.GetKeyDown(KeyCode.L))
             isLockingToTarget = !isLockingToTarget;
 
         UpdateAimVisuals();
-        ApplyRotation();
         UpdateAimPosition();
         UpdateCameraPosition();
     }
@@ -59,8 +56,9 @@ public class PlayerAim : MonoBehaviour
         if (aimLaser.enabled == false)
             return;
 
+
         WeaponModel weaponModel = player.weaponVisuals.CurrentWeaponModel();
-        //下面两句代码是为了保证弹道准确，不会因为角色的旋转而发生偏差
+
         weaponModel.transform.LookAt(aim);
         weaponModel.gunPoint.LookAt(aim);
 
@@ -68,7 +66,7 @@ public class PlayerAim : MonoBehaviour
         Transform gunPoint = player.weapon.GunPoint();
         Vector3 laserDirection = player.weapon.BulletDirection();
 
-        float laserTipLength = 0.5f;
+        float laserTipLenght = .5f;
         float gunDistance = player.weapon.CurrentWeapon().gunDistance;
 
         Vector3 endPoint = gunPoint.position + laserDirection * gunDistance;
@@ -76,43 +74,35 @@ public class PlayerAim : MonoBehaviour
         if (Physics.Raycast(gunPoint.position, laserDirection, out RaycastHit hit, gunDistance))
         {
             endPoint = hit.point;
-            laserTipLength = 0;
+            laserTipLenght = 0;
         }
 
         aimLaser.SetPosition(0, gunPoint.position);
         aimLaser.SetPosition(1, endPoint);
-        aimLaser.SetPosition(2, endPoint + laserDirection * laserTipLength);
+        aimLaser.SetPosition(2, endPoint + laserDirection * laserTipLenght);
     }
-
-
     private void UpdateAimPosition()
     {
-
-        Transform target = this.Target();
+        Transform target = Target();
 
         if (target != null && isLockingToTarget)
         {
-            if (target.GetComponent<Renderer>() != null)
-            {
-                //下面的代码是确保瞄准在target的中心，无论pivot在哪里
+            if(target.GetComponent<Renderer>() != null)
                 aim.position = target.GetComponent<Renderer>().bounds.center;
-            }
             else
-            {
                 aim.position = target.position;
-            }
+
 
             return;
-        }
+        }   
 
         aim.position = GetMouseHitInfo().point;
 
-        if (isAimingPrecisly == false)
+        if (!isAimingPrecisly)
             aim.position = new Vector3(aim.position.x, transform.position.y + 1, aim.position.z);
     }
 
-    public Transform Aim() => aim;
-    public bool CanAimPrecisly() => isAimingPrecisly;
+
 
 
     public Transform Target()
@@ -126,6 +116,46 @@ public class PlayerAim : MonoBehaviour
 
         return target;
     }
+    public Transform Aim() => aim;
+    public bool CanAimPrecisly() => isAimingPrecisly;
+    public RaycastHit GetMouseHitInfo()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mouseInput);
+
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
+        {
+            lastKnownMouseHit = hitInfo;
+            return hitInfo;
+        }
+
+        return lastKnownMouseHit;
+    }
+
+    #region Camera Region
+
+    private void UpdateCameraPosition()
+    {
+        cameraTarget.position =
+                    Vector3.Lerp(cameraTarget.position, DesieredCameraPosition(), cameraSensetivity * Time.deltaTime);
+    }
+
+    private Vector3 DesieredCameraPosition()
+    {
+        float actualMaxCameraDistance = player.movement.moveInput.y < -.5f ? minCameraDistance : maxCameraDistance;
+
+        Vector3 desiredCameraPosition = GetMouseHitInfo().point;
+        Vector3 aimDirection = (desiredCameraPosition - transform.position).normalized;
+
+        float distanceToDesierdPosition = Vector3.Distance(transform.position, desiredCameraPosition);
+        float clampedDistance = Mathf.Clamp(distanceToDesierdPosition, minCameraDistance, actualMaxCameraDistance);
+
+        desiredCameraPosition = transform.position + aimDirection * clampedDistance;
+        desiredCameraPosition.y = transform.position.y + 1;
+
+        return desiredCameraPosition;
+    }
+
+    #endregion
 
     private void AssignInputEvents()
     {
@@ -135,58 +165,4 @@ public class PlayerAim : MonoBehaviour
         controls.Character.Aim.canceled += context => mouseInput = Vector2.zero;
     }
 
-    private void ApplyRotation()
-    {
-        Vector3 lookingDirection = this.GetMouseHitInfo().point - transform.position;
-        lookingDirection.y = 0;
-        lookingDirection.Normalize();
-
-        //下面的函数是让玩家以自己定义的速度来进行旋转
-        //lerp这个函数是让值以一定步长来增加,后面速度会越来越慢
-        //这样可以让玩家旋转更平滑
-        Quaternion targetRotation = Quaternion.LookRotation(lookingDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
-    }
-
-    public RaycastHit GetMouseHitInfo()
-    {
-        //这个函数的作用，就是返回一个坐标
-        //要想实现玩家朝向物体，就要用这种方式，从camera发出射线，然后射中物体，返回物体坐标
-        //camera实际上有一个视野是一个四棱锥，称为视锥体
-        //在屏幕上点击的位置虽然是个二维坐标，实际上就是这个视椎体的底部上面的区域
-        Ray ray = Camera.main.ScreenPointToRay(mouseInput);
-
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
-        {
-            lastKnowMouseHit = hitInfo;
-            return hitInfo;
-        }
-
-        return lastKnowMouseHit;
-    }
-
-    #region Camera Region
-    private Vector3 DesieredCameraPosition()
-    {
-        //这个函数用来限制aim的位置
-        float actualMaxCameraDistance = player.movement.moveInput.y < -0.5f ? minCameraDistance : maxCameraDistance;
-
-        Vector3 desiredCameraPosition = GetMouseHitInfo().point;
-        Vector3 aimDirection = (desiredCameraPosition - transform.position).normalized;
-
-        float distanceToTargetPosition = Vector3.Distance(transform.position, desiredCameraPosition);
-        float clampedDistance = Mathf.Clamp(distanceToTargetPosition, minCameraDistance, actualMaxCameraDistance);
-
-        desiredCameraPosition = transform.position + aimDirection * clampedDistance;
-        desiredCameraPosition.y = transform.position.y + 1;
-
-        return desiredCameraPosition;
-    }
-
-    private void UpdateCameraPosition()
-    {
-        cameraTarget.position = Vector3.Lerp(cameraTarget.position, DesieredCameraPosition(), cameraSensetivity * Time.deltaTime);
-    }
-
-    #endregion
 }

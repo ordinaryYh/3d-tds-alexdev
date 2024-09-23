@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Enemy_WeaponModel : MonoBehaviour
 {
+    
     public Enemy_MeleeWeaponType weaponType;
     public AnimatorOverrideController overrideController;
     public Enemy_MeleeWeaponData weaponData;
 
-    public GameObject[] trailEffects;
+    [SerializeField] private GameObject[] trailEffects;
 
-    public void EneableTrailEffect(bool enable)
+    public void EnableTrailEffect(bool enable)
     {
         foreach (var effect in trailEffects)
         {

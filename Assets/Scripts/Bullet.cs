@@ -1,76 +1,78 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float impactForce;
+    private float impactForce;
 
-    private Rigidbody rb;
-    private TrailRenderer trailRenderer;
-    private MeshRenderer meshRenderer;
     private BoxCollider cd;
+    private Rigidbody rb;
+    private MeshRenderer meshRenderer;
+    private TrailRenderer trailRenderer;
 
 
     [SerializeField] private GameObject bulletImpactFX;
 
 
-
     private Vector3 startPosition;
     private float flyDistance;
-    private bool bulletDisable;
+    private bool bulletDisabled;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         cd = GetComponent<BoxCollider>();
         rb = GetComponent<Rigidbody>();
-        trailRenderer = GetComponent<TrailRenderer>();
         meshRenderer = GetComponent<MeshRenderer>();
+        trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    public void BulletSetup(float _flyDistance, float _impactForce)
+    public void BulletSetup(float flyDistance = 100, float impactForce = 100)
     {
-        bulletDisable = false;
+        this.impactForce = impactForce;
+
+        bulletDisabled = false;
         cd.enabled = true;
         meshRenderer.enabled = true;
-        trailRenderer.time = 0.25f;
+
+        trailRenderer.Clear();
+        trailRenderer.time = .25f;
         startPosition = transform.position;
-        this.flyDistance = _flyDistance + 0.5f;
-        this.impactForce = _impactForce;
+        this.flyDistance = flyDistance + .5f; // magic number .5f is a length of tip of the laser ( Check method UpdateAimVisuals() on PlayerAim script) ;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        if (Vector3.Distance(startPosition, transform.position) > flyDistance - 1.5f)
-        {
-            trailRenderer.time -= 2 * Time.deltaTime;
-        }
+        FadeTrailIfNeeded();
+        DisableBulletIfNeeded();
+        ReturnToPoolIfNeeded();
+    }
 
-        //如果子弹距离过远，那么就移回到对象池
-        if (Vector3.Distance(startPosition, transform.position) > flyDistance && bulletDisable == false)
+    protected void ReturnToPoolIfNeeded()
+    {
+        if (trailRenderer.time < 0)
+            ReturnBulletToPool();
+    }
+    protected void DisableBulletIfNeeded()
+    {
+        if (Vector3.Distance(startPosition, transform.position) > flyDistance && !bulletDisabled)
         {
             cd.enabled = false;
             meshRenderer.enabled = false;
-            bulletDisable = true;
+            bulletDisabled = true;
         }
-
-        if (trailRenderer.time < 0)
-            ObjectPool.instance.ReturnToPool(gameObject);
-
+    }
+    protected void FadeTrailIfNeeded()
+    {
+        if (Vector3.Distance(startPosition, transform.position) > flyDistance - 1.5f)
+            trailRenderer.time -= 2 * Time.deltaTime; // magic number 2 is choosen trhou testing
     }
 
-
-    //这个和OnTriggerEnter的区别是
-    //和OnTriggerEnter是冲突的，要求两个物体都不能勾选is Trigger，否则不会触发
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
-        CreateImpactFX(collision);
-        //使用对象池进行管理
-        ObjectPool.instance.ReturnToPool(gameObject);
+        CreateImpactFx();
+        ReturnBulletToPool();
 
         Enemy enemy = collision.gameObject.GetComponentInParent<Enemy>();
-        EnemyShield shield = collision.gameObject.GetComponent<EnemyShield>();
+        Enemy_Shield shield = collision.gameObject.GetComponent<Enemy_Shield>();
 
         if (shield != null)
         {
@@ -86,20 +88,15 @@ public class Bullet : MonoBehaviour
             enemy.GetHit();
             enemy.DeathImpact(force, collision.contacts[0].point, hitRigidbody);
         }
-
     }
 
-    private void CreateImpactFX(Collision collision)
+
+    protected void ReturnBulletToPool() => ObjectPool.instance.ReturnObject(gameObject);
+
+
+    protected void CreateImpactFx()
     {
-        if (collision.contacts.Length > 0)
-        {
-            //下面的代码是只在第一次接触的点，触发fx特效
-            ContactPoint contact = collision.contacts[0];
-
-            GameObject newImpactFX = ObjectPool.instance.GetObject(bulletImpactFX);
-            newImpactFX.transform.position = contact.point;
-
-            ObjectPool.instance.ReturnToPoolDelay(5, newImpactFX);
-        }
+        GameObject newImpactFx = ObjectPool.instance.GetObject(bulletImpactFX, transform);
+        ObjectPool.instance.ReturnObject(newImpactFx, 1);
     }
 }
