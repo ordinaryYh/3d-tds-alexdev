@@ -121,6 +121,7 @@ public class Enemy_Visuals : MonoBehaviour
         {
             if (weaponModel.weaponType == weaponType)
             {
+                //切换武器之后，还要切换到当前的武器的animator的layer
                 SwitchAnimationLayer((int)weaponModel.weaponHoldType);
                 SetupLeftHandIK(weaponModel.leftHandTarget, weaponModel.leftElbowTarget);
                 return weaponModel.gameObject;
