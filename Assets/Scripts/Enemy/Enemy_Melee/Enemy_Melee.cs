@@ -17,8 +17,6 @@ public enum EnemyMelee_Type { Regular, Shield, Dodge, AxeThrow }
 
 public class Enemy_Melee : Enemy
 {
-
-
     #region States
     public IdleState_Melee idleState { get; private set; }
     public MoveState_Melee moveState { get; private set; }

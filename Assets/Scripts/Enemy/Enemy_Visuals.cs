@@ -59,10 +59,10 @@ public class Enemy_Visuals : MonoBehaviour
     {
         SetupRandomColor();
         SetupRandomWeapon();
-        SetupRandomCorrution();
+        SetupRandomCorruption();
     }
 
-    private void SetupRandomCorrution()
+    private void SetupRandomCorruption()
     {
         List<int> avalibleIndexs = new List<int>();
         corruptionCrystals = CollectCorruptionCrystals();
@@ -121,7 +121,7 @@ public class Enemy_Visuals : MonoBehaviour
         {
             if (weaponModel.weaponType == weaponType)
             {
-                SwitchAnimationLayer(((int)weaponModel.weaponHoldType));
+                SwitchAnimationLayer((int)weaponModel.weaponHoldType);
                 SetupLeftHandIK(weaponModel.leftHandTarget, weaponModel.leftElbowTarget);
                 return weaponModel.gameObject;
             }
