@@ -5,7 +5,7 @@ using System.Collections;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] protected int healthPoints = 20;
-    
+
     [Header("Idle data")]
     public float idleTime;
     public float aggresionRange;
@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
 
     public bool inBattleMode { get; private set; }
 
-    public Transform player {  get; private set; }
+    public Transform player { get; private set; }
     public Animator anim { get; private set; }
     public NavMeshAgent agent { get; private set; }
     public EnemyStateMachine stateMachine { get; private set; }
@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
         InitializePatrolPoints();
     }
 
-  
+
 
     protected virtual void Update()
     {
@@ -57,6 +57,7 @@ public class Enemy : MonoBehaviour
             EnterBattleMode();
     }
 
+    //这里需要子类进行重写melee和range都需要重写这个函数
     protected virtual void InitializePerk()
     {
 
@@ -84,9 +85,9 @@ public class Enemy : MonoBehaviour
         healthPoints--;
     }
 
-    public virtual void DeathImpact( Vector3 force,Vector3 hitPoint,Rigidbody rb)
+    public virtual void DeathImpact(Vector3 force, Vector3 hitPoint, Rigidbody rb)
     {
-        StartCoroutine(DeathImpactCourutine(force,hitPoint,rb));
+        StartCoroutine(DeathImpactCourutine(force, hitPoint, rb));
     }
     private IEnumerator DeathImpactCourutine(Vector3 force, Vector3 hitPoint, Rigidbody rb)
     {
@@ -107,7 +108,7 @@ public class Enemy : MonoBehaviour
         transform.rotation = Quaternion.Euler(currentEulerAngels.x, yRotation, currentEulerAngels.z);
     }
 
-    
+
 
     #region Animation events
     public void ActivateManualMovement(bool manualMovement) => this.manualMovement = manualMovement;

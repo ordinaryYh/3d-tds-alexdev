@@ -79,6 +79,7 @@ public class BattleState_Range : EnemyState
         return enemy.IsPlayerInAgrresionRange() == false && ReadyToLeaveCover();
     }
 
+    //这里进行判断是否可以upstoppable
     private bool UnstoppableWalkReady()
     {
         float distanceToPlayer = Vector3.Distance(enemy.transform.position, enemy.player.position);
