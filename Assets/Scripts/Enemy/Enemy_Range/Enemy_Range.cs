@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CoverPerk { Unavalible, CanTakeCover, CanTakeAndChangeCover }
-public enum UnstoppablePerk { Unavalible, Unstoppable}
-public enum GrenadePerk { Unavalible, CanThrowGrenade}
+public enum CoverPerk { Unavalible, CanTakeCover, CanTakeAndChangeCover } //这个是cover的等级，代表enemy的切换cover的智能度
+public enum UnstoppablePerk { Unavalible, Unstoppable }
+public enum GrenadePerk { Unavalible, CanThrowGrenade }
 public class Enemy_Range : Enemy
 {
     [Header("Enemy perks")]
@@ -112,7 +112,7 @@ public class Enemy_Range : Enemy
         if (grenadePerk == GrenadePerk.Unavalible)
             return false;
 
-        if(Vector3.Distance(player.transform.position, transform.position) < safeDistance)
+        if (Vector3.Distance(player.transform.position, transform.position) < safeDistance)
             return false;
 
         if (Time.time > grenadeCooldown + lastTimeGrenadeThrown)
@@ -126,16 +126,16 @@ public class Enemy_Range : Enemy
         lastTimeGrenadeThrown = Time.time;
         visuals.EnableGrenadeModel(false);
 
-        GameObject newGrenade = ObjectPool.instance.GetObject(grenadePrefab,grenadeStartPoint);
+        GameObject newGrenade = ObjectPool.instance.GetObject(grenadePrefab, grenadeStartPoint);
         Enemy_Grenade newGrenadeScript = newGrenade.GetComponent<Enemy_Grenade>();
 
         if (stateMachine.currentState == deadState)
         {
-            newGrenadeScript.SetupGrenade(transform.position, 1,explosionTimer,impactPower);
+            newGrenadeScript.SetupGrenade(transform.position, 1, explosionTimer, impactPower);
             return;
         }
 
-        newGrenadeScript.SetupGrenade(player.transform.position, timeToTarget,explosionTimer,impactPower);
+        newGrenadeScript.SetupGrenade(player.transform.position, timeToTarget, explosionTimer, impactPower);
     }
 
     protected override void InitializePerk()
@@ -180,12 +180,19 @@ public class Enemy_Range : Enemy
         return false;
     }
 
+    //寻找最近的cover点
     private Transform AttemptToFindCover()
     {
+        //其实可以先判断哪个cover点最近，然后再去找coverpoint
+
+
+
         List<CoverPoint> collectedCoverPoints = new List<CoverPoint>();
 
         foreach (Cover cover in CollectNearByCovers())
         {
+            //AddRange函数是添加整个list的元素
+            //Add是添加单个元素
             collectedCoverPoints.AddRange(cover.GetValidCoverPoints(transform));
         }
 
@@ -235,13 +242,15 @@ public class Enemy_Range : Enemy
     }
 
     #endregion
+
+
     public void FireSingleBullet()
     {
         anim.SetTrigger("Shoot");
 
         Vector3 bulletsDirection = (aim.position - gunPoint.position).normalized;
 
-        GameObject newBullet = ObjectPool.instance.GetObject(bulletPrefab,gunPoint);
+        GameObject newBullet = ObjectPool.instance.GetObject(bulletPrefab, gunPoint);
         newBullet.transform.rotation = Quaternion.LookRotation(gunPoint.forward);
 
         newBullet.GetComponent<Enemy_Bullet>().BulletSetup();
@@ -260,7 +269,7 @@ public class Enemy_Range : Enemy
 
         foreach (var weaponData in avalibleWeaponData)
         {
-            if (weaponData.weaponType == weaponType)
+            if (weaponData.weaponType == this.weaponType)
                 filteredData.Add(weaponData);
         }
 
@@ -268,7 +277,7 @@ public class Enemy_Range : Enemy
         if (filteredData.Count > 0)
         {
             int random = Random.Range(0, filteredData.Count);
-            weaponData = filteredData[random];
+            this.weaponData = filteredData[random];
         }
         else
             Debug.LogWarning("No avalible weapon data was found!");
@@ -282,6 +291,7 @@ public class Enemy_Range : Enemy
 
     public void UpdateAimPosition()
     {
+        //aim点距离越远，那么aim点移动的速度就越低
         float aimSpeed = IsAimOnPlayer() ? fastAim : slowAim;
         aim.position = Vector3.MoveTowards(aim.position, playersBody.position, aimSpeed * Time.deltaTime);
     }
@@ -298,8 +308,11 @@ public class Enemy_Range : Enemy
         Vector3 myPosition = transform.position + Vector3.up;
         Vector3 directionToPlayer = playersBody.position - myPosition;
 
+        //这个~代表除了这个layer外的layer都会被检测
         if (Physics.Raycast(myPosition, directionToPlayer, out RaycastHit hit, Mathf.Infinity, ~whatToIgnore))
         {
+            //如果中间有障碍物，那么就不会执行下面的语句
+            //然后aim的位置就不会改变，enemy就会瞄准障碍物了
             if (hit.transform == player)
             {
                 UpdateAimPosition();

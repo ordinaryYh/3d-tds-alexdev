@@ -6,5 +6,5 @@ public class CoverPoint : MonoBehaviour
 {
     public bool occupied;
 
-    public void SetOccupied(bool occupied) => this.occupied = occupied;
+    public void SetOccupied(bool _occupied) => this.occupied = _occupied;
 }

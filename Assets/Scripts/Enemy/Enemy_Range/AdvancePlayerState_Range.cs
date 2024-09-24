@@ -16,8 +16,7 @@ public class AdvancePlayerState_Range : EnemyState
     public override void Enter()
     {
         base.Enter();
-
-
+        
 
         enemy.visuals.EnableIK(true, true);
 

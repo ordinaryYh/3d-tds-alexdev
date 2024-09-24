@@ -12,7 +12,7 @@ public class Enemy_RangeWeaponData : ScriptableObject
     public float fireRate = 1f; // bullets per second
 
     public int minBulletsPerAttack = 1;
-    public int maxBulletsPerAttack = 1;
+    public int maxBulletsPerAttack = 3;
 
     public float minWeaponCooldown = 2;
     public float maxWeaponCooldown = 3;

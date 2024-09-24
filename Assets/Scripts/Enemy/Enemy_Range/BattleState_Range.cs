@@ -12,10 +12,12 @@ public class BattleState_Range : EnemyState
 
     private float coverCheckTimer;
     private bool firstTimeAttack = true;
+
     public BattleState_Range(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName) : base(enemyBase, stateMachine, animBoolName)
     {
         enemy = enemyBase as Enemy_Range;
     }
+
     public override void Enter()
     {
         base.Enter();
@@ -87,8 +89,8 @@ public class BattleState_Range : EnemyState
         return outOfStoppingDistance && unstoppableWalkOnCooldown == false;
     }
 
-    #region Cover system region
 
+    #region Cover system region
 
     private bool ReadyToLeaveCover()
     {
@@ -106,6 +108,7 @@ public class BattleState_Range : EnemyState
         {
             coverCheckTimer = .5f; // We do cover check each .5f seconds
 
+            //下面的判断可以让enemy不会那么频繁的更换cover
             if (ReadyToChangeCover() && ReadyToLeaveCover())
             {
                 if (enemy.CanGetCover())
@@ -123,6 +126,7 @@ public class BattleState_Range : EnemyState
     }
 
 
+    //如果距离player过近，那么enemy也会切换coverpoint
     private bool IsPlayerClose()
     {
         return Vector3.Distance(enemy.transform.position, enemy.player.transform.position) < enemy.safeDistance;
