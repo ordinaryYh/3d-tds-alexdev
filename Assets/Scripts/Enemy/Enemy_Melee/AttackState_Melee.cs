@@ -25,7 +25,7 @@ public class AttackState_Melee : EnemyState
         attackMoveSpeed = enemy.attackData.moveSpeed;
         enemy.anim.SetFloat("AttackAnimationSpeed", enemy.attackData.animationSpeed);
         enemy.anim.SetFloat("AttackIndex", enemy.attackData.attackIndex);
-        enemy.anim.SetFloat("SlashAttackIndex", Random.Range(0, 5));
+        enemy.anim.SetFloat("SlashAttackIndex", Random.Range(0, 6));
 
 
         enemy.agent.isStopped = true;
@@ -59,11 +59,11 @@ public class AttackState_Melee : EnemyState
             enemy.FaceTarget(enemy.player.position);
             attackDirection = enemy.transform.position + (enemy.transform.forward * MAX_ATTACK_DISTANCE);
         }
-        
+
 
         if (enemy.ManualMovementActive())
         {
-            enemy.transform.position = 
+            enemy.transform.position =
                 Vector3.MoveTowards(enemy.transform.position, attackDirection, attackMoveSpeed * Time.deltaTime);
         }
 
@@ -87,7 +87,7 @@ public class AttackState_Melee : EnemyState
         if (PlayerClose())
             validAttacks.RemoveAll(parameter => parameter.attackType == AttackType_Melee.Charge);
 
-        int random = Random.Range(0,validAttacks.Count);
+        int random = Random.Range(0, validAttacks.Count);
         return validAttacks[random];
     }
 }

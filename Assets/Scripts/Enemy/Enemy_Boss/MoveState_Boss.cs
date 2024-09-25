@@ -41,10 +41,11 @@ public class MoveState_Boss : EnemyState
             //这里要追随玩家
             enemy.agent.SetDestination(playerPos);
 
-            if (Vector3.Distance(playerPos, enemy.transform.position) < enemy.attackRange)
-            {
+            if (enemy.CanDoJumpAttack())
+                stateMachine.ChangeState(enemy.jumpAttackState);
+            if (enemy.PlayerInAttackRange())
                 stateMachine.ChangeState(enemy.attackState);
-            }
+
         }
         else
         {

@@ -15,6 +15,7 @@ public class AttackState_Boss : EnemyState
     {
         base.Enter();
 
+        enemy.anim.SetFloat("AttackAnimIndex", Random.Range(0, 2));
         enemy.agent.isStopped = true;
     }
 
@@ -22,10 +23,13 @@ public class AttackState_Boss : EnemyState
     {
         base.Update();
 
-        enemy.anim.SetFloat("AttackAnimIndex", Random.Range(0, 2));
-
         if (triggerCalled)
-            stateMachine.ChangeState(enemy.moveState);
+        {
+            if (enemy.PlayerInAttackRange())
+                stateMachine.ChangeState(enemy.idleState);
+            else
+                stateMachine.ChangeState(enemy.moveState);
+        }
     }
 
     public override void Exit()

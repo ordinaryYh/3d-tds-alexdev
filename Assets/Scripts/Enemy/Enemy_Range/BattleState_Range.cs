@@ -1,3 +1,4 @@
+using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 public class BattleState_Range : EnemyState
@@ -140,7 +141,8 @@ public class BattleState_Range : EnemyState
 
         if (Physics.Raycast(enemy.transform.position, directionToPlayer, out RaycastHit hit))
         {
-            return hit.transform.parent == enemy.player;
+            if (hit.transform.parent == enemy.player || hit.transform == enemy.player)
+                return true;
         }
 
         return false;
