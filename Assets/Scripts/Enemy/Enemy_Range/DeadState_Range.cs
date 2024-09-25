@@ -16,6 +16,8 @@ public class DeadState_Range : EnemyState
     {
         base.Enter();
 
+        //死亡状态时，如果没有丢出手雷，那么死亡时就会丢出
+        //而且这个状态的手雷是在原地爆炸
         if (enemy.throwGrenadeState.finishedThrowingGrenade == false)
             enemy.ThrowGrenade();
 

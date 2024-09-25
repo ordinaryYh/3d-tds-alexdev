@@ -24,9 +24,9 @@ public class Enemy_Grenade : MonoBehaviour
 
     private void Explode()
     {
-        GameObject newFx = ObjectPool.instance.GetObject(explosionFx,transform);
-        
-        
+        GameObject newFx = ObjectPool.instance.GetObject(explosionFx, transform);
+
+
         ObjectPool.instance.ReturnObject(newFx, 1);
         ObjectPool.instance.ReturnObject(gameObject);
 
@@ -41,7 +41,7 @@ public class Enemy_Grenade : MonoBehaviour
         }
     }
 
-    public void SetupGrenade(Vector3 target, float timeToTarget,float countdown,float impactPower)
+    public void SetupGrenade(Vector3 target, float timeToTarget, float countdown, float impactPower)
     {
         rb.velocity = CalculateLaunchVelocity(target, timeToTarget);
         timer = countdown + timeToTarget;
@@ -51,12 +51,13 @@ public class Enemy_Grenade : MonoBehaviour
     private Vector3 CalculateLaunchVelocity(Vector3 target, float timeToTarget)
     {
         Vector3 direction = target - transform.position;
-        Vector3 directionXZ = new Vector3(direction.x, 0 , direction.z);
+        Vector3 directionXZ = new Vector3(direction.x, 0, direction.z);
 
         Vector3 velocityXZ = directionXZ / timeToTarget;
 
+        //  d=1/2 * g * t的平方 其中t是时间，g是重力加速度
         float velocityY =
-            (direction.y - (Physics.gravity.y * Mathf.Pow(timeToTarget, 2)) / 2) / timeToTarget;
+            (direction.y - Physics.gravity.y * Mathf.Pow(timeToTarget, 2) / 2) / timeToTarget;
 
         Vector3 launchVelocity = velocityXZ + Vector3.up * velocityY;
 

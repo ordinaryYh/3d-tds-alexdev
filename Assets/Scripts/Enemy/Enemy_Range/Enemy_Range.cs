@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum CoverPerk { Unavalible, CanTakeCover, CanTakeAndChangeCover } //这个是cover的等级，代表enemy的切换cover的智能度
 public enum UnstoppablePerk { Unavalible, Unstoppable }  //这个用来控制advance的两种状态
-public enum GrenadePerk { Unavalible, CanThrowGrenade }
+public enum GrenadePerk { Unavalible, CanThrowGrenade } //这个是开启扔手雷的能力
+
 public class Enemy_Range : Enemy
 {
     [Header("Enemy perks")]
@@ -67,6 +68,7 @@ public class Enemy_Range : Enemy
 
     protected override void Awake()
     {
+        //这里就会重新创建statemachine，这样每个enemy都有自己的statemachine
         base.Awake();
 
         idleState = new IdleState_Range(this, stateMachine, "Idle");

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThrowGrenadeState_Range : EnemyState
 {
     private Enemy_Range enemy;
+
     public bool finishedThrowingGrenade { get; private set; }
 
     public ThrowGrenadeState_Range(Enemy enemyBase, EnemyStateMachine stateMachine, string animBoolName) : base(enemyBase, stateMachine, animBoolName)
@@ -18,6 +19,7 @@ public class ThrowGrenadeState_Range : EnemyState
 
         finishedThrowingGrenade = false;
 
+        //扔手雷的时候，右手的武器会关闭，左手的武器会打开
         enemy.visuals.EnableWeaponModel(false);
         enemy.visuals.EnableIK(false, false);
         enemy.visuals.EnableSeconoderyWeaponModel(true);
@@ -44,4 +46,5 @@ public class ThrowGrenadeState_Range : EnemyState
         finishedThrowingGrenade = true;
         enemy.ThrowGrenade();
     }
+    
 }

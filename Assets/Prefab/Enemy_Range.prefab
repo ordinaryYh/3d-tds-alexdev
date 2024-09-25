@@ -1480,8 +1480,8 @@ MonoBehaviour:
   - {fileID: 5673001054955848948}
   - {fileID: 2103080116678446538}
   coverPerk: 2
-  unstoppablePerk: 0
-  grenadePerk: 0
+  unstoppablePerk: 1
+  grenadePerk: 1
   grenadePrefab: {fileID: 5866813730763450495, guid: 4ef4695b41e3b994682d08bda65871e5, type: 3}
   impactPower: 5
   explosionTimer: 0.75

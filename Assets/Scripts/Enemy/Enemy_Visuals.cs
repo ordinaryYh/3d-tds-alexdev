@@ -85,6 +85,7 @@ public class Enemy_Visuals : MonoBehaviour
             avalibleIndexs.RemoveAt(randomIndex);
         }
     }
+
     private void SetupRandomWeapon()
     {
         bool thisEnemyIsMelee = GetComponent<Enemy_Melee>() != null;
@@ -100,6 +101,7 @@ public class Enemy_Visuals : MonoBehaviour
 
         OverrideAnimatorControllerIfCan();
     }
+    
     private void SetupRandomColor()
     {
         int randomIndex = Random.Range(0, colorTextures.Length);

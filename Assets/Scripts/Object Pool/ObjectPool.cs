@@ -8,7 +8,7 @@ public class ObjectPool : MonoBehaviour
 
     [SerializeField] private int poolSize = 10;
 
-    private Dictionary<GameObject, Queue<GameObject>> poolDictionary = 
+    private Dictionary<GameObject, Queue<GameObject>> poolDictionary =
         new Dictionary<GameObject, Queue<GameObject>>();
 
 
@@ -19,7 +19,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-        else 
+        else
             Destroy(gameObject);
     }
 
@@ -29,7 +29,7 @@ public class ObjectPool : MonoBehaviour
         InitializeNewPool(ammoPickup);
     }
 
-    public GameObject GetObject(GameObject prefab,Transform target)
+    public GameObject GetObject(GameObject prefab, Transform _target)
     {
         if (poolDictionary.ContainsKey(prefab) == false)
         {
@@ -41,7 +41,8 @@ public class ObjectPool : MonoBehaviour
 
         GameObject objectToGet = poolDictionary[prefab].Dequeue();
 
-        objectToGet.transform.position = target.position;
+        //这里就要设置position，否则会出现bug，会导致物体瞬间偏移的bug
+        objectToGet.transform.position = _target.position;
         objectToGet.transform.parent = null;
 
         objectToGet.SetActive(true);
@@ -54,7 +55,7 @@ public class ObjectPool : MonoBehaviour
         StartCoroutine(DelayReturn(delay, objectToReturn));
     }
 
-    private IEnumerator DelayReturn(float delay,GameObject objectToReturn)
+    private IEnumerator DelayReturn(float delay, GameObject objectToReturn)
     {
         yield return new WaitForSeconds(delay);
 
@@ -67,7 +68,7 @@ public class ObjectPool : MonoBehaviour
 
         objectToReturn.SetActive(false);
         objectToReturn.transform.parent = transform;
-        
+
         poolDictionary[originalPrefab].Enqueue(objectToReturn);
     }
 
