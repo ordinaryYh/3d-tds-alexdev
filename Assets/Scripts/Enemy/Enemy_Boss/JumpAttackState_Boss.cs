@@ -48,5 +48,8 @@ public class JumpAttackState_Boss : EnemyState
     public override void Exit()
     {
         base.Exit();
+
+        //在退出这个状态的时候，才会设置cooldown
+        enemy.SetJumpAttackOnCooldown();
     }
 }
