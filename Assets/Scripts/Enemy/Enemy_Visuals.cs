@@ -4,12 +4,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public enum Enemy_MeleeWeaponType { OneHand, Throw, Unarmed}
-public enum Enemy_RangeWeaponType { Pistol, Revolver, Shotgun, AutoRifle , Rifle}
+public enum Enemy_MeleeWeaponType { OneHand, Throw, Unarmed }
+public enum Enemy_RangeWeaponType { Pistol, Revolver, Shotgun, AutoRifle, Rifle }
 
 public class Enemy_Visuals : MonoBehaviour
 {
-    
+
     public GameObject currentWeaponModel { get; private set; }
     public GameObject grenadeModel;
 
@@ -33,8 +33,10 @@ public class Enemy_Visuals : MonoBehaviour
 
     private void Update()
     {
-        leftHandIKConstraint.weight = AdjustIKWeight(leftHandIKConstraint.weight, leftHandTargetWeight);
-        weaponAimConstraint.weight = AdjustIKWeight(weaponAimConstraint.weight, weaponAimTargetWeight);
+        if (leftHandIKConstraint != null)
+            leftHandIKConstraint.weight = AdjustIKWeight(leftHandIKConstraint.weight, leftHandTargetWeight);
+        if (weaponAimConstraint != null)
+            weaponAimConstraint.weight = AdjustIKWeight(weaponAimConstraint.weight, weaponAimTargetWeight);
     }
 
     public void EnableGrenadeModel(bool active) => grenadeModel?.SetActive(active);
@@ -54,7 +56,7 @@ public class Enemy_Visuals : MonoBehaviour
         currentWeaponScript.EnableTrailEffect(enable);
     }
 
-    
+
     public void SetupLook()
     {
         SetupRandomColor();
@@ -78,7 +80,7 @@ public class Enemy_Visuals : MonoBehaviour
             if (avalibleIndexs.Count == 0)
                 break;
 
-            int randomIndex = Random.Range(0,avalibleIndexs.Count);
+            int randomIndex = Random.Range(0, avalibleIndexs.Count);
             int objectIndex = avalibleIndexs[randomIndex];
 
             corruptionCrystals[objectIndex].SetActive(true);
@@ -101,7 +103,7 @@ public class Enemy_Visuals : MonoBehaviour
 
         OverrideAnimatorControllerIfCan();
     }
-    
+
     private void SetupRandomColor()
     {
         int randomIndex = Random.Range(0, colorTextures.Length);
@@ -202,7 +204,7 @@ public class Enemy_Visuals : MonoBehaviour
         anim.SetLayerWeight(layerIndex, 1);
     }
 
-    public void EnableIK(bool enableLeftHand, bool enableAim,float changeRate = 10)
+    public void EnableIK(bool enableLeftHand, bool enableAim, float changeRate = 10)
     {
         if (leftHandIKConstraint == null)
         {
@@ -224,7 +226,7 @@ public class Enemy_Visuals : MonoBehaviour
         leftElbowIK.localRotation = leftElbowTarget.localRotation;
     }
 
-    private float AdjustIKWeight(float currentWeight,float targetWeight)
+    private float AdjustIKWeight(float currentWeight, float targetWeight)
     {
         if (Mathf.Abs(currentWeight - targetWeight) > 0.05f)
             return Mathf.Lerp(currentWeight, targetWeight, rigChangeRate * Time.deltaTime);

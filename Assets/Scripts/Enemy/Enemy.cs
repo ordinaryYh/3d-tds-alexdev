@@ -5,7 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected int healthPoints = 20;
+    [SerializeField] public int healthPoints = 20;
 
     [Header("Idle data")]
     public float idleTime;
@@ -32,6 +32,8 @@ public class Enemy : MonoBehaviour
 
     public Enemy_Ragdoll ragdoll { get; private set; }
 
+    public Enemy_Health health { get; private set; }
+
 
 
     protected virtual void Awake()
@@ -43,6 +45,8 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
         player = GameObject.Find("Player").GetComponent<Transform>();
+
+        health = GetComponent<Enemy_Health>();
     }
 
     protected virtual void Start()
@@ -82,15 +86,25 @@ public class Enemy : MonoBehaviour
 
     public virtual void GetHit()
     {
+        health.ReduceHealth();
+
+        if (health.ShouldDie())
+            Die();
+
         EnterBattleMode();
-        healthPoints--;
     }
 
-    public virtual void DeathImpact(Vector3 force, Vector3 hitPoint, Rigidbody rb)
+    public virtual void Die()
     {
-        StartCoroutine(DeathImpactCourutine(force, hitPoint, rb));
+
     }
-    private IEnumerator DeathImpactCourutine(Vector3 force, Vector3 hitPoint, Rigidbody rb)
+
+    public virtual void BulletImpact(Vector3 force, Vector3 hitPoint, Rigidbody rb)
+    {
+        if (health.ShouldDie())
+            StartCoroutine(BulletImpactCoroutine(force, hitPoint, rb));
+    }
+    private IEnumerator BulletImpactCoroutine(Vector3 force, Vector3 hitPoint, Rigidbody rb)
     {
         yield return new WaitForSeconds(.1f);
 
