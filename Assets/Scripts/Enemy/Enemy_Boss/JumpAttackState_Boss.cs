@@ -22,11 +22,22 @@ public class JumpAttackState_Boss : EnemyState
         enemy.agent.isStopped = true;
         enemy.agent.velocity = Vector3.zero;
 
+        enemy.bossVisuals.PlaceLandindZone(lastPlayerPos);
+        enemy.bossVisuals.EnableWeaponTrail(true);
+
         float distanceToPlayer = Vector3.Distance(lastPlayerPos, enemy.transform.position);
 
         jumpAttackMovementSpeed = distanceToPlayer / enemy.travelTimeToTarget;
 
         enemy.FaceTarget(lastPlayerPos, 1000);
+
+
+        if (enemy.bossWeaponType == BossWeaponType.Hummer)
+        {
+            enemy.agent.isStopped = false;
+            enemy.agent.speed = enemy.runSpeed;
+            enemy.agent.SetDestination(lastPlayerPos);
+        }
     }
 
     public override void Update()
@@ -51,5 +62,7 @@ public class JumpAttackState_Boss : EnemyState
 
         //在退出这个状态的时候，才会设置cooldown
         enemy.SetJumpAttackOnCooldown();
+
+        enemy.bossVisuals.EnableWeaponTrail(false);
     }
 }

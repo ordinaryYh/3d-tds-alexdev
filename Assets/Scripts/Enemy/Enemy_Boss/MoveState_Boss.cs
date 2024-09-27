@@ -8,7 +8,7 @@ public class MoveState_Boss : EnemyState
     private Vector3 destination;
 
     private float actionTimer;
-    private float timeBeforeSpeedUp=15;
+    private float timeBeforeSpeedUp = 15;
 
     private bool speedUpActivated;
 
@@ -33,7 +33,7 @@ public class MoveState_Boss : EnemyState
 
     private void SpeedReset()
     {
-        speedUpActivated=false;
+        speedUpActivated = false;
         enemy.anim.SetFloat("MoveAnimIndex", 0);
         enemy.agent.speed = enemy.walkSpeed;
     }
@@ -53,7 +53,7 @@ public class MoveState_Boss : EnemyState
 
         if (enemy.inBattleMode)
         {
-            if(ShouldSpeedUp())
+            if (ShouldSpeedUp())
             {
                 //之后会应用run的动画，然后enemy会加速
                 SpeedUp();
@@ -95,22 +95,29 @@ public class MoveState_Boss : EnemyState
 
         if (Random.Range(0, 2) == 0)
         {
-            if (enemy.CanDoAbility())
-                stateMachine.ChangeState(enemy.abilityState);
+            TryAbility();
         }
         else
         {
             if (enemy.CanDoJumpAttack())
                 stateMachine.ChangeState(enemy.jumpAttackState);
+            else if (enemy.bossWeaponType == BossWeaponType.Hummer)
+                TryAbility();
         }
+    }
+
+    private void TryAbility()
+    {
+        if (enemy.CanDoAbility())
+            stateMachine.ChangeState(enemy.abilityState);
     }
 
     private bool ShouldSpeedUp()
     {
-        if(speedUpActivated)
+        if (speedUpActivated)
             return false;
 
-        if(Time.time>enemy.attackState.lastTimeAttacked+timeBeforeSpeedUp)
+        if (Time.time > enemy.attackState.lastTimeAttacked + timeBeforeSpeedUp)
         {
             return true;
         }

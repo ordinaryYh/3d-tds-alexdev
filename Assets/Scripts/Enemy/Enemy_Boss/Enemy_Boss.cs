@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum BossWeaponType {  Flamethrower, Hummer}
+public enum BossWeaponType { Flamethrower, Hummer }
 
 public class Enemy_Boss : Enemy
 {
@@ -43,6 +43,7 @@ public class Enemy_Boss : Enemy
     public DeadState_Boss deadState { get; private set; }
 
     public Enemy_BossVisuals bossVisuals { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -118,6 +119,10 @@ public class Enemy_Boss : Enemy
     public void ActivateHummer()
     {
         GameObject newActivation = ObjectPool.instance.GetObject(activationPrefab, impactPoint);
+
+        if (newActivation == null)
+            return;
+
         ObjectPool.instance.ReturnObject(newActivation, 1);
     }
 

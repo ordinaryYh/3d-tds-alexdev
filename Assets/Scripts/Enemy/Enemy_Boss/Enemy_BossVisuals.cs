@@ -51,7 +51,6 @@ public class Enemy_BossVisuals : MonoBehaviour
 
     public void PlaceLandindZone(Vector3 target)
     {
-
         Vector3 dir = target - transform.position;
         Vector3 offset = dir.normalized * landingOffset;
         landindZoneFx.transform.position = target + offset;

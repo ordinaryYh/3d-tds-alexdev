@@ -46,6 +46,7 @@ public class AbilityState_Boss : EnemyState
         enemy.ActivateFlamethrower(false);
     }
 
+    //这里是一个脚本有两个技能，可以放在两个脚本中
     public override void AbilityTrigger()
     {
         if (enemy.bossWeaponType == BossWeaponType.Flamethrower)
