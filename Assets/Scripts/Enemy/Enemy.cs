@@ -5,7 +5,9 @@ using System.Collections;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] public int healthPoints = 20;
+    public LayerMask whatIsAlly;
+
+    public int healthPoints = 20;
 
     [Header("Idle data")]
     public float idleTime;

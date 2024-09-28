@@ -17,6 +17,8 @@ public class Bullet : MonoBehaviour
     private float flyDistance;
     private bool bulletDisabled;
 
+    private LayerMask allyLayerMask;
+
     protected virtual void Awake()
     {
         cd = GetComponent<BoxCollider>();
@@ -25,9 +27,10 @@ public class Bullet : MonoBehaviour
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    public void BulletSetup(float flyDistance = 100, float impactForce = 100)
+    public void BulletSetup(LayerMask _allyLayer, float flyDistance = 100, float impactForce = 100)
     {
         this.impactForce = impactForce;
+        this.allyLayerMask = _allyLayer;
 
         bulletDisabled = false;
         cd.enabled = true;
@@ -68,6 +71,18 @@ public class Bullet : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        if (FriendlyFireEnable() == false)
+        {
+            //这句代码需要查阅unity资料才能完全理解
+            //视频有文章，视频是14-004
+            //layer值实际上在unity中是保存在二进制中
+            if ((allyLayerMask.value & (1 << collision.gameObject.layer)) > 0)
+            {
+                ReturnBulletToPool(10);
+                return;
+            }
+        }
+
         CreateImpactFx();
         ReturnBulletToPool();
 
@@ -96,7 +111,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    protected void ReturnBulletToPool() => ObjectPool.instance.ReturnObject(gameObject);
+    protected void ReturnBulletToPool(float delay = 0) => ObjectPool.instance.ReturnObject(gameObject, delay);
 
 
     protected void CreateImpactFx()
@@ -104,4 +119,6 @@ public class Bullet : MonoBehaviour
         GameObject newImpactFx = ObjectPool.instance.GetObject(bulletImpactFX, transform);
         ObjectPool.instance.ReturnObject(newImpactFx, 1);
     }
+
+    private bool FriendlyFireEnable() => GameManager.instance.friendlyFire;
 }
