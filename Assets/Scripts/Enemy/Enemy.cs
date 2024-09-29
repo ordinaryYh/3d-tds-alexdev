@@ -6,6 +6,8 @@ using System.Collections;
 public class Enemy : MonoBehaviour
 {
     public LayerMask whatIsAlly;
+    public LayerMask whatIsPlayer;
+    [Space]
 
     public int healthPoints = 20;
 
@@ -25,6 +27,7 @@ public class Enemy : MonoBehaviour
     private int currentPatrolIndex;
 
     public bool inBattleMode { get; private set; }
+    protected bool isMeleeAttackReady;
 
     public Transform player { get; private set; }
     public Animator anim { get; private set; }
@@ -64,6 +67,35 @@ public class Enemy : MonoBehaviour
             EnterBattleMode();
     }
 
+    public virtual void MeleeAttackCheck(Transform[] damagePoints, float attackCheckRadius, GameObject fx, int _damage)
+    {
+        if (isMeleeAttackReady == false)
+            return;
+
+        foreach (var attackPoint in damagePoints)
+        {
+            Collider[] detectedHits =
+                Physics.OverlapSphere(attackPoint.position, attackCheckRadius, whatIsPlayer);
+
+            for (int i = 0; i < detectedHits.Length; i++)
+            {
+                IDamageble damage = detectedHits[i].GetComponent<IDamageble>();
+
+                if (damage != null)
+                {
+                    //如果找到了一个damage就直接返回，和手雷脚本的做法有一点不同
+                    damage.TakeDamage(_damage);
+                    isMeleeAttackReady = false;
+                    GameObject newAttackFx = ObjectPool.instance.GetObject(fx, attackPoint);
+                    ObjectPool.instance.ReturnObject(newAttackFx, 1);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void EnableMeleeAttack(bool enable) => isMeleeAttackReady = enable;
+
     //这里需要子类进行重写melee和range都需要重写这个函数
     protected virtual void InitializePerk()
     {
@@ -86,9 +118,9 @@ public class Enemy : MonoBehaviour
         inBattleMode = true;
     }
 
-    public virtual void GetHit()
+    public virtual void GetHit(int _damage)
     {
-        health.ReduceHealth();
+        health.ReduceHealth(_damage);
 
         if (health.ShouldDie())
             Die();

@@ -15,13 +15,16 @@ public class Enemy_Axe : MonoBehaviour
     private float rotationSpeed;
     private float timer = 1;
 
-    public void AxeSetup(float flySpeed, Transform player, float timer)
+    private int damage;
+
+    public void AxeSetup(float flySpeed, Transform player, float timer, int _damage)
     {
         rotationSpeed = 1600;
 
         this.flySpeed = flySpeed;
         this.player = player;
         this.timer = timer;
+        this.damage = _damage;
     }
 
     private void Update()
@@ -33,24 +36,25 @@ public class Enemy_Axe : MonoBehaviour
             direction = player.position + Vector3.up - transform.position;
 
 
-        rb.velocity = direction.normalized * flySpeed;
         transform.forward = rb.velocity;
     }
 
-
-    private void OnTriggerEnter(Collider other)
+    //fixedupdate和update的区别在于，fixedupdate每秒运行的次数固定
+    //而update每秒运行的次数可能不一致，每帧的时间都不同
+    private void FixedUpdate()
     {
-        Bullet bullet = other.GetComponent<Bullet>();
-        Player player = other.GetComponent<Player>();
-
-        if (bullet != null || player != null)
-        {
-            GameObject newFx = ObjectPool.instance.GetObject(impactFx,transform);
-
-            
-
-            ObjectPool.instance.ReturnObject(gameObject);
-            ObjectPool.instance.ReturnObject(newFx, 1f);
-        }
+        //放在这里面可以让运动更加流畅
+        rb.velocity = direction.normalized * flySpeed;
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        IDamageble damage = collision.gameObject.GetComponent<IDamageble>();
+        damage?.TakeDamage(this.damage);
+
+        GameObject newFx = ObjectPool.instance.GetObject(impactFx, transform);
+        ObjectPool.instance.ReturnObject(gameObject);
+        ObjectPool.instance.ReturnObject(newFx, 1f);
+    }
+
 }

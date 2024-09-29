@@ -15,6 +15,8 @@ public class Enemy_Grenade : MonoBehaviour
     private LayerMask allyLayerMask;
     private bool canExplode = true;
 
+    private int grenadeDamage;
+
     private void Awake() => rb = GetComponent<Rigidbody>();
 
     private void Update()
@@ -35,23 +37,29 @@ public class Enemy_Grenade : MonoBehaviour
         //如果不使用，那么手雷爆炸时，player身上有多少个collider就会伤害多少次
         //这样的话，手雷的伤害过高，所以用hash表来避免这种情况。最终手雷只会伤害一次
         HashSet<GameObject> uniqueEntities = new HashSet<GameObject>();
-
         Collider[] colliders = Physics.OverlapSphere(transform.position, impactRadius);
 
         foreach (Collider hit in colliders)
         {
-            if (IsTargetValid(hit) == false)
-                continue;
+            IDamageble damage = hit.GetComponent<IDamageble>();
 
-            //root代表的是最上面的那个父节点，祖宗节点
-            GameObject rootEntity = hit.transform.root.gameObject;
-            //如果已经在hash表中了，那么就不再进行伤害
-            if (uniqueEntities.Add(rootEntity) == false)
-                continue;
+            if (damage != null)
+            {
+                if (IsTargetValid(hit) == false)
+                    continue;
 
-            ApllyDamageTo(hit);
+                //root代表的是最上面的那个父节点，祖宗节点
+                GameObject rootEntity = hit.transform.root.gameObject;
+                //如果已经在hash表中了，那么就不再进行伤害
+                if (uniqueEntities.Add(rootEntity) == false)
+                    continue;
+
+                damage.TakeDamage(this.grenadeDamage);
+            }
+
             ApllyPhysicalForceTo(hit);
         }
+
     }
 
     private void ApllyPhysicalForceTo(Collider hit)
@@ -62,11 +70,7 @@ public class Enemy_Grenade : MonoBehaviour
             rb.AddExplosionForce(impactPower, transform.position, impactRadius, upwardsMultiplier, ForceMode.Impulse);
     }
 
-    private static void ApllyDamageTo(Collider hit)
-    {
-        IDamageble damage = hit.GetComponent<IDamageble>();
-        damage?.TakeDamage();
-    }
+
 
     private void PlayerExplosionFX()
     {
@@ -75,7 +79,7 @@ public class Enemy_Grenade : MonoBehaviour
         ObjectPool.instance.ReturnObject(gameObject);
     }
 
-    public void SetupGrenade(LayerMask _allyLayerMask, Vector3 target, float timeToTarget, float countdown, float impactPower)
+    public void SetupGrenade(LayerMask _allyLayerMask, Vector3 target, float timeToTarget, float countdown, float impactPower, int _damage)
     {
         canExplode = true;
 
@@ -83,6 +87,7 @@ public class Enemy_Grenade : MonoBehaviour
         rb.velocity = CalculateLaunchVelocity(target, timeToTarget);
         timer = countdown + timeToTarget;
         this.impactPower = impactPower;
+        this.grenadeDamage = _damage;
     }
 
     private bool IsTargetValid(Collider collider)

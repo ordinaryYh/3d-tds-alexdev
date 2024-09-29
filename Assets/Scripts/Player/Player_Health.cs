@@ -15,9 +15,9 @@ public class Player_Health : HealthController
         player = GetComponent<Player>();
     }
 
-    public override void ReduceHealth()
+    public override void ReduceHealth(int _damage)
     {
-        base.ReduceHealth();
+        base.ReduceHealth(_damage);
 
         if (ShouldDie())
             Die();

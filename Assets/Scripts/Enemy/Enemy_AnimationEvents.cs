@@ -6,10 +6,13 @@ public class Enemy_AnimationEvents : MonoBehaviour
 {
     private Enemy enemy;
     private Enemy_Boss enemyBoss;
+    private Enemy_Melee enemyMelee;
 
     private void Awake()
     {
         enemy = GetComponentInParent<Enemy>();
+        enemyMelee = GetComponentInParent<Enemy_Melee>();
+        enemyBoss = GetComponentInParent<Enemy_Boss>();
     }
 
     public void AnimationTrigger() => enemy.AnimationTrigger();
@@ -35,5 +38,15 @@ public class Enemy_AnimationEvents : MonoBehaviour
             enemyBoss = GetComponentInParent<Enemy_Boss>();
 
         enemyBoss?.JumpImpact();
+    }
+
+    public void BeginMeleeAttackCheck()
+    {
+        enemy?.EnableMeleeAttack(true);
+    }
+
+    public void FinishMeleeAttackCheck()
+    {
+        enemy?.EnableMeleeAttack(false);
     }
 }

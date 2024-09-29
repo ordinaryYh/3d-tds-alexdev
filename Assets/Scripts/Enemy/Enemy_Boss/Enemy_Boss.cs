@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum BossWeaponType { Flamethrower, Hummer }
@@ -15,15 +16,20 @@ public class Enemy_Boss : Enemy
     private float lastTimeUsedAbility;
 
     [Header("Flamethrower")]
+    public int flameDamage;
+    public float flameDamageCooldown;
     public ParticleSystem flamethrower;
     public float flamethrowDuration;
     public bool flamethrowActive { get; private set; }
 
     [Header("Hummer")]
+    public int hummerActiveDamage;
     public GameObject activationPrefab;
+    [SerializeField] private float hummerCheckRadius;
 
 
     [Header("Jump attack")]
+    public int jumpAttackDamage;
     public float jumpAttackCooldown = 10;
     private float lastTimeJumped;
     public float travelTimeToTarget = 1;
@@ -35,6 +41,12 @@ public class Enemy_Boss : Enemy
     [SerializeField] private float upforceMultiplier = 10;
     [Space]
     [SerializeField] private LayerMask whatToIngore;
+
+    [Header("Attack")]
+    [SerializeField] private Transform[] damagePoints;
+    [SerializeField] private float attackCheckRadius;
+    [SerializeField] private GameObject meleeAttackFx;
+
     public IdleState_Boss idleState { get; private set; }
     public MoveState_Boss moveState { get; private set; }
     public AttackState_Boss attackState { get; private set; }
@@ -73,14 +85,16 @@ public class Enemy_Boss : Enemy
 
         if (ShouldEnterBattleMode())
             EnterBattleMode();
+
+        MeleeAttackCheck(damagePoints, attackCheckRadius, meleeAttackFx);
     }
 
-    public override void GetHit()
+
+    public override void Die()
     {
-        base.GetHit();
+        base.Die();
 
-
-        if (healthPoints <= 0 && stateMachine.currentState != deadState)
+        if (stateMachine.currentState != deadState)
             stateMachine.ChangeState(deadState);
     }
 
@@ -119,11 +133,11 @@ public class Enemy_Boss : Enemy
     public void ActivateHummer()
     {
         GameObject newActivation = ObjectPool.instance.GetObject(activationPrefab, impactPoint);
-
         if (newActivation == null)
             return;
-
         ObjectPool.instance.ReturnObject(newActivation, 1);
+
+        MassDamage(damagePoints[0].position, hummerCheckRadius, hummerActiveDamage);
     }
 
     public bool CanDoAbility()
@@ -150,15 +164,38 @@ public class Enemy_Boss : Enemy
         if (impactPoint == null)
             impactPoint = transform;
 
-        Collider[] colliders = Physics.OverlapSphere(impactPoint.position, impactRadius);
+        //之后也可以添加其他的伤害等等
+        MassDamage(impactPoint.position, impactRadius, this.jumpAttackDamage);
+    }
+
+    private void MassDamage(Vector3 _impactPoint, float _impactRadius, int _damage)
+    {
+        HashSet<GameObject> uniqueEntities = new HashSet<GameObject>();
+        Collider[] colliders = Physics.OverlapSphere(_impactPoint, _impactRadius, ~whatIsAlly);
 
         foreach (Collider hit in colliders)
         {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
+            IDamageble damage = hit.GetComponent<IDamageble>();
+            if (damage != null)
+            {
+                GameObject root = hit.transform.root.gameObject;
+                if (uniqueEntities.Add(root) == false)
+                    continue;
 
-            if (rb != null)
-                rb.AddExplosionForce(impactPower, transform.position, impactRadius, upforceMultiplier, ForceMode.Impulse);
+                Debug.Log(hit.transform.root.gameObject.name + "was damaged");
+                damage.TakeDamage(_damage);
+            }
+
+            ApplyPhysicalForceTo(_impactPoint, hit);
         }
+    }
+
+    private void ApplyPhysicalForceTo(Vector3 _impactPoint, Collider hit)
+    {
+        Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+        if (rb != null)
+            rb.AddExplosionForce(impactPower, _impactPoint, impactRadius, upforceMultiplier, ForceMode.Impulse);
     }
 
     public bool CanDoJumpAttack()
@@ -211,13 +248,26 @@ public class Enemy_Boss : Enemy
             Gizmos.DrawLine(myPos, playerPos);
         }
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, minJumpDistanceRequired);
-
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, minAbilityDistance);
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, impactRadius);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, minJumpDistanceRequired);
+
+        if (damagePoints.Length > 0)
+        {
+            foreach (var damagePoints in damagePoints)
+            {
+                Gizmos.DrawWireSphere(damagePoints.position, attackCheckRadius);
+            }
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireSphere(damagePoints[0].position, hummerCheckRadius);
+        }
+
+
     }
 }

@@ -32,11 +32,16 @@ public class Enemy_Melee : Enemy
     public EnemyMelee_Type meleeType;
     public Enemy_MeleeWeaponType weaponType;
 
+    [Header("Shield")]
+    public int shieldDurability;
     public Transform shieldTransform;
+
+    [Header("Dodge")]
     public float dodgeCooldown;
     private float lastTimeDodge = -10;
 
     [Header("Axe throw ability")]
+    public int axeDamage;
     public GameObject axePrefab;
     public float axeFlySpeed;
     public float axeAimTimer;
@@ -47,6 +52,10 @@ public class Enemy_Melee : Enemy
     [Header("Attack Data")]
     public AttackData_EnemyMelee attackData;
     public List<AttackData_EnemyMelee> attackList;
+    private Enemy_WeaponModel currentWeapon;
+    private bool isAttackReady;
+    [Space]
+    [SerializeField] private GameObject meleeAttackFx;
 
     protected override void Awake()
     {
@@ -79,9 +88,8 @@ public class Enemy_Melee : Enemy
         stateMachine.currentState.Update();
 
 
+        MeleeAttackCheck(currentWeapon.damagePoints, currentWeapon.attackRadius, meleeAttackFx);
     }
-
-
 
 
     public override void EnterBattleMode()
@@ -103,7 +111,7 @@ public class Enemy_Melee : Enemy
 
     public void UpdateAttackData()
     {
-        Enemy_WeaponModel currentWeapon = visuals.currentWeaponModel.GetComponent<Enemy_WeaponModel>();
+        currentWeapon = visuals.currentWeaponModel.GetComponent<Enemy_WeaponModel>();
 
         if (currentWeapon.weaponData != null)
         {
@@ -165,7 +173,7 @@ public class Enemy_Melee : Enemy
     {
         GameObject newAxe = ObjectPool.instance.GetObject(axePrefab, axeStartPoint);
 
-        newAxe.GetComponent<Enemy_Axe>().AxeSetup(axeFlySpeed, player, axeAimTimer);
+        newAxe.GetComponent<Enemy_Axe>().AxeSetup(axeFlySpeed, player, axeAimTimer, this.axeDamage);
     }
     public bool CanThrowAxe()
     {

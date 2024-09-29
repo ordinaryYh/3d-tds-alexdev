@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IDamageble 
+public interface IDamageble
 {
-    void TakeDamage();
+    void TakeDamage(int _damage);
 }
