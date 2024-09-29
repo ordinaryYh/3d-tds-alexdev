@@ -12,40 +12,90 @@ public class Enemy_Grenade : MonoBehaviour
     private float timer;
     private float impactPower;
 
+    private LayerMask allyLayerMask;
+    private bool canExplode = true;
+
     private void Awake() => rb = GetComponent<Rigidbody>();
 
     private void Update()
     {
         timer -= Time.deltaTime;
 
-        if (timer < 0)
+        if (timer < 0 && canExplode == true)
             Explode();
     }
 
     private void Explode()
     {
-        GameObject newFx = ObjectPool.instance.GetObject(explosionFx, transform);
+        canExplode = false;
 
+        PlayerExplosionFX();
 
-        ObjectPool.instance.ReturnObject(newFx, 1);
-        ObjectPool.instance.ReturnObject(gameObject);
+        //这里要使用hash表，来避免重复元素
+        //如果不使用，那么手雷爆炸时，player身上有多少个collider就会伤害多少次
+        //这样的话，手雷的伤害过高，所以用hash表来避免这种情况。最终手雷只会伤害一次
+        HashSet<GameObject> uniqueEntities = new HashSet<GameObject>();
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, impactRadius);
 
         foreach (Collider hit in colliders)
         {
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
+            if (IsTargetValid(hit) == false)
+                continue;
 
-            if (rb != null)
-                rb.AddExplosionForce(impactPower, transform.position, impactRadius, upwardsMultiplier, ForceMode.Impulse);
+            //root代表的是最上面的那个父节点，祖宗节点
+            GameObject rootEntity = hit.transform.root.gameObject;
+            //如果已经在hash表中了，那么就不再进行伤害
+            if (uniqueEntities.Add(rootEntity) == false)
+                continue;
+
+            ApllyDamageTo(hit);
+            ApllyPhysicalForceTo(hit);
         }
     }
 
-    public void SetupGrenade(Vector3 target, float timeToTarget, float countdown, float impactPower)
+    private void ApllyPhysicalForceTo(Collider hit)
     {
+        Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+        if (rb != null)
+            rb.AddExplosionForce(impactPower, transform.position, impactRadius, upwardsMultiplier, ForceMode.Impulse);
+    }
+
+    private static void ApllyDamageTo(Collider hit)
+    {
+        IDamageble damage = hit.GetComponent<IDamageble>();
+        damage?.TakeDamage();
+    }
+
+    private void PlayerExplosionFX()
+    {
+        GameObject newFx = ObjectPool.instance.GetObject(explosionFx, transform);
+        ObjectPool.instance.ReturnObject(newFx, 1);
+        ObjectPool.instance.ReturnObject(gameObject);
+    }
+
+    public void SetupGrenade(LayerMask _allyLayerMask, Vector3 target, float timeToTarget, float countdown, float impactPower)
+    {
+        canExplode = true;
+
+        this.allyLayerMask = _allyLayerMask;
         rb.velocity = CalculateLaunchVelocity(target, timeToTarget);
         timer = countdown + timeToTarget;
         this.impactPower = impactPower;
+    }
+
+    private bool IsTargetValid(Collider collider)
+    {
+        if (GameManager.instance.friendlyFire)
+            return true;
+
+        if ((allyLayerMask.value & (1 << collider.gameObject.layer)) > 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private Vector3 CalculateLaunchVelocity(Vector3 target, float timeToTarget)

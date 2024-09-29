@@ -38,10 +38,13 @@ public class PlayerAim : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if (player.health.isDead)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.P))
             isAimingPrecisly = !isAimingPrecisly;
 
-        if(Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L))
             isLockingToTarget = !isLockingToTarget;
 
         UpdateAimVisuals();
@@ -87,14 +90,14 @@ public class PlayerAim : MonoBehaviour
 
         if (target != null && isLockingToTarget)
         {
-            if(target.GetComponent<Renderer>() != null)
+            if (target.GetComponent<Renderer>() != null)
                 aim.position = target.GetComponent<Renderer>().bounds.center;
             else
                 aim.position = target.position;
 
 
             return;
-        }   
+        }
 
         aim.position = GetMouseHitInfo().point;
 
