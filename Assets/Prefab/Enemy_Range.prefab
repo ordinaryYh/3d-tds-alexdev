@@ -1453,11 +1453,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148521078808675394}
+  - component: {fileID: 2044127388295834119}
   - component: {fileID: 1522754735549448092}
   - component: {fileID: 7514313664782962610}
   - component: {fileID: 1940292121413942818}
   - component: {fileID: 1334087555910019399}
-  - component: {fileID: 2044127388295834119}
   m_Layer: 11
   m_Name: Enemy_Range
   m_TagString: Untagged
@@ -1484,6 +1484,20 @@ Transform:
   - {fileID: 9099338632411412722}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2044127388295834119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316571440960610406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5c0c038b4d849d5b01e22ad97427ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
 --- !u!114 &1522754735549448092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1499,6 +1513,9 @@ MonoBehaviour:
   whatIsAlly:
     serializedVersion: 2
     m_Bits: 2048
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 0
   healthPoints: 2
   idleTime: 3
   aggresionRange: 15
@@ -1512,6 +1529,7 @@ MonoBehaviour:
   coverPerk: 2
   unstoppablePerk: 1
   grenadePerk: 1
+  grenadeDamage: 0
   grenadePrefab: {fileID: 5866813730763450495, guid: 4ef4695b41e3b994682d08bda65871e5, type: 3}
   impactPower: 5
   explosionTimer: 0.75
@@ -1602,20 +1620,6 @@ MonoBehaviour:
   leftElbowIK: {fileID: 8601710550309007857}
   leftHandIKConstraint: {fileID: 1601646893650882009}
   weaponAimConstraint: {fileID: 3311437297003741549}
---- !u!114 &2044127388295834119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1316571440960610406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd5c0c038b4d849d5b01e22ad97427ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 20
-  currentHealth: 0
 --- !u!1 &1416550309579397773
 GameObject:
   m_ObjectHideFlags: 0

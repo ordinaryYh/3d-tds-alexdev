@@ -43,6 +43,7 @@ public class Enemy_Boss : Enemy
     [SerializeField] private LayerMask whatToIngore;
 
     [Header("Attack")]
+    [SerializeField] private int meleeAttackDamage;
     [SerializeField] private Transform[] damagePoints;
     [SerializeField] private float attackCheckRadius;
     [SerializeField] private GameObject meleeAttackFx;
@@ -86,7 +87,7 @@ public class Enemy_Boss : Enemy
         if (ShouldEnterBattleMode())
             EnterBattleMode();
 
-        MeleeAttackCheck(damagePoints, attackCheckRadius, meleeAttackFx);
+        MeleeAttackCheck(damagePoints, attackCheckRadius, meleeAttackFx, meleeAttackDamage);
     }
 
 

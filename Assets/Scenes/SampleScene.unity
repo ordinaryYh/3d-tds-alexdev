@@ -323,6 +323,7 @@ MonoBehaviour:
   weaponData: {fileID: 11400000, guid: 3ea6f72a11abfb849937c1e24064c870, type: 2}
   weapon:
     weaponType: 0
+    bulletDamage: 0
     shootType: 0
     fireRate: 0
     burstActive: 0
@@ -6585,6 +6586,7 @@ MonoBehaviour:
   weaponData: {fileID: 11400000, guid: e3228b5e123aa934f8457c81698d3b18, type: 2}
   weapon:
     weaponType: 0
+    bulletDamage: 0
     shootType: 0
     fireRate: 0
     burstActive: 0
@@ -9436,6 +9438,7 @@ MonoBehaviour:
   weaponData: {fileID: 11400000, guid: 5eb5a200539edd4489d28c444ea7d52f, type: 2}
   weapon:
     weaponType: 0
+    bulletDamage: 0
     shootType: 0
     fireRate: 0
     burstActive: 0
@@ -9913,6 +9916,7 @@ MonoBehaviour:
   weaponData: {fileID: 11400000, guid: e12fe38b0ed5ce34c9defee2a30e9dbb, type: 2}
   weapon:
     weaponType: 0
+    bulletDamage: 0
     shootType: 0
     fireRate: 0
     burstActive: 0
@@ -11645,6 +11649,7 @@ MonoBehaviour:
   defaultWeaponData: {fileID: 11400000, guid: 2341707a809284748b68f961349af0d6, type: 2}
   currentWeapon:
     weaponType: 0
+    bulletDamage: 0
     shootType: 0
     fireRate: 0
     burstActive: 0
@@ -11658,6 +11663,7 @@ MonoBehaviour:
   maxSlots: 2
   weaponSlots:
   - weaponType: 3
+    bulletDamage: 0
     shootType: 1
     fireRate: 0
     burstActive: 0
@@ -11730,7 +11736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c7e6fe7a2e64a8e8cbc9bfb63172ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
+  maxHealth: 100
   currentHealth: 0
 --- !u!114 &1746550282
 MonoBehaviour:
@@ -20372,6 +20378,7 @@ MonoBehaviour:
   weaponData: {fileID: 11400000, guid: 2341707a809284748b68f961349af0d6, type: 2}
   weapon:
     weaponType: 0
+    bulletDamage: 0
     shootType: 0
     fireRate: 0
     burstActive: 0

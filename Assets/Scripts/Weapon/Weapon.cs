@@ -19,6 +19,8 @@ public class Weapon
 {
     public WeaponType weaponType;
 
+    public int bulletDamage;
+
 
     #region Regular mode variables
     public ShootType shootType;
@@ -43,14 +45,14 @@ public class Weapon
     public int totalReserveAmmo;
 
     #region Weapon generic info variables
-    
+
     public float reloadSpeed { get; private set; } // how fast charcater reloads weapon    
     public float equipmentSpeed { get; private set; } // how fast character equips weapon
     public float gunDistance { get; private set; }
     public float cameraDistance { get; private set; }
     #endregion
     #region Weapon spread variables
-    [Header("Spread ")] 
+    [Header("Spread ")]
     private float baseSpread = 1;
     private float maximumSpread = 3;
     private float currentSpread = 2;
@@ -66,7 +68,7 @@ public class Weapon
 
     public Weapon(Weapon_Data weaponData)
     {
-
+        bulletDamage = weaponData.bulletDamage;
         bulletsInMagazine = weaponData.bulletsInMagazine;
         magazineCapacity = weaponData.magazineCapacity;
         totalReserveAmmo = weaponData.totalReserveAmmo;
@@ -95,7 +97,7 @@ public class Weapon
         gunDistance = weaponData.gunDistance;
         cameraDistance = weaponData.cameraDistance;
 
-        
+
         defaultFireRate = fireRate;
         this.weaponData = weaponData;
     }

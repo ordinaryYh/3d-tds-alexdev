@@ -4,6 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public struct AttackData_EnemyMelee
 {
+    public int attackDamage;
     public string attackName;
     public float attackRange;
     public float moveSpeed;
@@ -88,7 +89,7 @@ public class Enemy_Melee : Enemy
         stateMachine.currentState.Update();
 
 
-        MeleeAttackCheck(currentWeapon.damagePoints, currentWeapon.attackRadius, meleeAttackFx);
+        MeleeAttackCheck(currentWeapon.damagePoints, currentWeapon.attackRadius, meleeAttackFx, attackData.attackDamage);
     }
 
 
