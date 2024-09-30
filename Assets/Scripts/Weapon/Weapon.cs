@@ -108,7 +108,7 @@ public class Weapon
     {
         UpdateSpread();
 
-        float randomizedValue = Random.Range(-currentSpread, currentSpread);
+        float randomizedValue = Random.Range(-currentSpread, currentSpread) / 2;
 
         Quaternion spreadRotation = Quaternion.Euler(randomizedValue, randomizedValue, randomizedValue);
 
