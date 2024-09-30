@@ -8,7 +8,7 @@ public class MoveState_Boss : EnemyState
     private Vector3 destination;
 
     private float actionTimer;
-    private float timeBeforeSpeedUp = 15;
+    private float timeBeforeSpeedUp = 5;
 
     private bool speedUpActivated;
 
@@ -35,6 +35,7 @@ public class MoveState_Boss : EnemyState
     {
         speedUpActivated = false;
         enemy.anim.SetFloat("MoveAnimIndex", 0);
+        enemy.anim.SetFloat("MoveAnimSpeedMultiplier", 1); //这个是设置move动画的速度
         enemy.agent.speed = enemy.walkSpeed;
     }
 
@@ -86,6 +87,7 @@ public class MoveState_Boss : EnemyState
     {
         enemy.agent.speed = enemy.runSpeed;
         enemy.anim.SetFloat("MoveAnimIndex", 1);
+        enemy.anim.SetFloat("MoveAnimSpeedMultiplier", 1.5f);  //这个是设置move动画的速度
         speedUpActivated = true;
     }
 

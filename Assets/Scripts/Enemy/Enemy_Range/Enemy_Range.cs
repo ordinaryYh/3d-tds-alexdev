@@ -316,7 +316,7 @@ public class Enemy_Range : Enemy
         {
             //如果中间有障碍物，那么就不会执行下面的语句
             //然后aim的位置就不会改变，enemy就会瞄准障碍物了
-            if (hit.transform == player)
+            if (hit.transform.root == player.root)
             {
                 UpdateAimPosition();
                 return true;

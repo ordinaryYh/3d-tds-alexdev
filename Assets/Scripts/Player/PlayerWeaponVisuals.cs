@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class PlayerWeaponVisuals : MonoBehaviour
+public class Player_WeaponVisuals : MonoBehaviour
 {
 
     private Player player;
@@ -27,7 +27,7 @@ public class PlayerWeaponVisuals : MonoBehaviour
 
     private void Start()
     {
-        player  = GetComponent<Player>();
+        player = GetComponent<Player>();
         anim = GetComponentInChildren<Animator>();
         rig = GetComponentInChildren<Rig>();
 
@@ -45,7 +45,7 @@ public class PlayerWeaponVisuals : MonoBehaviour
     public void PlayFireAnimation() => anim.SetTrigger("Fire");
     public void PlayReloadAnimation()
     {
-       
+
         float reloadSpeed = player.weapon.CurrentWeapon().reloadSpeed;
 
         anim.SetFloat("ReloadSpeed", reloadSpeed);
@@ -75,7 +75,7 @@ public class PlayerWeaponVisuals : MonoBehaviour
         SwitchOffBackupWeaponModels();
 
 
-        if(player.weapon.HasOnlyOneWeapon() == false)
+        if (player.weapon.HasOnlyOneWeapon() == false)
             SwitchOnBackupWeaponModel();
 
         SwitchAnimationLayer(animationIndex);
@@ -118,10 +118,10 @@ public class PlayerWeaponVisuals : MonoBehaviour
                 if (backupModel.HangTypeIs(HangType.LowBackHang))
                     lowHangWeapon = backupModel;
 
-                if(backupModel.HangTypeIs(HangType.BackHang))
+                if (backupModel.HangTypeIs(HangType.BackHang))
                     backHangWeapon = backupModel;
 
-                if(backupModel.HangTypeIs(HangType.SideHang))
+                if (backupModel.HangTypeIs(HangType.SideHang))
                     sideHangWeapon = backupModel;
             }
         }
@@ -130,7 +130,7 @@ public class PlayerWeaponVisuals : MonoBehaviour
         backHangWeapon?.Activate(true);
         sideHangWeapon?.Activate(true);
     }
-  
+
     private void SwitchAnimationLayer(int layerIndex)
     {
         for (int i = 1; i < anim.layerCount; i++)

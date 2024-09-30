@@ -16001,6 +16001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &3315369593976040353
 GameObject:
   m_ObjectHideFlags: 0
@@ -16273,6 +16274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &3787522544285563127
 GameObject:
   m_ObjectHideFlags: 0
@@ -17092,6 +17094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &5447463008706346372
 GameObject:
   m_ObjectHideFlags: 0
@@ -17426,6 +17429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &5640341609705286775
 GameObject:
   m_ObjectHideFlags: 0
@@ -17571,6 +17575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &5769942648930131929
 GameObject:
   m_ObjectHideFlags: 0
@@ -17987,6 +17992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1.5
 --- !u!1 &6454632340677073601
 GameObject:
   m_ObjectHideFlags: 0
@@ -18258,6 +18264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &6729174746272388251
 GameObject:
   m_ObjectHideFlags: 0
@@ -18404,32 +18411,36 @@ MonoBehaviour:
   idleTime: 2
   aggresionRange: 15
   walkSpeed: 1.5
-  runSpeed: 3
-  turnSpeed: 0
+  runSpeed: 4
+  turnSpeed: 8
   patrolPoints:
   - {fileID: 7029486463544008738}
   - {fileID: 3884047718374910588}
   - {fileID: 8958479703474112751}
   bossWeaponType: 1
-  actionCooldown: 1
-  attackRange: 1.5
+  actionCooldown: 0.5
+  attackRange: 1.6
   minAbilityDistance: 3
-  abilityCooldown: 0.5
+  abilityCooldown: 1
+  flameDamage: 0
   flameDamageCooldown: 0
   flamethrower: {fileID: 1419095767073089323}
   flamethrowDuration: 4
+  hummerActiveDamage: 25
   activationPrefab: {fileID: 2965222256817593503, guid: a164e676dbbd6e54587237e619372c98, type: 3}
-  hummerCheckRadius: 1.5
+  hummerCheckRadius: 1.25
+  jumpAttackDamage: 25
   jumpAttackCooldown: 4
   travelTimeToTarget: 1
-  minJumpDistanceRequired: 1
+  minJumpDistanceRequired: 5
   impactRadius: 2.5
-  impactPower: 5
+  impactPower: 15
   impactPoint: {fileID: 8637217927682720614}
   upforceMultiplier: 10
   whatToIngore:
     serializedVersion: 2
     m_Bits: 2048
+  meleeAttackDamage: 40
   damagePoints:
   - {fileID: 9016947662479470288}
   attackCheckRadius: 0.63
@@ -18477,7 +18488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5c0c038b4d849d5b01e22ad97427ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 40
+  maxHealth: 2000
   currentHealth: 0
 --- !u!1 &7005735316245791275
 GameObject:
@@ -18621,6 +18632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &7007043454039833838
 GameObject:
   m_ObjectHideFlags: 0
@@ -18766,6 +18778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &7018416140124952993
 GameObject:
   m_ObjectHideFlags: 0
@@ -19344,6 +19357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &8025275506895016241
 GameObject:
   m_ObjectHideFlags: 0
@@ -19584,6 +19598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee3e5b91bb784e8c831b508d27268ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageMultiplier: 1
 --- !u!1 &8878129794744234964
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,7 +29,7 @@ public class Enemy_RangeWeaponData : ScriptableObject
 
     public Vector3 ApplyWeaponSpread(Vector3 originalDirection)
     {
-        float randomizedValue = Random.Range(-weaponSpread, weaponSpread);
+        float randomizedValue = Random.Range(-weaponSpread, weaponSpread) / 2;
         Quaternion spreadRotation = Quaternion.Euler(randomizedValue, randomizedValue, randomizedValue);
 
 
