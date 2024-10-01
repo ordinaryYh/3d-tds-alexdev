@@ -5183,8 +5183,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 380ed05c730ef4dbea041376f0f957b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelParts: []
+  lastLevelPart: {fileID: 2339104511850204348, guid: 804e6492cda8b9a4ab1a80446c0226a2, type: 3}
+  levelParts:
+  - {fileID: 3210094754882557019, guid: 95c3b6f4548b0426b8d49fd3ddc2a761, type: 3}
+  - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
   nextSnapPoint: {fileID: 2122350820543174351}
+  generationCooldown: 0.25
 --- !u!4 &786522749
 Transform:
   m_ObjectHideFlags: 0
