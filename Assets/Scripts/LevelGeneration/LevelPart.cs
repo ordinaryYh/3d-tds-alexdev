@@ -4,6 +4,34 @@ using UnityEngine;
 
 public class LevelPart : MonoBehaviour
 {
+    [Header("InterSection Check")]
+    [SerializeField] private LayerMask intersectionLayer;
+    [SerializeField] private Collider[] intersectionCheckColliders;
+    [SerializeField] private Transform intersectionCheckParent;
+
+    public bool IntersectionDetected()
+    {
+        Physics.SyncTransforms();
+
+        foreach (var collider in intersectionCheckColliders)
+        {
+            Collider[] hitColliders =
+Physics.OverlapBox(collider.bounds.center, collider.bounds.extents, Quaternion.identity, intersectionLayer);
+
+            foreach (var hit in hitColliders)
+            {
+                InterSectionCheck interesectionCheck = hit.GetComponentInParent<InterSectionCheck>();
+
+                if (interesectionCheck != null && intersectionCheckParent != interesectionCheck.transform)
+                    return true;
+            }
+
+        }
+
+        return false;
+
+    }
+
     public void SnapAndAlignPartTo(SnapPoint _targetSnapPoint)
     {
         //相当是用另一个level的enter对准另一个level的exit

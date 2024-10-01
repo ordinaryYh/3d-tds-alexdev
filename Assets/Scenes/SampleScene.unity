@@ -5187,8 +5187,16 @@ MonoBehaviour:
   levelParts:
   - {fileID: 3210094754882557019, guid: 95c3b6f4548b0426b8d49fd3ddc2a761, type: 3}
   - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
+  - {fileID: 3210094754882557019, guid: 95c3b6f4548b0426b8d49fd3ddc2a761, type: 3}
+  - {fileID: 3210094754882557019, guid: 95c3b6f4548b0426b8d49fd3ddc2a761, type: 3}
+  - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
+  - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
+  - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
+  - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
+  - {fileID: 3711396427978238783, guid: 152a618903edf3d4880ef3151ecd8f92, type: 3}
+  generatedLevelParts: []
   nextSnapPoint: {fileID: 2122350820543174351}
-  generationCooldown: 0.25
+  generationCooldown: 0
 --- !u!4 &786522749
 Transform:
   m_ObjectHideFlags: 0
@@ -16041,6 +16049,10 @@ PrefabInstance:
     - target: {fileID: 511739705384758471, guid: 4f9cc27e5e05b48278518dc4cbfb6ed2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6640089116507827169, guid: 4f9cc27e5e05b48278518dc4cbfb6ed2, type: 3}
+      propertyPath: m_Name
+      value: InterSectionCollider
       objectReference: {fileID: 0}
     - target: {fileID: 9183359261366101901, guid: 4f9cc27e5e05b48278518dc4cbfb6ed2, type: 3}
       propertyPath: m_Name
