@@ -9,8 +9,6 @@ public class Enemy : MonoBehaviour
     public LayerMask whatIsPlayer;
     [Space]
 
-    public int healthPoints = 20;
-
     [Header("Idle data")]
     public float idleTime;
     public float aggresionRange;

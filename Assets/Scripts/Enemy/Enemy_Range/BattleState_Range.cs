@@ -173,6 +173,8 @@ public class BattleState_Range : EnemyState
     {
         if (firstTimeAttack)
         {
+            enemy.aggresionRange = enemy.advanceStoppingDistance + 2;
+
             firstTimeAttack = false;
             bulletsPerAttack = enemy.weaponData.GetBulletsPerAttack();
             weaponCooldown = enemy.weaponData.GetWeaponCooldown();
