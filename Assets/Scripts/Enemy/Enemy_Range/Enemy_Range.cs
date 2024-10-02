@@ -162,7 +162,7 @@ public class Enemy_Range : Enemy
 
         foreach (Enemy_RangeWeaponType item in Enum.GetValues(typeof(Enemy_RangeWeaponType)))
         {
-            if (item != Enemy_RangeWeaponType.Random || item != Enemy_RangeWeaponType.Rifle)
+            if (item != Enemy_RangeWeaponType.Random && item != Enemy_RangeWeaponType.Rifle)
                 validTypes.Add(item);
         }
 

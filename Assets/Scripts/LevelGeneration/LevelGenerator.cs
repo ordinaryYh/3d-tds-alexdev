@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
+    //Enemies
+    private List<Enemy> enemyList;
+
+    [SerializeField] private NavMeshSurface navMeshSurface;
+    [Space]
     [SerializeField] private Transform lastLevelPart;
     [SerializeField] private List<Transform> levelParts;
     private List<Transform> currentLevelParts;
-    [SerializeField] private List<Transform> generatedLevelParts = new List<Transform>();
+    private List<Transform> generatedLevelParts = new List<Transform>();
 
     [SerializeField] private SnapPoint nextSnapPoint;
     private SnapPoint defaultSnapPoint;
@@ -19,6 +25,7 @@ public class LevelGenerator : MonoBehaviour
 
     private void Start()
     {
+        enemyList = new List<Enemy>();
         defaultSnapPoint = nextSnapPoint;
         InitializeGeneration();
     }
@@ -51,6 +58,15 @@ public class LevelGenerator : MonoBehaviour
     {
         generationOver = true;
         GenerateNextLevelPart();
+
+        //这一步就是bake操作，这样可以避免手动进行bake
+        navMeshSurface.BuildNavMesh();
+
+        foreach (Enemy enemy in enemyList)
+        {
+            enemy.transform.parent = null;
+            enemy.gameObject.SetActive(true);
+        }
     }
 
     [ContextMenu("Create next level part")]
@@ -75,6 +91,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         nextSnapPoint = levelPart.GetExitPoint();
+        enemyList.AddRange(levelPart.MyEnemies());
     }
 
     [ContextMenu("Restart generation")]
@@ -83,17 +100,23 @@ public class LevelGenerator : MonoBehaviour
         nextSnapPoint = defaultSnapPoint;
         generationOver = false;
         currentLevelParts = new List<Transform>(levelParts);
-        DestroyOldLevelParts();
+        DestroyOldLevelPartAndEnemies();
     }
 
-    private void DestroyOldLevelParts()
+    private void DestroyOldLevelPartAndEnemies()
     {
+        foreach (Enemy enemy in enemyList)
+        {
+            Destroy(enemy.gameObject);
+        }
+
         foreach (var t in generatedLevelParts)
         {
             Destroy(t.gameObject);
         }
 
         generatedLevelParts = new List<Transform>();
+        enemyList = new List<Enemy>();
     }
 
     private Transform ChooseRandomPart()

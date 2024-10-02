@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class LevelPart : MonoBehaviour
@@ -117,4 +118,6 @@ Physics.OverlapBox(collider.bounds.center, collider.bounds.extents, Quaternion.i
         return null;
 
     }
+
+    public Enemy[] MyEnemies() => GetComponentsInChildren<Enemy>(true);
 }
