@@ -1460,6 +1460,7 @@ GameObject:
   - component: {fileID: 7514313664782962610}
   - component: {fileID: 1940292121413942818}
   - component: {fileID: 1334087555910019399}
+  - component: {fileID: -8019705592844786454}
   m_Layer: 11
   m_Name: Enemy_Range
   m_TagString: Untagged
@@ -1518,7 +1519,6 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
-  healthPoints: 2
   idleTime: 3
   aggresionRange: 15
   walkSpeed: 1.5
@@ -1528,6 +1528,7 @@ MonoBehaviour:
   - {fileID: 7086963790007380954}
   - {fileID: 5673001054955848948}
   - {fileID: 2103080116678446538}
+  weaponType: 0
   coverPerk: 2
   unstoppablePerk: 1
   grenadePerk: 0
@@ -1544,7 +1545,6 @@ MonoBehaviour:
   minCoverTime: 4
   safeDistance: 2
   attackDelay: 1
-  weaponType: 0
   weaponData: {fileID: 0}
   gunPoint: {fileID: 8361197842823344108}
   weaponHolder: {fileID: 7900631254226193839}
@@ -1622,6 +1622,18 @@ MonoBehaviour:
   leftElbowIK: {fileID: 8601710550309007857}
   leftHandIKConstraint: {fileID: 1601646893650882009}
   weaponAimConstraint: {fileID: 3311437297003741549}
+--- !u!114 &-8019705592844786454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316571440960610406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e984ea952166a1c479a3eacaaf7a12cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1416550309579397773
 GameObject:
   m_ObjectHideFlags: 0

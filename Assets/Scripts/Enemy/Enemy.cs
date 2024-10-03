@@ -37,6 +37,8 @@ public class Enemy : MonoBehaviour
 
     public Enemy_Health health { get; private set; }
 
+    public Enemy_DropController dropController { get; private set; }
+
 
 
     protected virtual void Awake()
@@ -50,6 +52,8 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Transform>();
 
         health = GetComponent<Enemy_Health>();
+
+        dropController = GetComponent<Enemy_DropController>();
     }
 
     protected virtual void Start()
@@ -100,6 +104,16 @@ public class Enemy : MonoBehaviour
 
     }
 
+    //这个函数是给enemy升级用的
+    public virtual void MakeEnemyVIP()
+    {
+        int additionalHealth = Mathf.RoundToInt(health.currentHealth * 1.5f);
+
+        health.currentHealth += additionalHealth;
+
+        transform.localScale = transform.localScale * 1.2f;
+    }
+
     protected bool ShouldEnterBattleMode()
     {
         if (IsPlayerInAgrresionRange() && !inBattleMode)
@@ -121,7 +135,10 @@ public class Enemy : MonoBehaviour
         health.ReduceHealth(_damage);
 
         if (health.ShouldDie())
+        {
+            dropController.DropItems();
             Die();
+        }
 
         EnterBattleMode();
     }
