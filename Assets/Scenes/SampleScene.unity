@@ -811,7 +811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 923917b86e7305e469b1a21f5af0911d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMission: {fileID: 11400000, guid: 8f66fb66ce5eb4b4f89fdc8014acd26a, type: 2}
+  currentMission: {fileID: 11400000, guid: 2d91d666ac9053e4ca479296f0c34331, type: 2}
 --- !u!4 &128882299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2339104511850204348, guid: 804e6492cda8b9a4ab1a80446c0226a2, type: 3}
@@ -4971,8 +4971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navMeshSurface: {fileID: 1222467681}
   lastLevelPart: {fileID: 3966566735694463111, guid: 6cb3d9e910d878c48a0daa1e0848ca0f, type: 3}
-  levelParts:
-  - {fileID: 344561504900064319, guid: bc6e99b42c9c96b4087696f3b6ac03bc, type: 3}
+  levelParts: []
   nextSnapPoint: {fileID: 1222467682}
   generationCooldown: 0.1
 --- !u!4 &786522749
@@ -7687,6 +7686,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7971264263925578437, guid: 70b023cb9c6f52342a00c3d4f6ac14ff, type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: 3e25798975a445b46a7cbd7ca9eb52c9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11256,7 +11259,7 @@ Transform:
   m_GameObject: {fileID: 1746550269}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 84.6, y: 1.342, z: -22.42}
+  m_LocalPosition: {x: 84.6, y: 0, z: -10.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
