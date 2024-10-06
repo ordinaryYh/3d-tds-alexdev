@@ -44,6 +44,11 @@ public class Player_WeaponController : MonoBehaviour
             Shoot();
     }
 
+    public void UpdateWeaponUI()
+    {
+        UI.instance.inGameUI.UpdateWeaponUI(weaponSlots, currentWeapon);
+    }
+
     #region Slots managment - Pickup\Equip\Drop\Ready Weapon
 
     private void EquipStartingWeapon()
@@ -62,6 +67,8 @@ public class Player_WeaponController : MonoBehaviour
         player.weaponVisuals.PlayWeaponEquipAnimation();
 
         CameraManager.instance.ChangeCameraDistance(currentWeapon.cameraDistance);
+
+        UpdateWeaponUI();
     }
     public void PickupWeapon(Weapon newWeapon)
     {
@@ -89,7 +96,10 @@ public class Player_WeaponController : MonoBehaviour
 
         weaponSlots.Add(newWeapon);
         player.weaponVisuals.SwitchOnBackupWeaponModel();
+
+        UpdateWeaponUI();
     }
+
     private void DropWeapon()
     {
         if (HasOnlyOneWeapon())
@@ -157,6 +167,7 @@ public class Player_WeaponController : MonoBehaviour
     {
         currentWeapon.bulletsInMagazine--;
 
+        UpdateWeaponUI();
 
         GameObject newBullet = ObjectPool.instance.GetObject(bulletPrefab, GunPoint());
 
@@ -178,6 +189,8 @@ public class Player_WeaponController : MonoBehaviour
     {
         SetWeaponReady(false);
         player.weaponVisuals.PlayReloadAnimation();
+        //这里也要更新weapon的UI，但是更新的函数语句实际上是放在了AnimationEvent中
+        //因为reload的实际行为在AnimationEvent中
     }
 
 
