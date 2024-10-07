@@ -15,7 +15,7 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        Invoke(nameof(StartMission), 2);
+        Invoke(nameof(StartMission), 1);
     }
 
     private void Update()

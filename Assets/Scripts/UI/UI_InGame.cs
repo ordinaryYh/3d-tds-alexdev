@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +12,29 @@ public class UI_InGame : MonoBehaviour
     [Header("Weapon")]
     [SerializeField] private UI_WeaponSlot[] weaponSlots_UI;
 
+    [Header("Missions")]
+    [SerializeField] private GameObject missionToolTipParent;
+    [SerializeField] private GameObject missionHelpTooltip;
+    [SerializeField] private TextMeshProUGUI missionText;
+    [SerializeField] private TextMeshProUGUI missionDetails;
+    private bool tooltipActive = true;
+
     private void Awake()
     {
         weaponSlots_UI = GetComponentsInChildren<UI_WeaponSlot>();
+    }
+
+    public void SwitchMissionToolTip()
+    {
+        tooltipActive = !tooltipActive;
+        missionToolTipParent.SetActive(tooltipActive);
+        missionHelpTooltip.SetActive(!tooltipActive);
+    }
+
+    public void UpdateMissionInfo(string _missionText, string _missionDetails = "")
+    {
+        this.missionDetails.text = _missionDetails;
+        this.missionText.text = _missionText;
     }
 
     public void UpdateWeaponUI(List<Weapon> weaponSlots, Weapon _currentWeapon)

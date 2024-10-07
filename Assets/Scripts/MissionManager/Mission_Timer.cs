@@ -26,6 +26,11 @@ public class Mission_Timer : Mission
         string timeText = System.TimeSpan.FromSeconds(currentTime).ToString("mm':'ss");
 
         Debug.Log(timeText);
+
+        string missionText = "Get to evacuation point before plane take off";
+        string missionDetails = "Time left: " + timeText;
+
+        UI.instance.inGameUI.UpdateMissionInfo(missionText, missionDetails);
     }
 
     public override void StartMission()

@@ -17,6 +17,8 @@ public class Mission_KeyFind : Mission
     {
         MissionObject_Key.OnKeyPickedUp += PickUpKey;
 
+        UI.instance.inGameUI.UpdateMissionInfo("Find a key-holder. Retrive the key");
+
         //找到随机的enemy
         Enemy enemy = LevelGenerator.instance.GetRandomEnemy();
         //然后把key给随机的enemy
@@ -30,7 +32,8 @@ public class Mission_KeyFind : Mission
     {
         keyFound = true;
         MissionObject_Key.OnKeyPickedUp -= PickUpKey;
-        Debug.Log("I pick up key");
+
+        UI.instance.inGameUI.UpdateMissionInfo("You've get the key! \n Get to the evacuation point");
     }
 
 }
