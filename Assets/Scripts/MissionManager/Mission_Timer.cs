@@ -25,8 +25,6 @@ public class Mission_Timer : Mission
         //这个是输出时间
         string timeText = System.TimeSpan.FromSeconds(currentTime).ToString("mm':'ss");
 
-        Debug.Log(timeText);
-
         string missionText = "Get to evacuation point before plane take off";
         string missionDetails = "Time left: " + timeText;
 

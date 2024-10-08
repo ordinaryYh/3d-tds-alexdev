@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 
     public Animator anim { get; private set; }
 
+    public bool controlsEnabled { get; private set; }
+
     private void Awake()
     {
         controls = new PlayerControls();
@@ -34,9 +36,12 @@ public class Player : MonoBehaviour
         controls.Enable();
 
         controls.Character.UI_MissionToolTipSwitch.performed += ctx => UI.instance.inGameUI.SwitchMissionToolTip();
+        controls.Character.UI_Pause.performed += ctx => UI.instance.PauseSwitch();
     }
     private void OnDisable()
     {
         controls.Disable();
     }
+
+    public void SetControlEnabledTo(bool enabled) => controlsEnabled = enabled;
 }

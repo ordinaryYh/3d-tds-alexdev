@@ -10,7 +10,7 @@ public class Player_WeaponController : MonoBehaviour
     private const float REFERENCE_BULLET_SPEED = 20;
     //This is the default speed from whcih our mass formula is derived.
 
-    [SerializeField] private Weapon_Data defaultWeaponData;
+    [SerializeField] private List<Weapon_Data> defaultWeaponData;
     [SerializeField] private Weapon currentWeapon;
     private bool weaponReady;
     private bool isShooting;
@@ -34,8 +34,6 @@ public class Player_WeaponController : MonoBehaviour
     {
         player = GetComponent<Player>();
         AssignInputEvents();
-
-        Invoke(nameof(EquipStartingWeapon), .1f);
     }
 
     private void Update()
@@ -51,9 +49,16 @@ public class Player_WeaponController : MonoBehaviour
 
     #region Slots managment - Pickup\Equip\Drop\Ready Weapon
 
-    private void EquipStartingWeapon()
+    public void SetDefaultWeapon(List<Weapon_Data> _newWeaponData)
     {
-        weaponSlots[0] = new Weapon(defaultWeaponData);
+        defaultWeaponData = new List<Weapon_Data>(_newWeaponData);
+        weaponSlots.Clear();
+
+        foreach (Weapon_Data weaponData in defaultWeaponData)
+        {
+            PickupWeapon(new Weapon(weaponData));
+        }
+
         EquipWeapon(0);
     }
     private void EquipWeapon(int i)

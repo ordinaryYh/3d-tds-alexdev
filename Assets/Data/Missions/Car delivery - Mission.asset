@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422be1d15e93cfb4e98c756eeda90cea, type: 3}
   m_Name: Car delivery - Mission
   m_EditorClassIdentifier: 
-  missionName: 
+  missionName: Car Delivery
   missionDescription: 

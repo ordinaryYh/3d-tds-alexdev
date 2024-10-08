@@ -130,6 +130,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "UI_Pause",
+                    "type": "Button",
+                    "id": "8e5e16f0-df34-4858-a1c9-5cdfb915815c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -328,6 +337,45 @@
                     "processors": "",
                     "groups": "",
                     "action": "UI_Mission ToolTip Switch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f00f206-8e68-46ad-9c6b-6c362421a204",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI_Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "2a80ceb1-630c-4754-837d-56e5575f9aed",
+            "actions": [
+                {
+                    "name": "UI_Pause",
+                    "type": "Button",
+                    "id": "1b7dab4e-6171-4a9c-83c0-88b899a13427",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "35f2bb8b-059d-46d2-a1b2-678410ab3f90",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UI_Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

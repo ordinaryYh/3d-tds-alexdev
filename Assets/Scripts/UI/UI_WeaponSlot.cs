@@ -26,7 +26,7 @@ public class UI_WeaponSlot : MonoBehaviour
 
         Color newColor = _activeWeapon ? Color.white : new Color(1, 1, 1, 0.35f);
         weaponIcon.color = newColor;
-        weaponIcon.sprite = _myWeapon.weaponData.Icon;
+        weaponIcon.sprite = _myWeapon.weaponData.weaponIcon;
 
         ammoText.text = _myWeapon.bulletsInMagazine + "/" + _myWeapon.totalReserveAmmo;
         ammoText.color = Color.white;

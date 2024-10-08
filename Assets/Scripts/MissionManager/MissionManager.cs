@@ -13,10 +13,7 @@ public class MissionManager : MonoBehaviour
         instance = this;
     }
 
-    private void Start()
-    {
-        Invoke(nameof(StartMission), 1);
-    }
+
 
     private void Update()
     {
@@ -24,7 +21,12 @@ public class MissionManager : MonoBehaviour
             currentMission.UpdateMission();
     }
 
-    private void StartMission() => currentMission.StartMission();
+    public void SetCurrentMission(Mission _newMission)
+    {
+        currentMission = _newMission;
+    }
+
+    public void StartMission() => currentMission.StartMission();
     public bool MissionCompleted() => currentMission.MissionCompleted();
 
 }
