@@ -48,7 +48,7 @@ public class TimeManager : MonoBehaviour
 
     private IEnumerator SlowTimeCo(float _seconds)
     {
-        targetTimeScale = 0.6f;
+        targetTimeScale = 0.5f;
         Time.timeScale = targetTimeScale;
 
         yield return new WaitForSecondsRealtime(_seconds);

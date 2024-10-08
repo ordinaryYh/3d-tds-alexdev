@@ -19,7 +19,7 @@ public class Mission_Timer : Mission
 
         if (currentTime < 0)
         {
-            Debug.Log("game over");
+            GameManager.instance.GameOver();
         }
 
         //这个是输出时间

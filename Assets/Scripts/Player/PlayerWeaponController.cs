@@ -71,7 +71,7 @@ public class Player_WeaponController : MonoBehaviour
         currentWeapon = weaponSlots[i];
         player.weaponVisuals.PlayWeaponEquipAnimation();
 
-        CameraManager.instance.ChangeCameraDistance(currentWeapon.cameraDistance);
+        //CameraManager.instance.ChangeCameraDistance(currentWeapon.cameraDistance);
 
         UpdateWeaponUI();
     }

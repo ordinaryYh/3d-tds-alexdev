@@ -24,7 +24,14 @@ public class GameManager : MonoBehaviour
         //任务开始，在LevelGenerator的finish函数当中
     }
 
-    public void RestartScene() =>SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    public void RestartScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    public void GameOver()
+    {
+        TimeManager.instance.SlowMotionFor(1.5f);
+        UI.instance.ShowGameOverUI();
+        CameraManager.instance.ChangeCameraDistance(5);
+    }
 
     public void SetDefaultWeaponsForPlayer()
     {
