@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class UI_WeaponSelection : MonoBehaviour
 {
+    [SerializeField] private GameObject nextUIToSwitchOn;
     public UI_SelectedWeaponWindow[] selectedWeapon;
 
     [Header("Warning Info")]
@@ -26,6 +27,19 @@ public class UI_WeaponSelection : MonoBehaviour
             warningText.color = new Color(1, 1, 1, currentWarningAlpha);
         }
     }
+
+    public void ConfirmWeaponSelection()
+    {
+        if (AtLeastOneWeaponSelected())
+        {
+            UI.instance.SwitchTo(nextUIToSwitchOn);
+            UI.instance.StartLevelGeneration();
+        }
+        else
+            ShowWarningMessage("请至少选择一把武器");
+    }
+
+    private bool AtLeastOneWeaponSelected() => SelectedWeaponData().Count > 0;
 
     public List<Weapon_Data> SelectedWeaponData()
     {

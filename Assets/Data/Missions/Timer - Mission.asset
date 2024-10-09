@@ -15,3 +15,4 @@ MonoBehaviour:
   missionName: Race against time
   missionDescription: "\u5F535\u5206\u949F\u540E\uFF0C\u5982\u679C\u6CA1\u6709\u5230\u8FBE\u76EE\u7684\u5730\uFF0C\u6E38\u620F\u7ED3\u675F"
   time: 300
+  currentTime: 300

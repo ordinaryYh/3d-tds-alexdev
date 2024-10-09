@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
@@ -9,9 +10,13 @@ public class UI : MonoBehaviour
     public UI_InGame inGameUI { get; private set; }
     public UI_WeaponSelection weaponSelection { get; private set; }
     public UI_GameOver gameOverUI { get; private set; }
+    public GameObject victoryScreenUI;
     public GameObject pauseUI;
 
     [SerializeField] private GameObject[] uiElements;
+
+    [Header("Fade Image")]
+    [SerializeField] private Image fadeImage;
 
     private void Awake()
     {
@@ -24,6 +29,15 @@ public class UI : MonoBehaviour
     private void Start()
     {
         AssignInputsUI();
+
+        StartCoroutine(ChangeImageAlpha(0, 1.5f, null));
+
+        //这个代码仅仅为了测试方便，打包前要注释掉
+        if (GameManager.instance.quickStart)
+        {
+            LevelGenerator.instance.InitializeGeneration();
+            StartTheGame();
+        }
     }
 
     public void SwitchTo(GameObject _uiToSwitchOn)
@@ -37,15 +51,18 @@ public class UI : MonoBehaviour
     }
 
 
-    public void StartTheGame()
-    {
-        SwitchTo(inGameUI.gameObject);
-        GameManager.instance.GameStart();
-    }
+    public void StartTheGame() => StartCoroutine(StartGameSequence());
 
     public void QuitTheGame() => Application.Quit();
+    public void StartLevelGeneration() => LevelGenerator.instance.InitializeGeneration();
 
-    public void RestartTheGame() => GameManager.instance.RestartScene();
+    public void RestartTheGame()
+    {
+        TimeManager.instance.ResumeTime();
+        StartCoroutine(ChangeImageAlpha(1, 1f, GameManager.instance.RestartScene));
+        //GameManager.instance.RestartScene();
+    }
+
 
     public void PauseSwitch()
     {
@@ -71,10 +88,62 @@ public class UI : MonoBehaviour
         gameOverUI.ShowGameOverMessage(message);
     }
 
+    public void ShowVictoryScreenUI()
+    {
+        StartCoroutine(ChangeImageAlpha(1, 1.5f, SwitchToVictoryScreenUI));
+    }
+
+    private void SwitchToVictoryScreenUI()
+    {
+        SwitchTo(victoryScreenUI);
+
+        Color color = fadeImage.color;
+        color.a = 0;
+        fadeImage.color = color;
+    }
+
     private void AssignInputsUI()
     {
         PlayerControls controls = GameManager.instance.player.controls;
 
         controls.UI.UI_Pause.performed += ctx => PauseSwitch();
+    }
+
+    private IEnumerator StartGameSequence()
+    {
+        //下面代码必须在打包前重新打开
+        // StartCoroutine(ChangeImageAlpha(1, 1, null));
+        // yield return new WaitForSeconds(1);
+
+        yield return null;
+
+        SwitchTo(inGameUI.gameObject);
+        GameManager.instance.GameStart();
+
+        StartCoroutine(ChangeImageAlpha(0, 1, null));
+
+    }
+
+    private IEnumerator ChangeImageAlpha(float _targetAlpha, float _duration, System.Action onComplete)
+    {
+        float time = 0;
+
+        Color currentColor = fadeImage.color;
+        float startAlpha = currentColor.a;
+
+        while (time <= _duration)
+        {
+            time += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, _targetAlpha, time / _duration);
+
+            fadeImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, alpha);
+            //这个代表这帧暂停，下一帧又开始，用于确保alpha通道的改变是逐渐的而不是瞬时的
+            //这种用法很常见
+            yield return null;
+        }
+
+        fadeImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, _targetAlpha);
+
+        onComplete?.Invoke();
     }
 }

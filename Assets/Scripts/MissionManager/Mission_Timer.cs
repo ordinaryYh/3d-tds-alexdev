@@ -6,7 +6,7 @@ using UnityEngine;
 public class Mission_Timer : Mission
 {
     public float time;
-    private float currentTime;
+    public float currentTime;
 
     public override bool MissionCompleted()
     {
@@ -16,9 +16,11 @@ public class Mission_Timer : Mission
     public override void UpdateMission()
     {
         currentTime -= Time.deltaTime;
+        Debug.Log(currentTime);
 
         if (currentTime < 0)
         {
+            Debug.Log("时间不够");
             GameManager.instance.GameOver();
         }
 

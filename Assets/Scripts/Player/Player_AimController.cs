@@ -40,8 +40,8 @@ public class Player_AimController : MonoBehaviour
     {
         if (player.health.isDead)
             return;
-            
-        if(player.controlsEnabled==false)
+
+        if (player.controlsEnabled == false)
             return;
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -115,7 +115,8 @@ public class Player_AimController : MonoBehaviour
     {
         Transform target = null;
 
-        if (GetMouseHitInfo().transform.GetComponent<Target>() != null)
+        //这里要判断是否为空，注意是.collider，这个是射线是否为空的判断
+        if (GetMouseHitInfo().collider != null && GetMouseHitInfo().transform.GetComponent<Target>() != null)
         {
             target = GetMouseHitInfo().transform;
         }

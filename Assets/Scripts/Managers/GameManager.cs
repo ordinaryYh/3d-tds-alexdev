@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Setting")]
     public bool friendlyFire;
+    [Space]
+    public bool quickStart;
 
     private void Awake()
     {
@@ -19,15 +21,26 @@ public class GameManager : MonoBehaviour
 
     public void GameStart()
     {
-        LevelGenerator.instance.InitializeGeneration();
         SetDefaultWeaponsForPlayer();
+
+        //生成关卡的步骤在选择武器栏目里面，点击next之后，就会生成关卡
+
         //任务开始，在LevelGenerator的finish函数当中
+        //MissionManager.instance.StartMission();
     }
 
     public void RestartScene() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
+    public void GameCompleted()
+    {
+        UI.instance.ShowVictoryScreenUI();
+        ControlsManager.instance.controls.Character.Disable();
+        player.health.currentHealth += 99999;
+    }
+
     public void GameOver()
     {
+        Debug.Log("游戏结束");
         TimeManager.instance.SlowMotionFor(1.5f);
         UI.instance.ShowGameOverUI();
         CameraManager.instance.ChangeCameraDistance(5);
