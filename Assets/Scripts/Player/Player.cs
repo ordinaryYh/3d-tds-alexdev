@@ -19,8 +19,6 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        controls = new PlayerControls();
-
         aim = GetComponent<Player_AimController>();
         movement = GetComponent<Player_Movement>();
         weapon = GetComponent<Player_WeaponController>();
@@ -29,6 +27,7 @@ public class Player : MonoBehaviour
         health = GetComponent<Player_Health>();
         ragdoll = GetComponent<Ragdoll>();
         anim = GetComponentInChildren<Animator>();
+        controls = ControlsManager.instance.controls;
     }
 
     private void OnEnable()
