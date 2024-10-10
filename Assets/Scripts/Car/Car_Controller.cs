@@ -99,6 +99,7 @@ public class Car_Controller : MonoBehaviour
             return;
 
         speed = rb.velocity.magnitude;
+        UI.instance.inGameUI.UpdateSpeedText(Mathf.RoundToInt(speed * 10) + "km/h");
 
         driftTimer -= Time.deltaTime;
 

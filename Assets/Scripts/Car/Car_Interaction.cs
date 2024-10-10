@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Car_Interaction : Interactable
 {
+    private Car_HealthController healthController;
     private Car_Controller car;
     private Transform player;
 
@@ -17,8 +18,15 @@ public class Car_Interaction : Interactable
 
     private void Start()
     {
+        healthController = GetComponent<Car_HealthController>();
         car = GetComponent<Car_Controller>();
         player = GameManager.instance.player.transform;
+
+        foreach (var point in exitPoints)
+        {
+            point.GetComponent<MeshRenderer>().enabled = false;
+            point.GetComponent<SphereCollider>().enabled = false;
+        }
     }
 
     public override void Interaction()
@@ -31,6 +39,7 @@ public class Car_Interaction : Interactable
     private void GetIntoTheCar()
     {
         ControlsManager.instance.SwitchToCarControls();
+        healthController.UpdateCarHealthUI();
         car.ActivateCar(true);
 
         defaultPlayerScale = player.localScale.x;
