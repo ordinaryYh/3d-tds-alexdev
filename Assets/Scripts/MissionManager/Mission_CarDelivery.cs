@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Key Mission", menuName = "Missions/Car delivery Mission")]
+[CreateAssetMenu(fileName = "New Key Mission", menuName = "Missions/Car_Controller delivery Mission")]
 public class Mission_CarDelivery : Mission
 {
 
@@ -19,9 +19,9 @@ public class Mission_CarDelivery : Mission
         carWasDelivered = false;
         MissionObject_CarToDeliver.OnCarDelivery += CarDeliveryCompleted;
 
-        Car[] cars = FindObjectsOfType<Car>();
+        Car_Controller[] cars = FindObjectsOfType<Car_Controller>();
 
-        foreach (Car car in cars)
+        foreach (Car_Controller car in cars)
         {
             car.gameObject.AddComponent<MissionObject_CarToDeliver>();
         }

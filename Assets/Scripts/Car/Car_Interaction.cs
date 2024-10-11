@@ -48,7 +48,7 @@ public class Car_Interaction : Interactable
         player.transform.parent = transform;
         player.transform.localPosition = Vector3.up / 2;
 
-        CameraManager.instance.ChangeCameraTarget(transform);
+        CameraManager.instance.ChangeCameraTarget(transform, 12, 0.5f);
     }
 
     public void GetOutOfTheCar()
@@ -63,7 +63,7 @@ public class Car_Interaction : Interactable
         player.transform.localScale = new Vector3(defaultPlayerScale, defaultPlayerScale, defaultPlayerScale);
 
         ControlsManager.instance.SwitchToCharacterControls();
-        CameraManager.instance.ChangeCameraTarget(GameManager.instance.player.aim.GetAimCameraTarget());
+        CameraManager.instance.ChangeCameraTarget(GameManager.instance.player.aim.GetAimCameraTarget(), 8.5f, 0);
     }
 
     private Vector3 GetExitPoint()
