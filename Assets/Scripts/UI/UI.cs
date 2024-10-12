@@ -111,16 +111,24 @@ public class UI : MonoBehaviour
 
     private IEnumerator StartGameSequence()
     {
-        //下面代码必须在打包前重新打开
-        // StartCoroutine(ChangeImageAlpha(1, 1, null));
-        // yield return new WaitForSeconds(1);
+        bool quickStart = GameManager.instance.quickStart;
+
+        if (quickStart == false)
+        {
+            fadeImage.color = Color.black;
+            StartCoroutine(ChangeImageAlpha(1, 1, null));
+            yield return new WaitForSeconds(1);
+        }
+
 
         yield return null;
-
         SwitchTo(inGameUI.gameObject);
         GameManager.instance.GameStart();
 
-        StartCoroutine(ChangeImageAlpha(0, 1, null));
+        if (quickStart)
+            StartCoroutine(ChangeImageAlpha(0, 0.1f, null));
+        else
+            StartCoroutine(ChangeImageAlpha(0, 1, null));
 
     }
 
@@ -145,5 +153,16 @@ public class UI : MonoBehaviour
         fadeImage.color = new Color(currentColor.r, currentColor.g, currentColor.b, _targetAlpha);
 
         onComplete?.Invoke();
+    }
+
+    [ContextMenu("Assign Audio To Button")]
+    public void AssignAudioListenersToButtons()
+    {
+        UI_Button[] buttons = FindObjectsOfType<UI_Button>(true);
+
+        foreach (var button in buttons)
+        {
+            button.AssighnAudioSource();
+        }
     }
 }

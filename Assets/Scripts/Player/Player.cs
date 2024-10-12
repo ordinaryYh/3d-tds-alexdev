@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 
     public Animator anim { get; private set; }
 
+    public Player_SoundFX sound { get; private set; }
+
     public bool controlsEnabled { get; private set; }
 
     private void Awake()
@@ -28,6 +30,7 @@ public class Player : MonoBehaviour
         ragdoll = GetComponent<Ragdoll>();
         anim = GetComponentInChildren<Animator>();
         controls = ControlsManager.instance.controls;
+        sound = GetComponent<Player_SoundFX>();
     }
 
     private void OnEnable()

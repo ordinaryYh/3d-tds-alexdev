@@ -43,6 +43,9 @@ public class Enemy_AnimationEvents : MonoBehaviour
     public void BeginMeleeAttackCheck()
     {
         enemy?.EnableMeleeAttack(true);
+
+        if (enemy != null)
+            AudioManager.instance.PlaySFX(enemyMelee?.meleeSFX.swoosh, true);
     }
 
     public void FinishMeleeAttackCheck()

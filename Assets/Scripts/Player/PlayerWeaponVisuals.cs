@@ -3,13 +3,11 @@ using UnityEngine.Animations.Rigging;
 
 public class Player_WeaponVisuals : MonoBehaviour
 {
-
     private Player player;
     private Animator anim;
 
     [SerializeField] private WeaponModel[] weaponModels;
     [SerializeField] private BackupWeaponModel[] backupWeaponModels;
-
 
 
     [Header("Rig ")]

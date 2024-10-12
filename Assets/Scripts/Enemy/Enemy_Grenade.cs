@@ -60,6 +60,8 @@ public class Enemy_Grenade : MonoBehaviour
             ApllyPhysicalForceTo(hit);
         }
 
+        ObjectPool.instance.ReturnObject(gameObject);
+
     }
 
     private void ApllyPhysicalForceTo(Collider hit)

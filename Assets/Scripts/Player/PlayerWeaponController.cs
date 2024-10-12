@@ -24,7 +24,6 @@ public class Player_WeaponController : MonoBehaviour
     [SerializeField] private Transform weaponHolder;
 
     [Header("Inventory")]
-
     [SerializeField] private int maxSlots = 2;
     [SerializeField] private List<Weapon> weaponSlots;
 
@@ -123,7 +122,13 @@ public class Player_WeaponController : MonoBehaviour
         droppedWeapon.GetComponent<Pickup_Weapon>()?.SetupPickupWeapon(currentWeapon, transform);
     }
 
-    public void SetWeaponReady(bool ready) => weaponReady = ready;
+    public void SetWeaponReady(bool ready)
+    {
+        weaponReady = ready;
+
+        if (ready == true)
+            player.sound.weaponReady.Play();
+    }
     public bool WeaponReady() => weaponReady;
 
     #endregion
@@ -173,6 +178,7 @@ public class Player_WeaponController : MonoBehaviour
         currentWeapon.bulletsInMagazine--;
 
         UpdateWeaponUI();
+        player.weaponVisuals.CurrentWeaponModel().fireSFX.Play();
 
         GameObject newBullet = ObjectPool.instance.GetObject(bulletPrefab, GunPoint());
 
@@ -194,6 +200,8 @@ public class Player_WeaponController : MonoBehaviour
     {
         SetWeaponReady(false);
         player.weaponVisuals.PlayReloadAnimation();
+
+        player.weaponVisuals.CurrentWeaponModel().reloadSFX.Play();
         //这里也要更新weapon的UI，但是更新的函数语句实际上是放在了AnimationEvent中
         //因为reload的实际行为在AnimationEvent中
     }

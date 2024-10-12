@@ -43,7 +43,6 @@ public class Enemy : MonoBehaviour
     public Enemy_DropController dropController { get; private set; }
 
 
-
     protected virtual void Awake()
     {
         stateMachine = new EnemyStateMachine();
