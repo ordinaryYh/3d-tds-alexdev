@@ -5,6 +5,8 @@ using UnityEngine;
 public class Car_Sounds : MonoBehaviour
 {
     private Car_Controller car;
+
+    [SerializeField] private float engineVolume = 0.07f;
     [SerializeField] private AudioSource engineStart;
     [SerializeField] private AudioSource engineWork;
     [SerializeField] private AudioSource engineOff;
@@ -44,11 +46,11 @@ public class Car_Sounds : MonoBehaviour
         if (activate)
         {
             engineStart.Play();
-            engineWork.Play();
+            AudioManager.instance.PlaySFXWithDelayAndFade(engineWork, true, engineVolume, 1);
         }
         else
         {
-            engineWork.Stop();
+            AudioManager.instance.PlaySFXWithDelayAndFade(engineWork, false, 0f, 0.25f);
             engineOff.Play();
         }
     }
