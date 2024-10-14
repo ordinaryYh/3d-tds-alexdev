@@ -16,6 +16,8 @@ public class Car_Controller : MonoBehaviour
     private float moveInput;
     private float steerInput;
 
+    [SerializeField] private LayerMask whatIsGround;
+
     public float speed;
 
     [Range(30, 60)]
@@ -114,8 +116,9 @@ public class Car_Controller : MonoBehaviour
         if (carActive == false)
             return;
 
-        ApplySpeedLimit();
+        ApplyTrailsOnTheGround();
         ApplyAnimationToWheels();
+        ApplySpeedLimit();
         ApplyDrive();
         ApplySteering();
         ApplyBrakes();
@@ -124,6 +127,30 @@ public class Car_Controller : MonoBehaviour
             ApplyDrift();
         else
             StopDrift();
+    }
+
+    private void ApplyTrailsOnTheGround()
+    {
+        foreach (var wheel in wheels)
+        {
+            WheelHit hit;
+
+            if (wheel.cd.GetGroundHit(out hit))
+            {
+                if (whatIsGround == (whatIsGround | (1 << hit.collider.gameObject.layer)))
+                {
+                    wheel.trail.emitting = true;
+                }
+                else
+                {
+                    wheel.trail.emitting = false;
+                }
+            }
+            else
+            {
+                wheel.trail.emitting = false;
+            }
+        }
     }
 
     private void ApplyBrakes()
