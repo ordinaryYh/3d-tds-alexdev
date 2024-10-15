@@ -11,7 +11,6 @@ public class Car_Sounds : MonoBehaviour
     [SerializeField] private AudioSource engineWork;
     [SerializeField] private AudioSource engineOff;
 
-    private float minSpeed = 0;
     private float maxSpeed = 10;
 
     public float minPitch = 0.75f;

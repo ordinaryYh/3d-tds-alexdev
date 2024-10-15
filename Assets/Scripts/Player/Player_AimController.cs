@@ -15,6 +15,9 @@ public class Player_AimController : MonoBehaviour
     [SerializeField] private bool isAimingPrecisly;
     [SerializeField] private bool isLockingToTarget;
 
+    [SerializeField] private float offsetChangeRate = 5;
+    private float offsetY;
+
     [Header("Camera control")]
     [SerializeField] private Transform cameraTarget;
     [Range(.5f, 1)]
@@ -35,6 +38,8 @@ public class Player_AimController : MonoBehaviour
     {
         player = GetComponent<Player>();
         AssignInputEvents();
+
+        Cursor.visible = false; //关闭鼠标的光标
     }
     private void Update()
     {
@@ -44,16 +49,20 @@ public class Player_AimController : MonoBehaviour
         if (player.controlsEnabled == false)
             return;
 
-        if (Input.GetKeyDown(KeyCode.P))
-            isAimingPrecisly = !isAimingPrecisly;
-
-        if (Input.GetKeyDown(KeyCode.L))
-            isLockingToTarget = !isLockingToTarget;
 
         UpdateAimVisuals();
         UpdateAimPosition();
         UpdateCameraPosition();
     }
+
+    private void EnablePreciseAim(bool enable)
+    {
+        isAimingPrecisly = !isAimingPrecisly;
+        Cursor.visible = false;
+
+
+    }
+
     public Transform GetAimCameraTarget()
     {
         cameraTarget.position = player.transform.position;
@@ -62,6 +71,8 @@ public class Player_AimController : MonoBehaviour
     public void EnableAimLaser(bool enbale) => aimLaser.enabled = enabled;
     private void UpdateAimVisuals()
     {
+        aim.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+
         aimLaser.enabled = player.weapon.WeaponReady();
 
         if (aimLaser.enabled == false)
@@ -94,40 +105,21 @@ public class Player_AimController : MonoBehaviour
     }
     private void UpdateAimPosition()
     {
-        Transform target = Target();
-
-        if (target != null && isLockingToTarget)
-        {
-            if (target.GetComponent<Renderer>() != null)
-                aim.position = target.GetComponent<Renderer>().bounds.center;
-            else
-                aim.position = target.position;
-
-
-            return;
-        }
-
         aim.position = GetMouseHitInfo().point;
-
-        if (!isAimingPrecisly)
-            aim.position = new Vector3(aim.position.x, transform.position.y + 1, aim.position.z);
+        aim.position = new Vector3(aim.position.x, aim.position.y + AdjustOffsetY(), aim.position.z);
     }
 
-
-
-
-    public Transform Target()
+    private float AdjustOffsetY()
     {
-        Transform target = null;
+        if (isAimingPrecisly)
+            offsetY = Mathf.Lerp(offsetY, 0, offsetChangeRate * Time.deltaTime);
+        else
+            offsetY = Mathf.Lerp(offsetY, 1, Time.deltaTime * offsetChangeRate);
 
-        //这里要判断是否为空，注意是.collider，这个是射线是否为空的判断
-        if (GetMouseHitInfo().collider != null && GetMouseHitInfo().transform.GetComponent<Target>() != null)
-        {
-            target = GetMouseHitInfo().transform;
-        }
-
-        return target;
+        return offsetY;
     }
+
+
     public Transform Aim() => aim;
     public bool CanAimPrecisly() => isAimingPrecisly;
     public RaycastHit GetMouseHitInfo()
@@ -175,6 +167,9 @@ public class Player_AimController : MonoBehaviour
 
         controls.Character.Aim.performed += context => mouseInput = context.ReadValue<Vector2>();
         controls.Character.Aim.canceled += context => mouseInput = Vector2.zero;
+
+        controls.Character.PreciseAim.performed += ctx => EnablePreciseAim(true);
+        controls.Character.PreciseAim.canceled += ctx => EnablePreciseAim(false);
     }
 
 }
