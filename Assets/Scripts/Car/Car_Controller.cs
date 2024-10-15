@@ -61,6 +61,7 @@ public class Car_Controller : MonoBehaviour
     [SerializeField] private float driftDuration = 1;
     private float driftTimer;
     private bool isDrifting;
+    private bool canEmitTrails = true;
 
 
     private Car_Wheel[] wheels;
@@ -191,6 +192,9 @@ public class Car_Controller : MonoBehaviour
 
     private void ApplyAnimationToWheels()
     {
+        if (canEmitTrails == false)
+            return;
+
         foreach (var wheel in wheels)
         {
             Quaternion rotation;
@@ -222,6 +226,14 @@ public class Car_Controller : MonoBehaviour
 
     public void BreakTheCar()
     {
+        canEmitTrails = false;
+
+        foreach (var wheel in wheels)
+        {
+            wheel.trail.emitting = false;
+        }
+
+        rb.drag = 1; //这个可以让小车爆炸之后不会再移动太远
         motorForce = 0;
         isDrifting = true;
         frontDriftFactor = 0.9f;
