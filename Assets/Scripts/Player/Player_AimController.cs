@@ -10,13 +10,20 @@ public class Player_AimController : MonoBehaviour
     [SerializeField] private LineRenderer aimLaser; // this component is on the waepon holder(child of a player)
 
     [Header("Aim control")]
+    [SerializeField] private float preciseAimCamDistance = 6;
+    [SerializeField] private float regularAimCamDistance = 7;
+    [SerializeField] private float camChangeRate = 5;
+
+    [Header("Aim Setup")]
     [SerializeField] private Transform aim;
-
     [SerializeField] private bool isAimingPrecisly;
-    [SerializeField] private bool isLockingToTarget;
-
     [SerializeField] private float offsetChangeRate = 5;
     private float offsetY;
+
+    [Header("Aim layers")]
+    [SerializeField] private LayerMask preciseAim;
+    [SerializeField] private LayerMask regularAim;
+
 
     [Header("Camera control")]
     [SerializeField] private Transform cameraTarget;
@@ -29,7 +36,6 @@ public class Player_AimController : MonoBehaviour
 
     [Space]
 
-    [SerializeField] private LayerMask aimLayerMask;
 
     private Vector2 mouseInput;
     private RaycastHit lastKnownMouseHit;
@@ -60,7 +66,16 @@ public class Player_AimController : MonoBehaviour
         isAimingPrecisly = !isAimingPrecisly;
         Cursor.visible = false;
 
-
+        if (enable == true)
+        {
+            CameraManager.instance.ChangeCameraDistance(preciseAimCamDistance, camChangeRate);
+            Time.timeScale = 0.5f;
+        }
+        else
+        {
+            CameraManager.instance.ChangeCameraDistance(regularAimCamDistance, camChangeRate);
+            Time.timeScale = 1;
+        }
     }
 
     public Transform GetAimCameraTarget()
@@ -106,13 +121,16 @@ public class Player_AimController : MonoBehaviour
     private void UpdateAimPosition()
     {
         aim.position = GetMouseHitInfo().point;
-        aim.position = new Vector3(aim.position.x, aim.position.y + AdjustOffsetY(), aim.position.z);
+
+        Vector3 newAimPosition = isAimingPrecisly ? aim.position : transform.position;
+
+        aim.position = new Vector3(aim.position.x, newAimPosition.y + AdjustOffsetY(), aim.position.z);
     }
 
     private float AdjustOffsetY()
     {
         if (isAimingPrecisly)
-            offsetY = Mathf.Lerp(offsetY, 0, offsetChangeRate * Time.deltaTime);
+            offsetY = Mathf.Lerp(offsetY, 0, Time.deltaTime * offsetChangeRate * 0.5f);
         else
             offsetY = Mathf.Lerp(offsetY, 1, Time.deltaTime * offsetChangeRate);
 
@@ -126,7 +144,7 @@ public class Player_AimController : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(mouseInput);
 
-        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, aimLayerMask))
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, preciseAim))
         {
             lastKnownMouseHit = hitInfo;
             return hitInfo;
@@ -139,13 +157,22 @@ public class Player_AimController : MonoBehaviour
 
     private void UpdateCameraPosition()
     {
+        //下面是缓慢进行移动
+        bool canMoveCamera = Vector3.Distance(cameraTarget.position, DesieredCameraPosition()) > 1;
+
+        if (canMoveCamera == false)
+            return;
+
         cameraTarget.position =
                     Vector3.Lerp(cameraTarget.position, DesieredCameraPosition(), cameraSensetivity * Time.deltaTime);
+
+        //如果想要进行即使移动，就使用下面的代码
+        //cameraTarget.position = DesieredCameraPosition();
     }
 
     private Vector3 DesieredCameraPosition()
     {
-        float actualMaxCameraDistance = player.movement.moveInput.y < -.5f ? minCameraDistance : maxCameraDistance;
+        float actualMaxCameraDistance = player.movement.moveInput.y < -0.5f ? minCameraDistance : maxCameraDistance;
 
         Vector3 desiredCameraPosition = GetMouseHitInfo().point;
         Vector3 aimDirection = (desiredCameraPosition - transform.position).normalized;
