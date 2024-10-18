@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AxelType { Front, Back }
-
 [RequireComponent(typeof(WheelCollider))]
 public class Car_Wheel : MonoBehaviour
 {

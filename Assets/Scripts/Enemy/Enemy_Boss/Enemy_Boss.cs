@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BossWeaponType { Flamethrower, Hummer }
-
 public class Enemy_Boss : Enemy
 {
     [Header("Boss details")]

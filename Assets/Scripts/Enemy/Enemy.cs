@@ -2,8 +2,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public enum EnemyType { Melee, Range, Boss, Random }
-
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {

@@ -3,10 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CoverPerk { Unavalible, CanTakeCover, CanTakeAndChangeCover } //这个是cover的等级，代表enemy的切换cover的智能度
-public enum UnstoppablePerk { Unavalible, Unstoppable }  //这个用来控制advance的两种状态
-public enum GrenadePerk { Unavalible, CanThrowGrenade } //这个是开启扔手雷的能力
-
 public class Enemy_Range : Enemy
 {
     [Header("Enemy perks")]

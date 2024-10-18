@@ -13,8 +13,6 @@ public struct AttackData_EnemyMelee
     public float animationSpeed;
     public AttackType_Melee attackType;
 }
-public enum AttackType_Melee { Close, Charge }
-public enum EnemyMelee_Type { Regular, Shield, Dodge, AxeThrow }
 
 public class Enemy_Melee : Enemy
 {

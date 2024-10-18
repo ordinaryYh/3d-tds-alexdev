@@ -9,7 +9,6 @@ public struct AmmoData
     [Range(10, 100)] public int minAmount;
     [Range(10, 100)] public int maxAmount;
 }
-public enum AmmoBoxType { smallBox,bigBox}
 
 public class Pickup_Ammo : Interactable
 {

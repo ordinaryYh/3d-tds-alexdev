@@ -1,18 +1,5 @@
 using UnityEngine;
 
-public enum WeaponType
-{
-    Pistol,
-    Revolver,
-    AutoRifle,
-    Shotgun,
-    Rifle
-}
-public enum ShootType
-{
-    Single,
-    Auto
-}
 
 [System.Serializable] // Makes class visible in the inspector. 
 public class Weapon

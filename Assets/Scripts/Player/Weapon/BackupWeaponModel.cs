@@ -1,9 +1,6 @@
 using UnityEngine;
 
 
-public enum HangType { LowBackHang, BackHang, SideHang }
-
-
 public class BackupWeaponModel : MonoBehaviour
 {
     public WeaponType weaponType;

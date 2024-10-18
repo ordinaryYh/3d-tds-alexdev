@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum DriveType { FrontWheelDrive, RearWheelDrive, AllWheelDrive }
-
 [RequireComponent(typeof(Rigidbody))]
 public class Car_Controller : MonoBehaviour
 {
