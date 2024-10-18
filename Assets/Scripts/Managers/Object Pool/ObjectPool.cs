@@ -52,10 +52,10 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnObject(GameObject objectToReturn, float delay = .001f)
     {
-        StartCoroutine(DelayReturn(delay, objectToReturn));
+        StartCoroutine(DelayReturnCo(delay, objectToReturn));
     }
 
-    private IEnumerator DelayReturn(float delay, GameObject objectToReturn)
+    private IEnumerator DelayReturnCo(float delay, GameObject objectToReturn)
     {
         yield return new WaitForSeconds(delay);
 
@@ -90,4 +90,5 @@ public class ObjectPool : MonoBehaviour
 
         poolDictionary[prefab].Enqueue(newObject);
     }
+
 }
