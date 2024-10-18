@@ -17,7 +17,7 @@ public class Cover : MonoBehaviour
     private void Start()
     {
         GenerateCoverPoints();
-        playerTransform = FindObjectOfType<Player>().transform;
+        playerTransform = GameManager.instance.player.transform;
     }
 
     //在掩体的四周生成coverPoint

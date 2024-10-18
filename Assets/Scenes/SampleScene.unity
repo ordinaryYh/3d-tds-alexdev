@@ -1895,7 +1895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc3b134c772dc55438ae2249e8990a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1746550276}
   friendlyFire: 1
   quickStart: 0
 --- !u!4 &127373061

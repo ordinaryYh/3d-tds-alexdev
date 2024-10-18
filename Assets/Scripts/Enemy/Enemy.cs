@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
         visuals = GetComponent<Enemy_Visuals>();
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-        player = GameObject.Find("Player").GetComponent<Transform>();
+        player = GameManager.instance.player.transform;
 
         health = GetComponent<Enemy_Health>();
 

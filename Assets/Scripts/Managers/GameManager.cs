@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Pool;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,10 +14,13 @@ public class GameManager : MonoBehaviour
     [Space]
     public bool quickStart;
 
+    // [Header("pools")]
+    // private ObjectPool<GameObject> bulletPool;
+    // public GameObject bulletPrefab;
+
     private void Awake()
     {
         instance = this;
-        player = FindObjectOfType<Player>();
     }
 
     public void GameStart()
