@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//这个是个靶子，可以进行武器的数值测试
 public class Dummy : MonoBehaviour, IDamageble
 {
     public int currentHealth;
@@ -18,7 +19,7 @@ public class Dummy : MonoBehaviour, IDamageble
 
     private void Update()
     {
-        if (Time.time > lastTimeDamaged + refreshCooldown || Input.GetKeyDown(KeyCode.B))
+        if (Time.time > lastTimeDamaged + refreshCooldown)
             Refresh();
     }
 

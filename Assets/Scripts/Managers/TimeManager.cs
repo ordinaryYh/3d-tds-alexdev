@@ -19,9 +19,6 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            SlowMotionFor(1);
-
         if (Mathf.Abs(Time.timeScale - targetTimeScale) > 0.05f)
         {
             float adjustRate = Time.unscaledDeltaTime * timeAdjustRate;
